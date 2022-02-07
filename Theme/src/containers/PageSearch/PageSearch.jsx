@@ -1,8 +1,11 @@
-import React, { FC, useState } from "react";
+import React, {useState} from "react";
 import { DEMO_POSTS } from "../../data/posts";
 // import { PostDataType } from "data/types";
-import Pagination from "../../components/Pagination/Pagination";
-import ButtonPrimary from "../../components/Button/ButtonPrimary";
+// import Pagination from "../../components/Pagination/Pagination";
+// import ButtonPrimary from "../../components/Button/ButtonPrimary";
+import ModalCategories from "./ModalCategories";
+import { DEMO_CATEGORIES, DEMO_TAGS } from "../../data/taxonomies";
+import ModalTags from "./ModalTags";
 import Nav from "../../components/Nav/Nav";
 import NavItem from "../../components/NavItem/NavItem";
 import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
@@ -11,26 +14,25 @@ import { Helmet } from "react-helmet";
 import SectionSubscribe2 from "../../components/SectionSubscribe2/SectionSubscribe2";
 import NcImage from "../../components/NcImage/NcImage";
 import NcLink from "../../components/NcLink/NcLink";
-import SectionSliderNewAuthors from "../../components/SectionSliderNewAthors/SectionSliderNewAuthors";
-import { DEMO_AUTHORS } from "../../data/authors";
-import ButtonSecondary from "../../components/Button/ButtonSecondary";
-import { DEMO_CATEGORIES } from "../../data/taxonomies";
-import SectionGridCategoryBox from "../../components/SectionGridCategoryBox/SectionGridCategoryBox";
-import BackgroundSection from "../../components/BackgroundSection/BackgroundSection";
-import Card11 from "../../components/Card11/Card11";
+//import SectionSliderNewAuthors from "../../components/SectionSliderNewAthors/SectionSliderNewAuthors";
+// import { DEMO_AUTHORS } from "../../data/authors";
+// import ButtonSecondary from "../../components/Button/ButtonSecondary";
+// import SectionGridCategoryBox from "../../components/SectionGridCategoryBox/SectionGridCategoryBox";
+// import BackgroundSection from "../../components/BackgroundSection/BackgroundSection";
+ import Card11 from "../../components/Card11/Card11";
 import ButtonCircle from "../../components/Button/ButtonCircle";
-import CardCategory2 from "../../components/CardCategory2/CardCategory2";
-import Tag from "../../components/Tag/Tag";
-import CardAuthorBox2 from "../../components/CardAuthorBox2/CardAuthorBox2";
+// import CardCategory2 from "../../components/CardCategory2/CardCategory2";
+// import Tag from "../../components/Tag/Tag";
+// import CardAuthorBox2 from "../../components/CardAuthorBox2/CardAuthorBox2";
 
-// export interface PageSearchProps {
-//   className?: string;
-// }
+export const PageSearchProps = {
+  className: String
+}
 
-const posts = DEMO_POSTS.filter((_, i) => i < 12);
-const cats = DEMO_CATEGORIES.filter((_, i) => i < 15);
-const tags = DEMO_CATEGORIES.filter((_, i) => i < 32);
-const authors = DEMO_AUTHORS.filter((_, i) => i < 12);
+// const posts = DEMO_POSTS.filter((_, i) => i < 12);
+// const cats = DEMO_CATEGORIES.filter((_, i) => i < 15);
+// const tags = DEMO_CATEGORIES.filter((_, i) => i < 32);
+// const authors = DEMO_AUTHORS.filter((_, i) => i < 12);
 
 const FILTERS = [
   { name: "Most Recent" },
@@ -41,18 +43,23 @@ const FILTERS = [
 ];
 
 const TABS = ["Articles", "Categories", "Tags", "Authors"];
+const posts = DEMO_POSTS.filter((_, i) => i < 16);
 
 const PageSearch = ({ className = "" }) => {
+
   let s = "Technology";
 
-  const [tabActive, setTabActive] = useState(TABS[0]);
+  // Tag and category have same data type - we will use one demo data
 
-  const handleClickTab = (item) => {
-    if (item === tabActive) {
-      return;
-    }
-    setTabActive(item);
-  };
+
+   const [tabActive, setTabActive] = useState(TABS[0]);
+
+  // const handleClickTab = (item) => {
+  //   if (item === tabActive) {
+  //     return;
+  //   }
+  //   setTabActive(item);
+  // };
 
   return (
     <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
@@ -146,21 +153,12 @@ const PageSearch = ({ className = "" }) => {
       <div className="container py-16 lg:py-28 space-y-16 lg:space-y-28">
         <main>
           {/* TABS FILTER */}
+       {/* Here i applied Models */}
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
-            <Nav
-              containerClassName="w-full overflow-x-auto hiddenScrollbar"
-              className="sm:space-x-2"
-            >
-              {TABS.map((item, index) => (
-                <NavItem
-                  key={index}
-                  isActive={tabActive === item}
-                  onClick={() => handleClickTab(item)}
-                >
-                  {item}
-                </NavItem>
-              ))}
-            </Nav>
+            <div className="flex space-x-2.5">
+              <ModalCategories categories={DEMO_CATEGORIES} />
+              <ModalTags tags={DEMO_TAGS} />
+            </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
             <div className="flex justify-end">
               <ArchiveFilterListBox lists={FILTERS} />
@@ -177,40 +175,40 @@ const PageSearch = ({ className = "" }) => {
             </div>
           )}
           {/* LOOP ITEMS CATEGORIES */}
-          {tabActive === "Categories" && (
+          {/* {tabActive === "Categories" && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-8 mt-8 lg:mt-10">
               {cats.map((cat) => (
                 <CardCategory2 key={cat.id} taxonomy={cat} />
               ))}
             </div>
-          )}
+          )} */}
           {/* LOOP ITEMS TAGS */}
-          {tabActive === "Tags" && (
+          {/* {tabActive === "Tags" && (
             <div className="flex flex-wrap mt-12 ">
               {tags.map((tag) => (
                 <Tag className="mb-3 mr-3" key={tag.id} tag={tag} />
               ))}
             </div>
-          )}
+          )} */}
           {/* LOOP ITEMS POSTS */}
-          {tabActive === "Authors" && (
+          {/* {tabActive === "Authors" && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-8 mt-8 lg:mt-10">
               {authors.map((author) => (
                 <CardAuthorBox2 key={author.id} author={author} />
               ))}
             </div>
-          )}
+          )} */}
 
           {/* PAGINATION */}
-          <div className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center">
+          {/* <div className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center">
             <Pagination />
             <ButtonPrimary>Show me more</ButtonPrimary>
-          </div>
+          </div> */}
         </main>
 
         {/* MORE SECTIONS */}
         {/* === SECTION 5 === */}
-        <div className="relative py-16">
+        {/* <div className="relative py-16">
           <BackgroundSection />
           <SectionGridCategoryBox
             categories={DEMO_CATEGORIES.filter((_, i) => i < 10)}
@@ -218,14 +216,14 @@ const PageSearch = ({ className = "" }) => {
           <div className="text-center mx-auto mt-10 md:mt-16">
             <ButtonSecondary>Show me more</ButtonSecondary>
           </div>
-        </div>
+        </div> */}
 
         {/* === SECTION 5 === */}
-        <SectionSliderNewAuthors
+        {/* <SectionSliderNewAuthors
           heading="Top elite authors"
           subHeading="Discover our elite writers"
           authors={DEMO_AUTHORS.filter((_, i) => i < 10)}
-        />
+        /> */}
 
         {/* SUBCRIBES */}
         <SectionSubscribe2 />

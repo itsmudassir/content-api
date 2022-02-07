@@ -6,16 +6,21 @@
 // }
 
 //  ##########  PostDataType ######## //
-// export interface TaxonomyType {
-//   id: string | number;
-//   name: string;
-//   href: string;
-//   count?: number;
-//   thumbnail?: string;
-//   desc?: string;
-//   color?: TwMainColor | string;
-//   taxonomy: "category" | "tag";
-// }
+export const TwMainColor = "gray";
+
+
+export const TaxonomyType = {
+  id: String | Number,
+  name: String,
+  href: String,
+  count: Number,
+  thumbnail: String,
+  desc: String,
+  color: TwMainColor | String,
+  taxonomy: "category" | "tag",
+}
+
+
 
 // export interface PostAuthorType {
 //   id: string | number;
@@ -57,15 +62,7 @@
 //   galleryImgs?: string[];
 // }
 
-// export type TwMainColor =
-//   | "pink"
-//   | "green"
-//   | "yellow"
-//   | "red"
-//   | "indigo"
-//   | "blue"
-//   | "purple"
-//   | "gray";
+
 
 // export interface VideoType {
 //   id: string;
