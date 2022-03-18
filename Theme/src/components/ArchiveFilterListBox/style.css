@@ -1,0 +1,9 @@
+#headlessui-listbox-button-7 {
+    border-radius: 0px;
+    border: 1px solid #5345e0;
+    background-color: #ececee;
+}
+
+#headlessui-listbox-button-7.border{
+    border-width:none;
+}

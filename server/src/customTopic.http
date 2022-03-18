@@ -1,0 +1,43 @@
+# create post
+post http://localhost:7777/api/customTopicSearch/createcustomtopic
+Content-Type: application/json
+
+{    
+    "name": "covid-22",
+    "match_type": "abc",
+    "any_keywords": ["123" ,"asda", "asdasbd"],
+    "must_also_keywords": ["123", "abc", "xyz", "pqr"],
+    "must_not_contains_keywords": ["123", "abc", "xyz", "pqr"],
+    "exclude_domains": ["amazon.com", "google.com"],
+    "limit_domains_results": ["ww.amazon", "www.saad.com", "google.com"],
+    "enddate": "2021-11-03",
+    "startdate": "2021-11-02",
+    "language": "urdu"
+}
+
+###
+
+# get all custom topics
+get http://localhost:7777/api/customTopicSearch/getcustomtopics
+
+
+###
+
+# update a single custom topic by customTopic ID
+PATCH http://localhost:7777/api/customTopicSearch/updatecustomtopic/623319cb16d503df34194437
+Content-Type: application/json
+
+{
+    "name": "covid-21",
+    "match_type": "abc",
+    "any_keywords": ["saad" ,"asda", "asdasbd"],
+    "must_also_keywords": ["123", "abc", "xyz", "pqr"],
+    "must_not_contains_keywords": ["123", "abc", "xyz", "pqr"],
+    "exclude_domains": ["amazon.com", "google.com"],
+    "limit_domains_results": ["ww.amazon", "www.saad.com", "google.com"],
+    "enddate": "2021-11-03",
+    "startdate": "2021-11-02",
+    "language": "urdu"
+
+}
+

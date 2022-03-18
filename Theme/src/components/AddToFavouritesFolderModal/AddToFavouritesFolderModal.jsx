@@ -24,6 +24,7 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
   // RTK query
   const [createFolder, createFolderObj] = useCreateFolderMutation();
   const getAllFolders = useGetAllFoldersQuery();
+  console.log(getAllFolders , "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
   const [addPostToFavFolder, addPostToFavFolderObj] =
     useAddPostToFavouritesFolderMutation();
 

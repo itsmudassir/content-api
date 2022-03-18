@@ -8,10 +8,132 @@ import { DEMO_POSTS } from "../../data/posts";
 import Chip from "../../components/chip/chip";
 import { set } from "date-fns";
 // import InputAutoComplete from "../../components/InputAutoComplete/InputAutoComplete";
+import { gql, useQuery } from "@apollo/client";
+import { useSearchkitVariables, useSearchkit } from '@searchkit/client'
+import {
+  withSearchkit, withSearchkitRouting, useSearchkitQueryValue
+} from '@searchkit/client'
+import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
+import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
+import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
+// const widgetPostsDemo = DEMO_POSTS.filter((_, i) => i > 2 && i < 7);
 
-const widgetPostsDemo = DEMO_POSTS.filter((_, i) => i > 2 && i < 7);
+
+
+const query = gql`
+query resultSet($query: String, $filters: [SKFiltersSet], $page: SKPageInput, $sortBy: String) {
+  results(query: $query, filters: $filters) {
+    summary {
+      total
+      appliedFilters {
+        id
+        identifier
+        display
+        label
+        ... on DateRangeSelectedFilter {
+          dateMin
+          dateMax
+          __typename
+        }
+
+        ... on ValueSelectedFilter {
+          value
+          __typename
+        }
+        __typename
+      }
+      sortOptions {
+        id
+        label
+        __typename
+      }
+      query
+      __typename
+    }
+    hits(page: $page, sortBy: $sortBy) {
+      page {
+        total
+        totalPages
+        pageNumber
+        from
+        size
+        __typename
+      }
+      sortedBy
+
+      items {
+        ... on ResultHit {
+          id
+          fields {
+  article_length
+  category
+  authors
+  date_download
+  language
+  facebook_shares
+  sentiment
+  url 
+  readtime
+  image_url
+  twitter_shares
+  maintext
+  source_domain
+  title
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    facets {
+      identifier
+      type
+      label
+      display
+      entries {
+        label
+        count
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+`
+
+const FILTERS = [
+  { label: "Relevance", id: "relevance" },
+  { label: "Facebook Shares", id: "facebook_shares" },
+  { label: "Twitter Shares", id: "twitter_shares" },
+  { label: "Date Download", id: "date_download" },
+];
 
 const TopicSubmitPost = () => {
+  /////////////////////////////////graphql code starts ////////////////////////////////////////////
+
+  
+  const variables = useSearchkitVariables();
+  if (variables?.page.size) {
+    variables.page.size = 20
+  }
+  console.log(variables?.page.size)
+
+
+  const { data, error, loading } = useQuery(query, { variables });
+
+  if (error) {
+    console.log("An error Occured" + error);
+  }
+
+  if (loading) {
+   <div style={{display : "flex", alignItems : "center"}}> <LoadingVideo /></div> ;
+  }
+  console.log(data , "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+  /////////////////////////////////graphql code ends ////////////////////////////////////////////
+
   const [topicName, setTopicName] = useState(null); // topic name
 
   // selection
@@ -189,8 +311,6 @@ const TopicSubmitPost = () => {
             keywords
           </p>
 
-
-          {/ CHIPS /} */}
           <div className="flex flex-wrap mt-1.5">
             {must_also_keywords_list.map((val, index) => {
               return (
@@ -263,33 +383,37 @@ const TopicSubmitPost = () => {
         </label>
 
         <div className="grid grid-cols-12 md:col-span-2 gap-2">
-          <label className="col-span-6 sm:col-span-4 md:col-span-3">
+          <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
          
-            <Select
-              onChange={(e) => setStartDate(e.target.value)}
-              className="mt-1 rounded bg-gray-100 border-slate-300"
-            >
-              <option value={null}>Start Date</option>
-              <option value="2021-11-02">2021-11-02</option>
-              <option value="2021-11-02">2021-11-02</option>
-              <option value="2021-11-02">2021-11-02</option>
-            </Select>
-          </label>
-
-          <label className="col-span-6 sm:col-span-4 md:col-span-3">
            
+               <DateRangeDropDown facet={data?.results?.facets}/>
+              
+           
+          </label>
+
+          <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3" >
+         
+           <span className="mt-1 bg-gray-100"  >
+               <ArchiveFilterListBox lists={FILTERS} />
+            </span>
+              
+           
+          </label>
+
+          {/* <label className="col-span-6 sm:col-span-4 md:col-span-3">
+            
 
             <Select
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={(e) => setEngagement(e.target.value)}
               className="mt-1 rounded bg-gray-100 border-slate-300"
             >
-              <option value={null}>End Date</option>
-              <option value="2021-11-03">2021-11-03</option>
-              <option value="2021-11-03">2021-11-03</option>
-              <option value="2021-11-03">2021-11-03</option>
-              <option value="2021-11-03">2021-11-03</option>
+              <option value="-1">Select engagement</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Facebook">Facebook</option>
             </Select>
           </label>
+        
 
           <label className="col-span-6 sm:col-span-4 md:col-span-3">
          
@@ -303,21 +427,7 @@ const TopicSubmitPost = () => {
               <option value="German">German</option>
               <option value="French">French</option>
             </Select>
-          </label>
-
-          <label className="col-span-6 sm:col-span-4 md:col-span-3">
-            
-
-            <Select
-              onChange={(e) => setEngagement(e.target.value)}
-              className="mt-1 rounded bg-gray-100 border-slate-300"
-            >
-              <option value="-1">Select engagement</option>
-              <option value="Facebook">Facebook</option>
-              <option value="Facebook">Facebook</option>
-              <option value="Facebook">Facebook</option>
-            </Select>
-          </label>
+          </label> */}
         </div>
 
         <label className="block md:col-span-2 mt-5">
@@ -363,7 +473,7 @@ const TopicSubmitPost = () => {
 
 
       <div className="basis-1/3	">
-        <WidgetPosts posts={widgetPostsDemo} />
+        <WidgetPosts posts={data} />
       </div>
     </div>
   );

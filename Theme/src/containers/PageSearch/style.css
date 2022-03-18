@@ -1,0 +1,7 @@
+.allbutton {
+    border: 2px solid blue ;
+     border-radius: 5px ; 
+     background-color : #f5f5f5 ;
+       text-shadow: 1px 1px 1px #928e8e ;
+       color: #666666
+    }

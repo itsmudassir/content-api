@@ -5,31 +5,25 @@ import ModalTags from "./ModalTags";
 import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
 import LanguagesFilterBox from "../../components/LanguagesFilterBox/LanguagesFilterBox";
 import { Helmet } from "react-helmet";
-
 import NcLink from "../../components/NcLink/NcLink";
 import { gql, useQuery } from "@apollo/client";
 import { useSearchkitVariables, useSearchkit } from '@searchkit/client'
 import {
   withSearchkit, withSearchkitRouting, useSearchkitQueryValue
 } from '@searchkit/client'
-
 import Card11 from "../../components/Card11/Card11";
-
-import DateRangeCalender from "../../components/DateRangeCalender/DateRangeCalender";
-import Pagination from "../../components/Pagination/Pagination";
 import { useLocation } from "react-router-dom";
 import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
-
-import AutoCompleteSearch from "../SearchBox/autoCompleteSearchbox";
 import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
-
-import Pagination from "../../components/Pagination/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { addpost, removePost } from "../../app/posts/posts";
+import './style.css'
+
 export const PageSearchProps = {
   className: String,
 };
+
 
 const query = gql`
 query resultSet($query: String, $filters: [SKFiltersSet], $page: SKPageInput, $sortBy: String) {
@@ -46,9 +40,6 @@ query resultSet($query: String, $filters: [SKFiltersSet], $page: SKPageInput, $s
           dateMax
           __typename
         }
-        sortOptions {
-          id
-          label
 
         ... on ValueSelectedFilter {
           value
@@ -56,40 +47,43 @@ query resultSet($query: String, $filters: [SKFiltersSet], $page: SKPageInput, $s
         }
         __typename
       }
+      sortOptions {
+        id
+        label
+        __typename
+      }
+      query
+      __typename
+    }
+    hits(page: $page, sortBy: $sortBy) {
+      page {
+        total
+        totalPages
+        pageNumber
+        from
+        size
+        __typename
+      }
+      sortedBy
 
-      hits(page: $page, sortBy: $sortBy) {
-        page {
-          total
-          totalPages
-          pageNumber
-          from
-          size
-          __typename
-        }
-        sortedBy
-
-        items {
-          ... on ResultHit {
-            id
-            fields {
-
-            article_length
-            authors
-            category
-            date_download
-            facebook_shares
-            twitter_shares
-            date_publish
-            image_url
-            language
-            maintext
-            readtime
-            source_domain
-            title
-            url
-            sentiment
-              __typename
-            }
+      items {
+        ... on ResultHit {
+          id
+          fields {
+  article_length
+  category
+  authors
+  date_download
+  language
+  facebook_shares
+  sentiment
+  url 
+  readtime
+  image_url
+  twitter_shares
+  maintext
+  source_domain
+  title
             __typename
           }
           __typename
@@ -129,13 +123,13 @@ const PageSearch = ({ className = "" }, data1) => {
   const location = useLocation();
   var labelfromcatCard = location.state;
 
-const PageSearch = ({ className = "" }) => {
 
   const variables = useSearchkitVariables();
   if (variables?.page.size) {
     variables.page.size = 20
   }
   console.log(variables?.page.size)
+
 
   const { data, error, loading } = useQuery(query, { variables });
 
@@ -147,6 +141,8 @@ const PageSearch = ({ className = "" }) => {
    <div style={{display : "flex", alignItems : "center"}}> <LoadingVideo /></div> ;
   }
   console.log(data);
+
+
   if (data) {
     var languageslist = [];
     {
@@ -184,49 +180,21 @@ const PageSearch = ({ className = "" }) => {
         <SearchBoxMain />
 
 
-        <div className="w-screen px-2 xl:max-w-screen-2xl mx-auto">
-          <AutoCompleteSearch />
-
-          <div className="margin">
-            <span className="mr-2.5">Related:</span>
-            <NcLink className="mr-2.5 inline-block font-normal" to="/#">
-              Design
-            </NcLink>
-            <NcLink className="mr-2.5 inline-block font-normal" to="/#">
-              Photo
-            </NcLink>
-            <NcLink className="mr-2.5 inline-block font-normal" to="/#">
-              Vector
-            </NcLink>
-            <NcLink className="mr-2.5 inline-block font-normal" to="/#">
-              Frontend
-            </NcLink>
-          
-          </div>
-        </div>
         
         <div className="container py-16 lg:py-28 space-y-16 lg:space-y-28">
           <main>
             <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
               <div className="flex space-x-2.5">
-                {/* Languages */}
+            
+              <span className="allbutton"> <ModalTags tags={DEMO_TAGS} /></span> 
 
-                {languageslist && languageslist.length > 0 ? (
-                  <LanguagesFilterBox lists={languageslist} />
-                ) : (
-                  ""
-                )}
-
-                <ModalTags tags={DEMO_TAGS} />
-
-                
                   <DateRangeDropDown  facet={data?.results?.facets}/>
                   
                 
-                
               </div>
+
               <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
-              <div className="flex justify-end">
+              <div className="flex justify-end ">
   
                 <ArchiveFilterListBox lists={FILTERS} />
               </div>

@@ -61,6 +61,9 @@ query resultSet($query: String, $filters: [SKFiltersSet], $page: SKPageInput, $s
   date_download
   language
   facebook_shares
+  sentiment
+  url 
+  image_url
   twitter_shares
   maintext
   source_domain

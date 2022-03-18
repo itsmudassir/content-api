@@ -17,9 +17,10 @@ const ArchiveFilterListBox = ({ className = "", lists }) => {
     <div
       className={`nc-ArchiveFilterListBox ${className}`}
       data-nc-id="ArchiveFilterListBox"
+      style={{border : "2px solid blue" , borderRadius : "5px" , backgroundColor : "#f5f5f5" ,  textShadow: "1px 1px 1px #928e8e" ,color: "#666666"}}
     >
       <Listbox value={selected} onChange={setSelected}>
-        <div className="relative md:min-w-[200px]">
+        <div className="relative ">
           <Listbox.Button as={"div"}>
             <ButtonDropdown>{selected.label}</ButtonDropdown>
           </Listbox.Button>

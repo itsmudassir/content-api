@@ -18,13 +18,6 @@ import {
 //   href: string;
 // }
 
-
-const SocialsShare = () =>{
-  return(
-    <h1></h1>
-  )
-}
-
 const socials = [
   { id: "Facebook", name: "Facebook", icon: "lab la-facebook-f", href: "#" },
   { id: "Twitter", name: "Twitter", icon: "lab la-twitter", href: "#" },
@@ -74,11 +67,12 @@ let socialurl = cardData.fields.url
 //     );
 //   };
 
-//   return (
-//     <div className={`nc-SocialsShare ${className}`} data-nc-id="SocialsShare">
-//       {renderItem()}
-//     </div>
-//   );
-// };
+  return (
+    <></>
+    // <div className={`nc-SocialsShare ${className}`} data-nc-id="SocialsShare">
+    //   {renderItem()}
+    // </div>
+  );
+};
 
 export default SocialsShare;

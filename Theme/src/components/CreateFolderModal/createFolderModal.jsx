@@ -7,7 +7,7 @@ import ButtonSecondary from "../Button/ButtonSecondary";
 import { RadioGroup } from "@headlessui/react";
 import twFocusClass from "../../utils/twFocusClass";
 import { useCreateFolderMutation } from "../../app/Api/contentApi";
-import ArchiveFilterListBox from "../ArchiveFilterListBox/ArchiveFilterListBox";
+// import ArchiveFilterListBox from "../ArchiveFilterListBox/ArchiveFilterListBox";
 import Input from "../Input/Input";
 
 const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
@@ -38,7 +38,7 @@ const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
         {/* TEXAREA MESSAGER */}
 
         <div className="mt-1">
-          <ArchiveFilterListBox />
+          {/* <ArchiveFilterListBox /> */}
 
           <h6 className="text-xs text-neutral-700 dark:text-neutral-200">
             Folder Name

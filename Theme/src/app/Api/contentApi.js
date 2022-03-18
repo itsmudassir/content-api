@@ -25,6 +25,42 @@ const contentApi = createApi({
             })
         }),
 
+        //Get All Customtopic Data
+
+        getAllCustomTopics: builder.query({
+            query: () => ({
+                url: "/api/customTopicSearch/getcustomtopics"
+            })
+        }),
+
+        //CreateCustomTopic
+
+        createTopic : builder.mutation({
+            query:(topicName)=>({
+                url : "/api/customTopicSearch/createcustomtopic",
+                method: "POST",
+                body: topicName
+            })
+        }),
+
+
+        //Update CustomTopics
+
+        // updateCustomTopic: builder.mutation({
+        //     query: (params) => ({
+        //         url: `/api/customTopicSearch/updatecustomtopic/${params.userId}`,
+        //         method: "PUT",
+        //         body: params.user
+        //     }),
+        // }),
+
+        updateCustomTopic: builder.mutation({
+            query: ({id , ...rest}) => ({
+                url: `/api/customTopicSearch/updatecustomtopic/${id}`,
+                method: "PUT",
+                body: rest
+            }),
+        }),
 
         //FAVOURITE POSTS QUERIES
 
@@ -66,4 +102,7 @@ export const {
     useCreateFolderMutation,
     useUpdateUserMutation,
     useAddPostToFavouritesFolderMutation,
+    useCreateTopicMutation,
+    useGetAllCustomTopicsQuery,
+    useUpdateCustomTopic,
 } = contentApi;

@@ -8,6 +8,7 @@ import CreateFolderModal from "../../components/CreateFolderModal/createFolderMo
 import {
   useGetAllFoldersQuery,
   useGetAllFavouritePostsQuery,
+  useGetAllCustomTopicsQuery
 } from "../../app/Api/contentApi";
 
 import Card12 from "../../components/Card11/Card12"
@@ -21,10 +22,12 @@ const TopicsPage = ({ className = "" }) => {
   const getAllFolders = useGetAllFoldersQuery();
   const getAllFavouritePosts = useGetAllFavouritePostsQuery(folderID);
   const cardData = useGetAllFavouritePostsQuery(folderID);
+  const getAllCustomTopics = useGetAllCustomTopicsQuery()
+  console.log(getAllCustomTopics , "Getting all data of Custom Topic xxxxxxxxxxxxxxxxxxxxxxxx")
   // handlers
   const closeModal = () => setshowModal(false);
   const showModalOnClick = () => setshowModal(true);
-  const cardData = useGetAllFavouritePostsQuery(folderID);
+
 
 
   return (
@@ -87,6 +90,8 @@ const TopicsPage = ({ className = "" }) => {
                   </li>
                 );
               })}
+
+            
             </ul>
           </div>
 
@@ -102,7 +107,16 @@ const TopicsPage = ({ className = "" }) => {
               <Route
                 path={`${path}/favourite-posts/:id`}
                 render={() => {
-                  return <p>{JSON.stringify(getAllFavouritePosts?.data)}</p>;
+                  return   <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
+              {cardData?.data?.map((value, index) => {
+                console.log(value);
+                return (
+                  <>
+                    <Card12 key={index} cardItems={value} />
+                  </>
+                );
+              })}
+            </div>;
                 }}
               />
 
@@ -115,16 +129,7 @@ const TopicsPage = ({ className = "" }) => {
               <Redirect to={"/topics"} />
             </Switch>
 
-            <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
-              {cardData?.data?.map((value, index) => {
-                console.log(value);
-                return (
-                  <>
-                    <Card12 key={index} cardItems={value} />
-                  </>
-                );
-              })}
-            </div>
+           
           </div>
         </div>
       </LayoutPage>
