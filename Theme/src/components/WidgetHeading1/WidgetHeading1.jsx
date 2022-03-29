@@ -22,7 +22,7 @@ const WidgetHeading1 = ({
       <h2 className="text-lg text-neutral-900 dark:text-neutral-100 font-semibold flex-grow">
         {title}
       </h2>
-      {!!viewAll.href && (
+      {/* {!!viewAll.href && (
         <Link
           className="flex-shrink-0 block text-primary-700 dark:text-primary-500 font-semibold text-sm"
           target={viewAll.targetBlank ? "_blank" : undefined}
@@ -31,7 +31,7 @@ const WidgetHeading1 = ({
         >
           {viewAll.label}
         </Link>
-      )}
+      )} */}
     </div>
   );
 };

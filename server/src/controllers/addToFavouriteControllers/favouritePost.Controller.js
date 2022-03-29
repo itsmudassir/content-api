@@ -14,8 +14,8 @@ const postFavouritePost = async (req, res) => {
     try {
         const post = new favouritePostsModel(req.body);
         post.folderId = req.params.id;
-        //  post.userId = req.user.id;
-        post.userId = "622a0c7b24abda1ef66718c7";
+         post.userId = req.user.id;
+        // post.userId = "622a0c7b24abda1ef66718c7";
         await post.save();
         return res.status(201).json({ successMsg: "Added to favourite folder" }); //201 for created
     } catch (err) {
@@ -74,8 +74,8 @@ const getAllPosts = async (req, res,) => {
 // access: PROTECTED
 const getAllPostsByUserId = async (req, res) => {
     try {
-        //  const userId = req.user.id;
-        const userId = "622a0c7b24abda1ef66718c7";
+         const userId = req.user.id;
+        // const userId = "622a0c7b24abda1ef66718c7";
         const posts = await favouritePostsModel.find({ userId: userId });
 
         if (!posts) {

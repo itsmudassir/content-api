@@ -350,6 +350,7 @@ const discoveryDropdwonItems = [
   // },
 ];
 
+
 export const NAVIGATION_DEMO = [
   {
     id: ncNanoId(),

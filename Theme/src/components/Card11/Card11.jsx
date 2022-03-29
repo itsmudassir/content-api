@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import PostCardSaveAction from "../../components/PostCardSaveAction/PostCardSaveAction";
 import { Link } from "react-router-dom";
-import { useRouteMatch} from "react-router";
+import { useRouteMatch } from "react-router";
 import PostCardLikeAndComment from "../../components/PostCardLikeAndComment/PostCardLikeAndComment";
 import PostCardMeta from "../../components/PostCardMeta/PostCardMeta";
 import PostFeaturedMedia from "../../components/PostFeaturedMedia/PostFeaturedMedia";
 import { useHistory } from "react-router-dom";
-
-
 // import { useAppDispatch } from "../../app/hooks";
-// import { cardLoadingData } from "./SingleCard";
 import { addpost } from "../../app/posts/posts";
 import { useDispatch } from "react-redux";
 import { add } from "date-fns";
+// import cogoToast from "cogo-toast";
 
 const Card11 = ({
   className = "h-full",
@@ -22,52 +20,29 @@ const Card11 = ({
 }) => {
   const dispatch = useDispatch();
 
+  var { path } = useRouteMatch();
 
-var { path } = useRouteMatch();
+  const { id } = cardvalue;
+  const history = useHistory();
 
+  const { title, date_download, url } = cardvalue.fields;
 
-  
- const{ id } = cardvalue
- const history = useHistory()
+  const externalUrl = () => {
+    history.push((window.location.href = url));
+  };
 
+  const href = `/discover/discover_content/mainpostpage/${id}`;
 
-  const { title, date_download , url } = cardvalue.fields;
-  
-
-  const externalUrl = ()=>{
-
-
-    history.push(window.location.href = url )
-
-  }
-
-  // const href = `search/mainpostpage/${id}`
-  const href = `/discover/discover_content/mainpostpage/${id}`
   //getting id from Page search
-
-  // cardLoadingData(dispatch, cardvalue);
-
-  ////////////////////////////////
-
-  //destructuring the post that  we are getting form  PageSearch component
-
-  // const { title, date_download, source_domain } = post;
-
-  // Giving a static value to herf
-
-  // const href = `/${id}`;
 
   //useState hook from the theme
   const [isHover, setIsHover] = useState(false);
 
-  
+  const pushData = () => {
+    history.push(`${path}/mainpostpage/${id}`, cardvalue);
 
-  const pushData = ()=>{
-
-    history.push(`${path}/mainpostpage/${id}` , cardvalue )
-
-   console.log("data tranfered")
-  }
+    console.log("data tranfered");
+  };
 
   // handler
   const setPostToRedux = (e) => {
@@ -75,6 +50,9 @@ var { path } = useRouteMatch();
       e.preventDefault();
       dispatch(addpost({ id, ...cardvalue.fields }));
     } catch (err) {
+      // cogoToast.error("This is a error message", {
+      //   position: "top-left",
+      // });
       console.log(err);
     }
   };
@@ -91,13 +69,10 @@ var { path } = useRouteMatch();
       <div
         className={`block flex-shrink-0 relative w-full rounded-t-xl overflow-hidden ${ratio}`}
       >
-
-        <Link to={href} className="absolute inset-0">
+        <div className="absolute inset-0" onClick={pushData}>
           <PostFeaturedMedia post={cardvalue.fields} isHover={isHover} />
-        </Link>
+        </div>
       </div>
-
-
 
       <div className="p-4 flex flex-col flex-grow space-y-3">
         {!hiddenAuthor ? (
@@ -107,29 +82,32 @@ var { path } = useRouteMatch();
         )}
 
         <h2 className="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100 ">
-
-
-          {/* {/ // putting &nbsp so that we can add somespace temporarely /} */}
-
-          <Link to={href} className="line-clamp-2" title={title}>
+          <span
+            onClick={() => externalUrl()}
+            style={{ cursor: "pointer" }}
+            className="line-clamp-2"
+            title={title}
+          >
             {title} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-          </Link>
+          </span>
         </h2>
-        <div
-          style={{ border: "5px solid green" }}
-          className="flex items-end justify-between mt-auto"
-        >
-          <PostCardLikeAndComment
-            className="relative"
-            setPostToRedux={setPostToRedux}
-            postData={cardvalue.fields}
-          />
+        <div className="flex items-end justify-between mt-auto">
+          <div className="flex items-end justify-between mt-auto">
+            <PostCardLikeAndComment
+              className="relative"
+              setPostToRedux={setPostToRedux}
+              postData={cardvalue.fields}
+            />
 
-          <PostCardSaveAction className="relative" postData={cardvalue.fields} />
+            <PostCardSaveAction
+              className="relative"
+              postData={cardvalue.fields}
+            />
+          </div>
         </div>
-      </div> 
+      </div>
     </div>
   );
 };

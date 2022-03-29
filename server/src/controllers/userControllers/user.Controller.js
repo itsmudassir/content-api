@@ -25,7 +25,7 @@ function register(req, res, next) {
     }
 
     userService.register(req.body, req.hostname)
-        .then(() => res.json({ message: 'Registration successful, please check your email for verification instructions' }))
+        .then(() => res.json({ message: 'Registration successful.' }))
         .catch(next);
 }
 

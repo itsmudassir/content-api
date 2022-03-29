@@ -26,6 +26,7 @@ const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
       }, 400);
     }
   }, [show]);
+  
 
   const handleClickSubmitForm = (e) => {
     // e.preventDefault();

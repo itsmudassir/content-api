@@ -42,3 +42,6 @@ Content-Type: application/json
 
 }
 
+###
+# delete a custom topic by topic-id
+DELETE http://localhost:7777/api/customTopicSearch/deletecustomtopic/623319cb16d503df34194437

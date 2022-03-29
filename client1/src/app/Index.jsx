@@ -7,7 +7,7 @@ import { Alert } from "../_components/Alert";
 import { PrivateRoute } from "../_components/PrivateRoute";
 import { Home } from "../home/Index";
 import { Profile } from "../profile/Index";
-import { Admin } from "../admin/Index";
+// import { Admin } from "../admin/Index";
 import { User } from "../user/Index";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
         <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
         <PrivateRoute exact path="/" component={Home} />
         <PrivateRoute path="/profile" component={Profile} />
-        <PrivateRoute path="/admin" roles={[Role.Admin]} component={Admin} />
+        {/* <PrivateRoute path="/admin" roles={[Role.Admin]} component={Admin} /> */}
         <Route path="/user" component={User} />
         <Redirect from="*" to="/" />
       </Switch>
