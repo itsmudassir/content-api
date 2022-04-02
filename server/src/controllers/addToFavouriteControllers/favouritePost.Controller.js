@@ -12,12 +12,16 @@ const postFavouritePost = async (req, res) => {
     }
 
     try {
+        // if (await favouritePostsModel.findOne({ post_id: req.body.id })) {
+        //    return res.status(400).json({errorMsg:"This post is already added to this folder"})
+        // }
         const post = new favouritePostsModel(req.body);
+        post.post_id = req.body.id;
         post.folderId = req.params.id;
-         post.userId = req.user.id;
+        post.userId = req.user.id;
         // post.userId = "622a0c7b24abda1ef66718c7";
         await post.save();
-        return res.status(201).json({ successMsg: "Added to favourite folder" }); //201 for created
+        return res.status(201).json({ successMsg: "Added to favourites folder" }); //201 for created
     } catch (err) {
         res.status(500).json({ errorMsg: "Server Error" }); //500 for server error
         console.log("ERROR OCCOURED WHILE ADDING POST TO FAVOURITES FOLDER", err);
@@ -74,7 +78,7 @@ const getAllPosts = async (req, res,) => {
 // access: PROTECTED
 const getAllPostsByUserId = async (req, res) => {
     try {
-         const userId = req.user.id;
+        const userId = req.user.id;
         // const userId = "622a0c7b24abda1ef66718c7";
         const posts = await favouritePostsModel.find({ userId: userId });
 

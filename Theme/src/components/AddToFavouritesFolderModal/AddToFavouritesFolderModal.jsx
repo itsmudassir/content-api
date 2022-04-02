@@ -12,6 +12,7 @@ import {
 import Input from "../Input/Input";
 import ScrollableSelectBox from "../ScrollableSelectBox/ScrollableSelectBox";
 import { useSelector } from "react-redux";
+import cogoToast from "cogo-toast";
 
 const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
   // local/global states
@@ -23,17 +24,23 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
 
   // RTK query
   const [createFolder, createFolderObj] = useCreateFolderMutation();
-  const getAllFolders = useGetAllFoldersQuery();
+    const getAllFolders = useGetAllFoldersQuery();
   const [addPostToFavFolder, addPostToFavFolderObj] =
     useAddPostToFavouritesFolderMutation();
-  console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", getAllFolders);
 
   // handlers
-  const handleClickSubmitForm = (e) => {
+  const handleClickSubmitForm = async (e) => {
+    e.preventDefault();
+    try{
+      const res = await createFolder({ folderName: folderName });
+      if (res.data) cogoToast.success(res.data.successMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg);
+      console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",res)
+    }catch(err){
+      console.log("ERROR OCCOURED WHILE CREATING FOLDER", createFolderObj)
+      cogoToast.error(createFolderObj?.error?.data?.errorMsg);
+    }
     setShowAddFolder(false);
-    // e.preventDefault();
-    // createFolder({ folderName: folderName });
-    // history.push("/topics");
   };
 
   const handelShowAddFolder = (e) => {
@@ -41,18 +48,22 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
     setShowAddFolder(true);
   };
 
-  const handelAddPostToFavFolder = (e) => {
+  const handelAddPostToFavFolder = async (e) => {
     e.preventDefault();
     try {
+
       if (folderId !== undefined && selectedPost !== null) {
-        addPostToFavFolder({ folderId, selectedPost });
+
+        const res = await addPostToFavFolder({ folderId, selectedPost });
+
+        if (res.data) cogoToast.success(res.data.successMsg);
+
+        if (res.error) cogoToast.error(res.error.data.errorMsg);
       }
-      if (addPostToFavFolderObj.error) {
-        console.log("ERROR WHILE SENDING DATA", addPostToFavFolderObj.error);
-      }
+      
     } catch (err) {
       console.log("ERROR WHILE SENDING DATA", err);
-      console.log("ERROR WHILE SENDING DATA", addPostToFavFolderObj.error);
+      cogoToast.error(addPostToFavFolderObj?.error?.data?.errorMsg);
     }
   };
 
@@ -67,18 +78,6 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
       }, 400);
     }
   }, [show]);
-
-  // useEffect(() => {
-  //   // RTK query code to add post to favouritesFolder
-  //   if (folderId !== undefined && selectedPost !== null) {
-  //     addPostToFavFolder({ folderId, selectedPost });
-  //     console.log("POST ADDED xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-  //   }
-  //   console.log("ERROR WHILE SENDING DATA", addPostToFavFolderObj.error);
-  // }, [folderId]);
-
-  console.log(folderId);
-  console.log(selectedPost);
 
   const renderContent = () => {
     return (
@@ -106,7 +105,6 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
           <>
             <div className="mt-4">
               <h6 className="text-md text-neutral-700">Folder Name</h6>
-
               <Input
                 type="text"
                 placeholder="Enter Folder Name"
