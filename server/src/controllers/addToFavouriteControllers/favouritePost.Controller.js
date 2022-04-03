@@ -12,10 +12,10 @@ const postFavouritePost = async (req, res) => {
     }
 
     try {
-        // if (await favouritePostsModel.findOne({ post_id: req.body.id })) {
-        //    return res.status(400).json({errorMsg:"This post is already added to this folder"})
-        // }
-        const post = new favouritePostsModel(req.body);
+        if (await favouritePostsModel.findOne({ post_id: req.body.id, folderId: req.params.id })) {
+            return res.status(400).json({ errorMsg: "This post is already added to this folder" })
+        }
+        const post = new favouritePostsModel(req.body); 
         post.post_id = req.body.id;
         post.folderId = req.params.id;
         post.userId = req.user.id;
@@ -97,12 +97,12 @@ const getAllPostsByUserId = async (req, res) => {
 
 
 // route:  DELETE /api/favouritePosts/post/:id
-// desc:   Deleting a post by post id
+// desc:   Deleting a post by Elastic Search post id
 // access: PROTECTED
 const deleteSinglePost = async (req, res) => {
-    const postId = req.params.id;
+    const elasticPostId = req.params.id;
     try {
-        await favouritePostsModel.deleteOne({ _id: postId });
+        await favouritePostsModel.deleteOne({ post_id: elasticPostId });
         return res.status(200).json({ successMsg: "Post deleted successfully" });
 
     } catch (err) {

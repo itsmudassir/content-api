@@ -23,7 +23,7 @@ const PostCardLikeAndComment = ({
 
   //getting postData from the Card11 component
 
-  var {category ,twitter_shares ,facebook_shares , date , facebook , image_url  , date_publish, title ,source_domain ,twitter ,language} =  postData
+  var {category ,twitter_shares ,facebook_shares , date , facebook , image_url  , date_publish, title ,source_domain ,twitter ,language} =  postData.fields;
 
   // setting href statically
 
@@ -52,7 +52,7 @@ const PostCardLikeAndComment = ({
         }  ${itemClass}`}
       />
 
-      <PostCardAddtoFavouritesFolderBtn setPostToRedux={setPostToRedux}/>
+      <PostCardAddtoFavouritesFolderBtn postData={postData} setPostToRedux={setPostToRedux}/>
 
       
     </div>

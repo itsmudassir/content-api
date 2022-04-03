@@ -18,7 +18,7 @@ import ButtonCircle from "../../components/Button/ButtonCircle";
 import Input from "../../components/Input/Input";
 import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import cogoToast from "cogo-toast"
 import Card12 from "../../components/Card11/Card12";
 
 const TopicsPage = ({ className = "" }) => {
@@ -69,10 +69,12 @@ const TopicsPage = ({ className = "" }) => {
   const SaveClick = async (e) => {
     e.preventDefault();
     if (toggleFolderNameHideId !== "" && folderNameState !== "") {
-      await updateFolder({
+      const res = await updateFolder({
         id: toggleFolderNameHideId,
         folderName: folderNameState,
       });
+      if (res.data) cogoToast.success(res.data.successMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg);
     }
     setToggleFolderNameHide(false);
     setToggleFolderNameHideId("");
@@ -183,7 +185,7 @@ const TopicsPage = ({ className = "" }) => {
                 return (
                   <>
                     {toggleFolderNameHide && toggleFolderNameHideId === _id ? (
-                      <form className="mt-0 relative max-w-[80%]" key={_id}>
+                      <form className="mt-0  relative max-w-[80%]" key={_id}>
                         <Input
                           rounded="rounded-md"
                           aria-required
@@ -211,7 +213,7 @@ const TopicsPage = ({ className = "" }) => {
                     ) : (
                       <li key={_id}>
                         <NavLink
-                          className="flex px-6 py-2.5 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+                          className="flex px-6 py-2.5 m-0 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
                           // to={`/topics/${_id}`}
                           to={`${url}/favourite-posts/${_id}`}

@@ -7,7 +7,6 @@ const baseQuery = fetchBaseQuery({
     prepareHeaders: (headers, { getState }) => {
         const user = accountService.userValue;
         const token = user.jwtToken;
-        // const token = getState().auth.token
 
         // If we have a token set in state, let's assume that we should be passing it.
         if (token) {
@@ -23,14 +22,13 @@ const contentApi = createApi({
     reducerPath: "contentApi",
     baseQuery: baseQuery,
     // baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7777" }),
-    tagTypes: ["FavouritesFolder", "GetCustomTopics"],
+    tagTypes: ["FavouritesFolder", "GetCustomTopics", "FavouritePosts"],
 
     endpoints: (builder) => ({
 
         // FAVOURITE FOLDER QUERIES
 
         // get all favourite folders
-
         getAllFolders: builder.query({
             query: () => ({
                 url: "/api/favouritesFolder/",
@@ -49,7 +47,6 @@ const contentApi = createApi({
         }),
 
         //delete folder by id
-
         deleteFolder: builder.mutation({
             query: ({ id }) => ({
                 url: `/api/favouritesFolder/${id}`,
@@ -65,10 +62,10 @@ const contentApi = createApi({
                 method: "POST",
                 body: folderName,
             }),
+            invalidatesTags: ["FavouritesFolder"],
         }),
 
         //Get All Customtopic
-
         getAllCustomTopics: builder.query({
             query: () => ({
                 url: "/api/customTopicSearch/getcustomtopics",
@@ -84,8 +81,8 @@ const contentApi = createApi({
             }),
             // invalidatesTags: ["GetCustomTopics"],
         }),
-        //Update CustomTopics
 
+        //Update CustomTopics
         updateCustomTopic: builder.mutation({
             query: ({ _id, ...rest }) => ({
                 url: `/api/customTopicSearch/updatecustomtopic/${_id}`,
@@ -110,11 +107,15 @@ const contentApi = createApi({
             query: (folderId) => ({
                 url: `/api/favouritePosts/all_posts/${folderId}`,
             }),
+            providesTags: ["FavouritePosts"]
         }),
+
+        // get all favourite posts by authenticated user
         getAllFavouritePostsbyUser: builder.query({
             query: () => ({
                 url: `/api/favouritePosts/all_posts`,
             }),
+            providesTags: ["FavouritePosts"]
         }),
 
         //add a post to favouritesFolder
@@ -124,7 +125,18 @@ const contentApi = createApi({
                 method: "POST",
                 body: params.selectedPost,
             }),
+            invalidatesTags: ["FavouritePosts"]
         }),
+
+        // delete single post by post id
+        deletePostByElasticId: builder.mutation({
+            query: (id) => ({
+                url: `/api/favouritePosts/post/${id}`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["FavouritePosts"]
+        }),
+
 
         //USER QUERIES
 
@@ -153,4 +165,5 @@ export const {
     useDeleteFolderMutation,
     useUpdateFolderMutation,
     useCreateTopicMutation,
+    useDeletePostByElasticIdMutation
 } = contentApi;

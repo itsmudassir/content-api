@@ -98,7 +98,7 @@ const Card11 = ({
             <PostCardLikeAndComment
               className="relative"
               setPostToRedux={setPostToRedux}
-              postData={cardvalue.fields}
+              postData={cardvalue}
             />
 
             <PostCardSaveAction

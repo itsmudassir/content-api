@@ -29,13 +29,12 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
     useAddPostToFavouritesFolderMutation();
 
   // handlers
-  const handleClickSubmitForm = async (e) => {
+  const handelCreateFolder = async (e) => {
     e.preventDefault();
     try{
       const res = await createFolder({ folderName: folderName });
       if (res.data) cogoToast.success(res.data.successMsg);
       if (res.error) cogoToast.error(res.error.data.errorMsg);
-      console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",res)
     }catch(err){
       console.log("ERROR OCCOURED WHILE CREATING FOLDER", createFolderObj)
       cogoToast.error(createFolderObj?.error?.data?.errorMsg);
@@ -116,7 +115,7 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
             </div>
             <div className="mt-4 space-x-6">
               <ButtonPrimary
-                onClick={(e) => handleClickSubmitForm(e)}
+                onClick={(e) => handelCreateFolder(e)}
                 type="submit"
               >
                 Create

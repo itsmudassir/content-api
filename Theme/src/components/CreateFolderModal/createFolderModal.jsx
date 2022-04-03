@@ -9,6 +9,7 @@ import twFocusClass from "../../utils/twFocusClass";
 import { useCreateFolderMutation } from "../../app/Api/contentApi";
 import ArchiveFilterListBox from "../ArchiveFilterListBox/ArchiveFilterListBox";
 import Input from "../Input/Input";
+import cogoToast from "cogo-toast"
 
 const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
   const textareaRef = useRef(null);
@@ -28,11 +29,19 @@ const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
   }, [show]);
   
 
-  const handleClickSubmitForm = (e) => {
-    // e.preventDefault();
-    createFolder({ folderName: folderName });
-    history.push("/topics");
+  const handleClickSubmitForm = async (e) => {
+    e.preventDefault();
+    // history.push("/topics");
+    try{
+      const res = await createFolder({ folderName: folderName });
+      if (res.data) cogoToast.success(res.data.successMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg);
+    }catch(err){
+      console.log("ERROR OCCOURED WHILE CREATING FOLDER", createFolderObj)
+      cogoToast.error(createFolderObj?.error?.data?.errorMsg);
+    }
   };
+
   const renderContent = () => {
     return (
       <form action="#">
@@ -44,19 +53,6 @@ const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
           <h6 className="text-xs text-neutral-700 dark:text-neutral-200">
             Folder Name
           </h6>
-          {/* <span className="text-sm text-neutral-6000 dark:text-neutral-400">
-            Please provide any additional information or context that will help
-            us understand and handle the situation.
-          </span> */}
-          {/* <Textarea
-            placeholder="enter folder name"
-            className="mt-3"
-            ref={textareaRef}
-            required={true}
-            rows={4}
-            id="report-message"
-            onChange={(e) => setFolderName(e.target.value)}
-          /> */}
           <Input
             type="text"
             placeholder="Enter Folder Name"
