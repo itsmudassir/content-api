@@ -15,6 +15,7 @@ const postFavouritePost = async (req, res) => {
         if (await favouritePostsModel.findOne({ post_id: req.body.id, folderId: req.params.id })) {
             return res.status(400).json({ errorMsg: "This post is already added to this folder" })
         }
+        
         const post = new favouritePostsModel(req.body); 
         post.post_id = req.body.id;
         post.folderId = req.params.id;

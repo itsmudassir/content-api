@@ -12,8 +12,8 @@ const favouritePostsSchema = new Schema({
         ref: "userModel"
     },
 
-    index: {
-        type: String,
+    article_length:{
+        type:Number
     },
 
     title: {
@@ -23,6 +23,8 @@ const favouritePostsSchema = new Schema({
     maintext: {
         type: String,
     },
+
+    authors:[String],
 
     category: {
         type: String,
@@ -40,12 +42,20 @@ const favouritePostsSchema = new Schema({
         type: Number,
     },
 
-    facebook: {
+    sentiment: {
+        type:String
+    },
+
+    facebook_shares: {
         type: Number,
     },
 
-    twitter: {
+    twitter_shares: {
         type: Number,
+    },
+
+    __typename:{
+        type:String
     },
 
     image_url: {
@@ -59,13 +69,16 @@ const favouritePostsSchema = new Schema({
     post_id: {
         type: String,
     },
+    
+    date_download: {
+        type: Date
+    },
+    isLiked:{
+        type: Boolean
+    },
     date: {
         type: Date,
         default: Date.now,
-    },
-
-    date_publish: {
-        type: Date
     }
 });
 

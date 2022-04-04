@@ -48,15 +48,13 @@ const Card11 = ({
   const setPostToRedux = (e) => {
     try {
       e.preventDefault();
-      dispatch(addpost({ id, ...cardvalue.fields }));
+      dispatch(addpost({...cardvalue.fields, id, isLiked: true  }));
     } catch (err) {
-      // cogoToast.error("This is a error message", {
-      //   position: "top-left",
-      // });
       console.log(err);
     }
   };
 
+  console.log(cardvalue)
   //returning of fuction starts here
   return (
     <div

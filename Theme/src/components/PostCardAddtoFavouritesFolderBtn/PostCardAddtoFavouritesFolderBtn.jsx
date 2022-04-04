@@ -9,7 +9,10 @@ import cogoToast from "cogo-toast";
 
 const PostCardAddtoFavouritesFolderBtn = ({ setPostToRedux, postData }) => {
   const [showModal, setshowModal] = useState(false);
+  
+  // RTK query
   const [deletePost, deletePostObj]= useDeletePostByElasticIdMutation();
+  
   // handlers
   const closeModal = () => setshowModal(false);
   const showModalOnClick = () => setshowModal(true);
@@ -18,10 +21,10 @@ const PostCardAddtoFavouritesFolderBtn = ({ setPostToRedux, postData }) => {
     showModalOnClick();
     setPostToRedux(e);
   };
-
+console.log(postData)
   const deletePostHandler = async ()=>{
     try{
-      const res = await deletePost(postData?.id);
+      const res = await deletePost(postData?.id || postData?.post_id);
       if(res.data)cogoToast.success("Removed From favourites");
       if(res.error)cogoToast.error(res.error.data.errorMsg);
 
