@@ -117,6 +117,13 @@ const FILTERS = [
   { label: "Twitter Shares", id: "twitter_shares" },
   { label: "Date Download", id: "date_download" },
 ];
+const LANGFILTER = [
+  { label: "English", identifier: "language", id: "English" },
+  { label: "Greek", identifier: "language", id: "Greek" },
+  { label: "Dutch", identifier: "language", id: "Dutch" },
+  { label: "French", identifier: "language", id: "French" },
+  { label: "German", identifier: "language", id: "German" },
+];
 
 const PageSearch = ({ className = "" }) => {
   const RtkData = useGetAllFavouritePostsbyUserQuery();
@@ -129,7 +136,8 @@ const PageSearch = ({ className = "" }) => {
 
   const variables = useSearchkitVariables();
   var flag = false;
- let newData;
+  let newData;
+
   useEffect(() => {
     if (location?.state?.topic) {
       api.toggleFilter({
@@ -169,8 +177,10 @@ const PageSearch = ({ className = "" }) => {
   //     }
   //   });
   // }
+
+  console.log(variables);
   if (data) {
-    console.log(RtkData);
+    console.log(data);
     var allFavoriteFolder = {};
     RtkData?.data?.filter((item) => {
       if (item.post_id !== undefined) {
@@ -180,14 +190,14 @@ const PageSearch = ({ className = "" }) => {
     const jsonString = JSON.stringify(Object.assign({}, allFavoriteFolder));
     const json_obj = JSON.parse(jsonString);
     console.log(allFavoriteFolder);
-     newData = data?.results?.hits?.items?.map((item) => {
+    newData = data?.results?.hits?.items?.map((item) => {
       try {
         if (allFavoriteFolder[item.id] === undefined) {
           // return allFavoriteFolder[""];
-          return {...item, isLiked: false}
+          return { ...item, isLiked: false };
         } else {
           // console.log(item.id)
-          return {...item, isLiked: true}
+          return { ...item, isLiked: true };
         }
       } catch (error) {
         // return allFavoriteFolder[""];
@@ -244,14 +254,8 @@ const PageSearch = ({ className = "" }) => {
         <main>
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex space-x-2.5">
-              {/* {/ Languages /} */}
 
-              {/* {languageslist && languageslist.length > 0 ? (
-                <LanguagesFilterBox lists={languageslist} />
-              ) : (
-                ""
-              )} */}
-
+              <LanguagesFilterBox lists={LANGFILTER} />
               <DateRangeDropDown facet={data?.results?.facets} />
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>

@@ -24,19 +24,19 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
 
   // RTK query
   const [createFolder, createFolderObj] = useCreateFolderMutation();
-    const getAllFolders = useGetAllFoldersQuery();
+  const getAllFolders = useGetAllFoldersQuery();
   const [addPostToFavFolder, addPostToFavFolderObj] =
     useAddPostToFavouritesFolderMutation();
 
   // handlers
   const handelCreateFolder = async (e) => {
     e.preventDefault();
-    try{
+    try {
       const res = await createFolder({ folderName: folderName });
       if (res.data) cogoToast.success(res.data.successMsg);
       if (res.error) cogoToast.error(res.error.data.errorMsg);
-    }catch(err){
-      console.log("ERROR OCCOURED WHILE CREATING FOLDER", createFolderObj)
+    } catch (err) {
+      console.log("ERROR OCCOURED WHILE CREATING FOLDER", createFolderObj);
       cogoToast.error(createFolderObj?.error?.data?.errorMsg);
     }
     setShowAddFolder(false);
@@ -50,16 +50,13 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
   const handelAddPostToFavFolder = async (e) => {
     e.preventDefault();
     try {
-
       if (folderId !== undefined && selectedPost !== null) {
-
         const res = await addPostToFavFolder({ folderId, selectedPost });
 
         if (res.data) cogoToast.success(res.data.successMsg);
 
         if (res.error) cogoToast.error(res.error.data.errorMsg);
       }
-      
     } catch (err) {
       console.log("ERROR WHILE SENDING DATA", err);
       cogoToast.error(addPostToFavFolderObj?.error?.data?.errorMsg);
@@ -81,17 +78,25 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
   const renderContent = () => {
     return (
       <form action="#">
-        <ScrollableSelectBox
-          foldersList={getAllFolders?.data}
-          setFolderId={setFolderId}
-        />
-        <ButtonPrimary
-          className="mt-3 mb-2 bg-green-400"
-          onClick={(e) => handelAddPostToFavFolder(e)}
-        >
-          Add To Folder
-        </ButtonPrimary>
-        <br />
+        {getAllFolders?.data?.length == 0 ? (
+          <>
+            <p>There are no folders to add post</p>
+          </>
+        ) : (
+          <>
+            <ScrollableSelectBox
+              foldersList={getAllFolders?.data}
+              setFolderId={setFolderId}
+            />
+            <ButtonPrimary
+              className="!mt-3 mb-2 bg-green-400"
+              onClick={(e) => handelAddPostToFavFolder(e)}
+            >
+              Add To Folder
+            </ButtonPrimary>
+            <br />
+          </>
+        )}
 
         {!showAddFolder ? (
           <ButtonPrimary

@@ -21,7 +21,6 @@ const PostCardAddtoFavouritesFolderBtn = ({ setPostToRedux, postData }) => {
     showModalOnClick();
     setPostToRedux(e);
   };
-console.log(postData)
   const deletePostHandler = async ()=>{
     try{
       const res = await deletePost(postData?.id || postData?.post_id);

@@ -54,7 +54,6 @@ const Card11 = ({
     }
   };
 
-  console.log(cardvalue)
   //returning of fuction starts here
   return (
     <div
