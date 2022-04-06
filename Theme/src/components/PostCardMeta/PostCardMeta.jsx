@@ -19,7 +19,9 @@ const PostCardMeta = ({
 
 
   
- const res =  dateFormat(date_download, "mmmm dS, yyyy") 
+ const res =  dateFormat(date_download, "mmm d, yyyy") 
+   
+ const formatedDate =  dateFormat(date_download, "mm/dd/yy") 
 
 
 
@@ -93,11 +95,11 @@ const PostCardMeta = ({
       
       <>
       <span className="text-neutral-500 dark:text-neutral-400 mx-[6px] font-medium">
-          ·
+          · {res}
         </span>
-        <span className="text-neutral-500 dark:text-neutral-400 font-normal" style={{padding: "0px 0px 0px 15px"}}>
-          {!res ? date_publish : date}
-        </span>
+        {/* <span className="text-neutral-500 dark:text-neutral-400 font-normal">
+          {formatedDate}
+        </span> */}
       </>
     </div>
   );

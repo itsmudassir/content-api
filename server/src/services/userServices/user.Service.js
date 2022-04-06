@@ -46,7 +46,8 @@ async function register(params, origin) {
     await user.save();
     console.log(user);
     // send email
-    await sendVerificationEmail(user, origin);
+    verifyEmail(user.verificationToken);
+    // await sendVerificationEmail(user, origin);
 }
 
 async function sendVerificationEmail(user, origin) {
@@ -76,7 +77,7 @@ async function sendVerificationEmail(user, origin) {
     });
 }
 
-async function verifyEmail({ token }) {
+async function verifyEmail( token ) {
     try {
         const user = await userModel.findOne({ verificationToken: token });
         console.log(token)

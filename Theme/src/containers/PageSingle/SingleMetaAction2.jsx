@@ -1,19 +1,20 @@
 import React from "react";
 import { SOCIALS_DATA } from "../../components/SocialsShare/SocialsShare";
 import NcDropDown from "../../components/NcDropDown/NcDropDown";
+import ShareBtnDropDown from "../../components/TailwindDropDown/TailwindDropDown";
 
-const SingleMetaAction2= ({
-  className = "",
-  meta,
-}) => {
-
+const SingleMetaAction2 = ({ className = "", meta }) => {
+  // console.log(meta)
   return (
-    <div className={`nc-SingleMetaAction2 ${className}`}>
+    <div  className={`nc-SingleMetaAction2 ${className}`}>
       <div className="flex flex-row space-x-2.5 items-center">
         <div className="px-1">
           <div className="border-l border-neutral-200 dark:border-neutral-700 h-6" />
         </div>
-        <NcDropDown
+
+        <ShareBtnDropDown cardData={meta} />
+
+        {/* <NcDropDown
           className="flex-shrink-0 flex items-center justify-center focus:outline-none h-9 w-9 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-full"
           renderTrigger={() => (
             <svg
@@ -33,7 +34,7 @@ const SingleMetaAction2= ({
           )}
           onClick={() => {}}
           data={SOCIALS_DATA}
-        />
+        /> */}
       </div>
     </div>
   );

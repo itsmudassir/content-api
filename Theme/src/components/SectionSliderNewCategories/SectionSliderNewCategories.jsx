@@ -34,7 +34,19 @@ const query = gql`
     }
   }
 `;
-
+const renderCard = (entry, index) => {
+  let categoryimage = CategoryImage(entry.label);
+  return (
+    <>
+      <CardCategory4
+        label={entry.label}
+        count={entry.count}
+        index={index}
+        categoryimage={categoryimage}
+      />
+    </>
+  );
+};
 const SectionSliderNewCategories = ({
   heading,
   subHeading,
@@ -53,20 +65,6 @@ const SectionSliderNewCategories = ({
   if (loading) {
     <LoadingVideo />;
   }
-
-  const renderCard = (entry, index) => {
-    let categoryimage = CategoryImage(entry.label);
-    return (
-      <>
-        <CardCategory4
-          label={entry.label}
-          count={entry.count}
-          index={index}
-          categoryimage={categoryimage}
-        />
-      </>
-    );
-  };
 
   return (
     <>
@@ -89,13 +87,19 @@ const SectionSliderNewCategories = ({
           })}
         </div>
       ) : (
-
-        <div style={{ display: "flex",
-  justifyContent: "center",
-  alignItems: "center"}}> <LoadingVideo /></div> 
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          <LoadingVideo />
+        </div>
       )}
     </>
   );
 };
 
-export default withSearchkit(withSearchkitRouting(SectionSliderNewCategories));
+export default SectionSliderNewCategories;

@@ -10,25 +10,26 @@ import { Link } from "react-router-dom";
 // }
 
 const Card3Small = ({ className = "h-full", post }) => {
-  const { title, href, featuredImage } = post;
+  const { title, url, image_url,source_domain,date_download ,sentiment} = post;
 
   return (
     <div
       className={`nc-Card3Small relative flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center ${className}`}
       data-nc-id="Card3Small"
     >
-      <Link to={href} className=" absolute inset-0" title={title}></Link>
+      <Link to={url} className=" absolute inset-0" title={title}></Link>
       <div className="relative space-y-2">
         <PostCardMeta meta={{ ...post }} />
         <h2 className="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100">
-          <Link to={href} className=" line-clamp-2" title={title}>
+          <Link to={url} style={{fontSize : "13px"}} className=" line-clamp-2" title={title}>
             {title}
           </Link>
+          <p style={{fontWeight : "200" ,fontSize : "10px"}}>{source_domain}</p>
         </h2>
       </div>
 
       <Link
-        to={href}
+        to={url}
         title={title}
         className={`block sm:w-20 flex-shrink-0 relative rounded-lg overflow-hidden mb-5 sm:ml-4 sm:mb-0 group`}
       >
@@ -36,7 +37,7 @@ const Card3Small = ({ className = "h-full", post }) => {
           <NcImage
             containerClassName="absolute inset-0"
             className="nc-will-change-transform object-cover w-full h-full group-hover:scale-110 transform transition-transform duration-300"
-            src={featuredImage}
+            src={image_url}
             title={title}
           />
         </div>

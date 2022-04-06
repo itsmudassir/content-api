@@ -1,6 +1,6 @@
 import React from "react";
 import reportWebVitals from "./reportWebVitals";
-import { Router, } from "react-router-dom";
+import { Router } from "react-router-dom";
 import { render } from 'react-dom';
 import { history } from "./_helpers/history";
 import {accountService} from "./_services/account.Service"

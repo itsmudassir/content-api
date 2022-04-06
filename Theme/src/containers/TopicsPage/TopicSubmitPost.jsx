@@ -2,17 +2,140 @@ import React, { useEffect, useState } from "react";
 import Input from "../../components/Input/Input";
 import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import Select from "../../components/Select/Select";
-import Textarea from "../../components/Textarea/Textarea";
 import Label from "../../components/Label/Label";
 import WidgetPosts from "../../components/WidgetPosts/WidgetPosts";
 import { DEMO_POSTS } from "../../data/posts";
 import Chip from "../../components/chip/chip";
-import { set } from "date-fns";
 import ExcludeResultInputField from "../../components/ExcludeResultInputField/ExcludeResultInputField";
 import LimitResultInputField from "../../components/LimitResultInputField/LimitResultInputField";
-const widgetPostsDemo = DEMO_POSTS.filter((_, i) => i > 2 && i < 7);
+import { useCreateTopicMutation } from "../../app/Api/contentApi";
+import cogoToast from "cogo-toast";
+import { gql, useQuery } from "@apollo/client";
+import { useSearchkitVariables } from "@searchkit/client";
+import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
+import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
+import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
+
+const query = gql`
+  query resultSet(
+    $query: String
+    $filters: [SKFiltersSet]
+    $page: SKPageInput
+    $sortBy: String
+  ) {
+    results(query: $query, filters: $filters) {
+      summary {
+        total
+        appliedFilters {
+          id
+          identifier
+          display
+          label
+          ... on DateRangeSelectedFilter {
+            dateMin
+            dateMax
+            __typename
+          }
+
+          ... on ValueSelectedFilter {
+            value
+            __typename
+          }
+          __typename
+        }
+        sortOptions {
+          id
+          label
+          __typename
+        }
+        query
+        __typename
+      }
+      hits(page: $page, sortBy: $sortBy) {
+        page {
+          total
+          totalPages
+          pageNumber
+          from
+          size
+          __typename
+        }
+        sortedBy
+
+        items {
+          ... on ResultHit {
+            id
+            fields {
+              article_length
+              category
+              authors
+              date_download
+              language
+              facebook_shares
+              sentiment
+              url
+              readtime
+              image_url
+              twitter_shares
+              maintext
+              source_domain
+              title
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      facets {
+        identifier
+        type
+        label
+        display
+        entries {
+          label
+          count
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+
+const FILTERS = [
+  { label: "Relevance", id: "relevance" },
+  { label: "Facebook Shares", id: "facebook_shares" },
+  { label: "Twitter Shares", id: "twitter_shares" },
+  { label: "Date Download", id: "date_download" },
+];
 
 const TopicSubmitPost = () => {
+  /////////////////////////////////graphql code starts ////////////////////////////////////////////
+
+  const variables = useSearchkitVariables();
+  if (variables?.page.size) {
+    variables.page.size = 20;
+  }
+  console.log(variables?.page.size);
+
+  var { data, error, loading } = useQuery(query, { variables });
+
+  if (error) {
+    cogoToast.error("This is a error message", {
+      position: "top-left",
+    });
+  }
+
+  if (loading) {
+    <div style={{ display: "flex", alignItems: "center" }}>
+      {" "}
+      <LoadingVideo />
+    </div>;
+  }
+
   // states
   const [topicName, setTopicName] = useState(null); // topic name
 
@@ -33,8 +156,9 @@ const TopicSubmitPost = () => {
   ] = useState(""); // must_not_contains_keywords_value
 
   const [exclude_domains_list, setExclude_domains_list] = useState([]); // exclude_domains
-  const [limit_domains_results_list, setLimit_domains_results_list] =
-    useState([]); // limit_domains_results
+  const [limit_domains_results_list, setLimit_domains_results_list] = useState(
+    []
+  ); // limit_domains_results
 
   // filters
   const [bodyORtitle, setBodyORtitle] = useState("titles");
@@ -42,27 +166,41 @@ const TopicSubmitPost = () => {
   const [endDate, setEndDate] = useState(null);
   const [language, setlanguage] = useState(null);
   const [engagement, setEngagement] = useState(null);
+  const [createTopic, { isError, isLoading }] = useCreateTopicMutation();
 
+  // const custom_topic = {
+  //   userId: "123abc...",
+  //   name: topicName,
+  //   filters: {
+  //     type: bodyORtitle,
+  //     startdate: startDate,
+  //     enddate: endDate,
+  //     language: language,
+  //     engagement: engagement,
+  //   },
+  //   selection: {
+  //     match_type: domainORtopic,
+  //     // any_keywords: any_keywords,
+  //     // must_also_keywords: must_also_keywords,
+  //     // must_not_contains_keywords: must_not_contains_keywords,
+  //     // exclude_domains: exclude_domains,
+  //     // limit_domains_results: limit_domains_results,
+  //   },
+  // };
   const custom_topic = {
-    userId: "123abc...",
+    _id: "1211",
+    userId: "",
     name: topicName,
-    filters: {
-      type: bodyORtitle,
-      startdate: startDate,
-      enddate: endDate,
-      language: language,
-      engagement: engagement,
-    },
-    selection: {
-      match_type: domainORtopic,
-      // any_keywords: any_keywords,
-      // must_also_keywords: must_also_keywords,
-      // must_not_contains_keywords: must_not_contains_keywords,
-      // exclude_domains: exclude_domains,
-      // limit_domains_results: limit_domains_results,
-    },
+    any_keywords: any_keywords_list,
+    match_type: domainORtopic,
+    must_also_keywords: must_also_keywords_list,
+    must_not_contains_keywords: must_not_contains_keywords_list,
+    exclude_domains: ["exclude_domains_list.com"],
+    limit_domains_results: ["www.limit_domains_results_list"],
+    enddate: endDate,
+    startdate: startDate,
+    language: language,
   };
-
   // event handlers
   // any_keywords
   const any_keywords_addItem = (e) => {
@@ -136,11 +274,10 @@ const TopicSubmitPost = () => {
       limit_domains_results_list.filter((i) => i !== item)
     );
   };
-  console.log(limit_domains_results_list);
 
   return (
     <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
-      {/* form container */}
+      {/* {/ form container /} */}
       <form className="basis-2/3  grid md:grid-cols-2 gap-6">
         <label className="block md:col-span-2">
           <Label className="font-bold text-lg">Topic Name</Label>
@@ -196,7 +333,7 @@ const TopicSubmitPost = () => {
             value={any_keywords_value}
           />
 
-          {/* CHIPS */}
+          {/* {/ CHIPS /} */}
           <div className="flex flex-wrap mt-1.5">
             {any_keywords_list.map((item, index) => {
               return (
@@ -225,7 +362,8 @@ const TopicSubmitPost = () => {
             value={must_also_keywords_value}
           />
 
-          {/* CHIPS */}
+          {/* {/ CHIPS /} */}
+
           <div className="flex flex-wrap mt-1.5">
             {must_also_keywords_list.map((val, index) => {
               return (
@@ -252,7 +390,7 @@ const TopicSubmitPost = () => {
             onKeyDown={(e) => must_not_contains_keywords_addItem(e)}
             value={must_not_contains_keywords_value}
           />
-          {/* CHIPS */}
+          {/* {/ CHIPS /} */}
           <div className="flex flex-wrap mt-1.5">
             {must_not_contains_keywords_list.map((val, index) => {
               return (
@@ -269,15 +407,16 @@ const TopicSubmitPost = () => {
           </div>
         </label>
 
-        {/* EXCLUDE DOMAINS */}
+        {/* {/ EXCLUDE DOMAINS /} */}
         <label className="block md:col-span-2 mt-4">
           <p className="mt-2 text-base text-neutral-500 font-medium">
             <b>EXCLUDE</b> results from these domains
           </p>
+
           <ExcludeResultInputField
             getSelectedvalve={exclude_domains_list_addItem}
           />
-          {/* CHIPS */}
+          {/* {/ CHIPS /} */}
           <div className="flex flex-wrap mt-1.5">
             {exclude_domains_list?.map((val, index) => {
               return (
@@ -293,16 +432,16 @@ const TopicSubmitPost = () => {
             })}
           </div>
         </label>
-
-        {/* LIMIT DOMAINS */}
+        {/* {/ LIMIT DOMAINS /} */}
         <label className="block md:col-span-2 mt-4">
           <p className="mt-2 text-base text-neutral-500 font-medium">
             <b>LIMIT</b> results to these domais only
           </p>
+
           <LimitResultInputField
             getSelectedvalve={limit_domains_results_list_addItem}
           />
-          {/* CHIPS */}
+          {/* {/ CHIPS /} */}
           <div className="flex flex-wrap mt-1.5">
             {limit_domains_results_list?.map((val, index) => {
               return (
@@ -323,39 +462,20 @@ const TopicSubmitPost = () => {
           <Label className="font-bold text-lg">Set Default Filters</Label>
         </label>
 
+        {/* Set Default Filters */}
+
         <div className="grid grid-cols-12 md:col-span-2 gap-2">
-          <label className="col-span-6 sm:col-span-4 md:col-span-3">
-            {/* <Label>Set start date</Label> */}
+          <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
+            <DateRangeDropDown facet={data?.results?.facets} />
+          </label>
 
-            <Select
-              onChange={(e) => setStartDate(e.target.value)}
-              className="mt-1 rounded bg-gray-100 border-slate-300"
-            >
-              <option value={null}>Start Date</option>
-              <option value="2021-11-02">2021-11-02</option>
-              <option value="2021-11-02">2021-11-02</option>
-              <option value="2021-11-02">2021-11-02</option>
-            </Select>
+          <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
+            <span className="mt-1 bg-gray-100">
+              <ArchiveFilterListBox lists={FILTERS} />
+            </span>
           </label>
 
           <label className="col-span-6 sm:col-span-4 md:col-span-3">
-            {/* <Label>Set end date</Label> */}
-
-            <Select
-              onChange={(e) => setEndDate(e.target.value)}
-              className="mt-1 rounded bg-gray-100 border-slate-300"
-            >
-              <option value={null}>End Date</option>
-              <option value="2021-11-03">2021-11-03</option>
-              <option value="2021-11-03">2021-11-03</option>
-              <option value="2021-11-03">2021-11-03</option>
-              <option value="2021-11-03">2021-11-03</option>
-            </Select>
-          </label>
-
-          <label className="col-span-6 sm:col-span-4 md:col-span-3">
-            {/* <Label>Select Language</Label> */}
-
             <Select
               onChange={(e) => setlanguage(e.target.value)}
               className="mt-1 rounded bg-gray-100 border-slate-300"
@@ -364,20 +484,6 @@ const TopicSubmitPost = () => {
               <option value="English">English</option>
               <option value="German">German</option>
               <option value="French">French</option>
-            </Select>
-          </label>
-
-          <label className="col-span-6 sm:col-span-4 md:col-span-3">
-            {/* <Label>Select Engagement</Label> */}
-
-            <Select
-              onChange={(e) => setEngagement(e.target.value)}
-              className="mt-1 rounded bg-gray-100 border-slate-300"
-            >
-              <option value="-1">Select engagement</option>
-              <option value="Facebook">Facebook</option>
-              <option value="Facebook">Facebook</option>
-              <option value="Facebook">Facebook</option>
             </Select>
           </label>
         </div>
@@ -415,7 +521,9 @@ const TopicSubmitPost = () => {
         <ButtonPrimary
           onClick={(e) => {
             e.preventDefault();
-            console.log(custom_topic);
+
+            createTopic(custom_topic);
+            console.log("in update btn", custom_topic);
           }}
           className="md:col-span-2"
         >
@@ -423,9 +531,10 @@ const TopicSubmitPost = () => {
         </ButtonPrimary>
       </form>
 
-      {/* CONTENT FEED CONTAINER */}
+      {/* {/ CONTENT FEED CONTAINER /} */}
+
       <div className="basis-1/3	">
-        <WidgetPosts posts={widgetPostsDemo} />
+        <WidgetPosts posts={data} />
       </div>
     </div>
   );

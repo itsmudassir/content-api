@@ -3,13 +3,12 @@ post http://localhost:7777/api/user/register
 Content-Type: application/json
 
 {
-    "email":"saad@gmail.com",
+    "email":"smsidrees10@gmail.com",
     "password":"saad01",
     "firstName":"Saad", 
     "lastName":"Idrees",
     "title":"Mr"
-
-}
+}                                                                                                                                                                                                                                                      
 
 ###
 
@@ -28,9 +27,8 @@ post http://localhost:7777/api/user/authenticate
 Content-Type:  application/json
 
 {
-    "email":"saad_idrees@gmail.com",
-    "password":"saad_idrees"
-
+    "email":"smsidrees10@gmail.com",
+    "password":"saad01"
 }
 
 ###

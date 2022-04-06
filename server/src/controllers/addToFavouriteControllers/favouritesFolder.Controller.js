@@ -13,9 +13,13 @@ const postFavouriteFolder = async (req, res) => {
         return res.status(400).json(validationErrors.array()[0]) // 400 for bad request
     }
 
+    if(await favouritesFolderModel.findOne({folderName: req.body.folderName})){
+        return res.status(400).json({errorMsg:"Folder name already exist"}) // 400 for bad request
+    }
+
     const folderName = req.body.folderName;
-    const userId = "622a0c7b24abda1ef66718c7";
-    // const userId = req.user.id;
+    // const userId = "622a0c7b24abda1ef66718c7";
+    const userId = req.user.id;
 
     try {
         const favouritesFolder = new favouritesFolderModel({
@@ -61,9 +65,8 @@ const getSingleFavouriteFolder = async (req, res) => {
 // access: PROTECTED
 const getAllFavouriteFolder = async (req, res) => {
     try {
-        const userId = "622a0c7b24abda1ef66718c7";
-        // const userId = req.user.id;
-        
+        // const userId = "62399ee49884a61281edd8e3";
+        const userId = req.user.id;
         const allFolders = await favouritesFolderModel.find({ userId: userId });
 
         if (!allFolders) {
@@ -121,6 +124,10 @@ const updateFavouriteFolder = async (req, res) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
         return res.status(400).json(validationErrors.array()[0])
+    }
+
+    if(await favouritesFolderModel.findOne({folderName: req.body.folderName})){
+        return res.status(400).json({errorMsg:"Folder name already exist"}) // 400 for bad request
     }
     try {
         const folderName = req.body.folderName;

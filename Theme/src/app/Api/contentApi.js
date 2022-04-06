@@ -1,10 +1,29 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { accountService } from '../../authentication/_services/account.Service';
 
+
+const baseQuery = fetchBaseQuery({
+    baseUrl: 'http://localhost:7777',
+    prepareHeaders: (headers, { getState }) => {
+        const user = accountService.userValue;
+        const token = user.jwtToken;
+
+        // If we have a token set in state, let's assume that we should be passing it.
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`)
+        }
+
+        return headers
+    },
+})
 
 
 const contentApi = createApi({
     reducerPath: "contentApi",
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7777" }),
+    baseQuery: baseQuery,
+    // baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7777" }),
+    tagTypes: ["FavouritesFolder", "GetCustomTopics", "FavouritePosts"],
+
     endpoints: (builder) => ({
 
         // FAVOURITE FOLDER QUERIES
@@ -12,8 +31,28 @@ const contentApi = createApi({
         // get all favourite folders
         getAllFolders: builder.query({
             query: () => ({
-                url: "/api/favouritesFolder/"
-            })
+                url: "/api/favouritesFolder/",
+            }),
+            providesTags: ["FavouritesFolder"],
+        }),
+
+        // edit the single folder
+        updateFolder: builder.mutation({
+            query: ({ id, ...folder }) => ({
+                url: `/api/favouritesFolder/${id}`,
+                method: "PATCH",
+                body: folder,
+            }),
+            invalidatesTags: ["FavouritesFolder"],
+        }),
+
+        //delete folder by id
+        deleteFolder: builder.mutation({
+            query: ({ id }) => ({
+                url: `/api/favouritesFolder/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["FavouritesFolder"],
         }),
 
         // Create Folder
@@ -21,27 +60,81 @@ const contentApi = createApi({
             query: (folderName) => ({
                 url: `/api/favouritesFolder`,
                 method: "POST",
-                body: folderName
-            })
+                body: folderName,
+            }),
+            invalidatesTags: ["FavouritesFolder"],
         }),
 
+        //Get All Customtopic
+        getAllCustomTopics: builder.query({
+            query: () => ({
+                url: "/api/customTopicSearch/getcustomtopics",
+            }),
+            providesTags: ["GetCustomTopics"],
+        }),
+
+        //deleteCustomTopic
+        deleteCustomTopic: builder.mutation({
+            query: ({ id }) => ({
+                url: `api/customTopicSearch/deletecustomtopic/${id}`,
+                method: "DELETE",
+            }),
+            // invalidatesTags: ["GetCustomTopics"],
+        }),
+
+        //Update CustomTopics
+        updateCustomTopic: builder.mutation({
+            query: ({ _id, ...rest }) => ({
+                url: `/api/customTopicSearch/updatecustomtopic/${_id}`,
+                method: "PATCH",
+                body: rest,
+            }),
+            // invalidatesTags: ["GetCustomTopics"],
+        }),
+        createTopic: builder.mutation({
+            query: (topicFields) => ({
+                url: "/api/customTopicSearch/createcustomtopic",
+                method: "POST",
+                body: topicFields,
+            }),
+            // invalidatesTags: ["GetCustomTopics"],
+        }),
 
         //FAVOURITE POSTS QUERIES
 
         // get all favourite posts by folder id
         getAllFavouritePosts: builder.query({
             query: (folderId) => ({
-                url: `/api/favouritePosts/all_posts/${folderId}`
-            })
+                url: `/api/favouritePosts/all_posts/${folderId}`,
+            }),
+            providesTags: ["FavouritePosts"]
+        }),
+
+        // get all favourite posts by authenticated user
+        getAllFavouritePostsbyUser: builder.query({
+            query: () => ({
+                url: `/api/favouritePosts/all_posts`,
+            }),
+            providesTags: ["FavouritePosts"]
         }),
 
         //add a post to favouritesFolder
         addPostToFavouritesFolder: builder.mutation({
             query: (params) => ({
                 url: `/api/favouritePosts/${params.folderId}`,
-                method:"POST",
-                body: params.selectedPost
-            })
+                method: "POST",
+                body: params.selectedPost,
+            }),
+            invalidatesTags: ["FavouritePosts"]
+        }),
+
+        // delete single post by post id
+        deletePostByElasticId: builder.mutation({
+            query: (id) => ({
+                url: `/api/favouritePosts/post/${id}`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["FavouritePosts"]
         }),
 
 
@@ -52,18 +145,25 @@ const contentApi = createApi({
             query: (params) => ({
                 url: `/api/user/${params.userId}`,
                 method: "PUT",
-                body: params.user
+                body: params.user,
             }),
-        })
+        }),
     }),
 });
-
 
 export { contentApi };
 export const {
     useGetAllFoldersQuery,
     useGetAllFavouritePostsQuery,
+    useGetAllFavouritePostsbyUserQuery,
     useCreateFolderMutation,
     useUpdateUserMutation,
     useAddPostToFavouritesFolderMutation,
+    useGetAllCustomTopicsQuery,
+    useDeleteCustomTopicMutation,
+    useUpdateCustomTopicMutation,
+    useDeleteFolderMutation,
+    useUpdateFolderMutation,
+    useCreateTopicMutation,
+    useDeletePostByElasticIdMutation
 } = contentApi;

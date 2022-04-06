@@ -5,6 +5,36 @@
   font-size: 16px;
   border-radius: 5px;
   border: 1px #dcdcdc solid;
+  /* / background: #eaeaec; / */
+  background: linear-gradient(180deg, #f6f6f6 5%, #ffffff 100%);
+  text-shadow: 1px 1px 1px #928e8e;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  height: 43px;
+}
+.css-button:hover {
+  background: linear-gradient(180deg, #f6f6f6 5%, #ffffff 100%);
+  border: 2px #5547de solid;
+}
+.css-button-icon {
+  margin-left: 5px;
+  padding : 0px 3px; 
+  box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
+}
+.css-button-icon svg {
+  vertical-align: middle;
+  position: relative;
+}
+.css-button-text {
+  padding: 10px 18px;
+}
+/* .css-button {
+  font-family: Arial;
+  color: #666666;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px #dcdcdc solid;
   background: linear-gradient(180deg, #ffffff 5%, #f6f6f6 100%);
   text-shadow: 1px 1px 1px #ffffff;
   box-shadow: inset 1px 1px 2px 0px #ffffff;
@@ -29,7 +59,7 @@
 }
 .css-button-text {
   padding: 10px 18px;
-}
+} */
 
 
 .Datepicker {
