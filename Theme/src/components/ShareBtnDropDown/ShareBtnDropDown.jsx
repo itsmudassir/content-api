@@ -50,7 +50,7 @@ export default function ShareBtnDropDown({ cardData }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute right-[-190px] sm:right-0  mt-2 w-56 rounded-md shadow-lg text-white bg-neutral-900  ring-1 ring-white ring-opacity-5 focus:outline-none">
+        <Menu.Items className="origin-top-right absolute right-[-190px] sm:right-0  mt-1 w-56 rounded-md shadow-lg text-white bg-neutral-900  ring-1 ring-white ring-opacity-5 focus:outline-none">
           <div className="py-1 px-1.5">
             <Menu.Item>
               <FacebookShareButton

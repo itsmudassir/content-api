@@ -15,7 +15,7 @@ import { useLocation } from "react-router-dom";
 import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
 import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
-
+import RelevanceListBox from "../../components/RelevanceListBox/RelevanceListBox";
 import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
 
 export const PageSearchProps = {
@@ -111,12 +111,6 @@ const query = gql`
   }
 `;
 
-const FILTERS = [
-  { label: "Relevance", id: "relevance" },
-  { label: "Facebook Shares", id: "facebook_shares" },
-  { label: "Twitter Shares", id: "twitter_shares" },
-  { label: "Date Download", id: "date_download" },
-];
 const LANGFILTER = [
   { label: "English", identifier: "language", id: "English" },
   { label: "Greek", identifier: "language", id: "Greek" },
@@ -150,14 +144,16 @@ const PageSearch = ({ className = "" }) => {
     if (location?.state?.query) {
       api.setQuery(location.state.query);
       api.setPage({ size: 20, from: 0 });
-
       api.search();
     }
     flag = true;
   }, []);
 
   const { data, loading, error } = useQuery(query, { variables });
+  const sortOptions = data?.results.summary.sortOptions;
+  const langaugeList = data?.results.facets[5].entries;
 
+  console.log(langaugeList);
   // if (data && flag) {
   //   console.log(variables);
   // }
@@ -178,18 +174,16 @@ const PageSearch = ({ className = "" }) => {
   //   });
   // }
 
-  console.log(variables);
   if (data) {
     console.log(data);
+
     var allFavoriteFolder = {};
     RtkData?.data?.filter((item) => {
       if (item.post_id !== undefined) {
         return (allFavoriteFolder[item.post_id] = item.post_id);
       }
     });
-    const jsonString = JSON.stringify(Object.assign({}, allFavoriteFolder));
-    const json_obj = JSON.parse(jsonString);
-    console.log(allFavoriteFolder);
+
     newData = data?.results?.hits?.items?.map((item) => {
       try {
         if (allFavoriteFolder[item.id] === undefined) {
@@ -210,34 +204,10 @@ const PageSearch = ({ className = "" }) => {
     console.log("An error Occured" + error);
   }
 
-  if (loading) {
-    <div style={{ display: "flex", alignItems: "center" }}>
-      {" "}
-      <LoadingVideo />
-    </div>;
-  }
-
-  // if (data) {
-  //   var languageslist = [];
-  //   {
-  //     data?.results?.facets.map((items) => {
-  //       if (items.identifier == "language") {
-  //         languageslist = items?.entries?.map((item) => ({
-  //           label: item.label,
-  //           identifier: "language",
-  //           id: item.label,
-  //         }));
-  //       }
-  //       languageslist = [
-  //         ...languageslist,
-  //         {
-  //           label: "All Languages",
-  //           identifier: "language",
-  //           id: "All Languages",
-  //         },
-  //       ];
-  //     });
-  //   }
+  // if (loading) {
+  //   return <div className="flex justify-center items-center mt-4">
+  //     <LoadingVideo />
+  //   </div>;
   // }
 
   return (
@@ -255,12 +225,13 @@ const PageSearch = ({ className = "" }) => {
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex space-x-2.5">
 
-              <LanguagesFilterBox lists={LANGFILTER} />
+              {!loading ? <LanguagesFilterBox lists={langaugeList} /> : null}
+              
               <DateRangeDropDown facet={data?.results?.facets} />
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
             <div className="flex justify-end">
-              <ArchiveFilterListBox lists={FILTERS} />
+              <RelevanceListBox lists={sortOptions} />
             </div>
           </div>
 

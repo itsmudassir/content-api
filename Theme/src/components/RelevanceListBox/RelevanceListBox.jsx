@@ -5,12 +5,12 @@ import { CheckIcon } from "@heroicons/react/solid";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
 
-const ArchiveFilterListBox = ({ className = "", lists }) => {
+const RelevanceListBox = ({ className = "", lists }) => {
   const api = useSearchkit();
   const [selected, setSelected] = useState(lists? lists[0]: null);
   useEffect(() => {
-    api.setSortBy(selected.id);
-    api.setPage({ size: 10, from: 0 });
+    api.setSortBy(selected?.id);
+    api.setPage({ size: 20, from: 0 });
     api.search();
   }, [selected]);
   
@@ -18,12 +18,11 @@ const ArchiveFilterListBox = ({ className = "", lists }) => {
     <div
       className={`nc-ArchiveFilterListBox ${className}`}
       data-nc-id="ArchiveFilterListBox"
-      style={{border : "2px solid blue" , borderRadius : "5px" , backgroundColor : "#f5f5f5" ,  textShadow: "1px 1px 1px #928e8e" ,color: "#666666"}}
     >
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative ">
-          <Listbox.Button as={"div"}>
-            <ButtonDropdown>{selected.label}</ButtonDropdown>
+          <Listbox.Button as={"div"} >
+            <ButtonDropdown className="border border-slate-300" >{selected? selected.label : "Sort By"}</ButtonDropdown>
           </Listbox.Button>
           <Transition
             as={Fragment}
@@ -32,7 +31,7 @@ const ArchiveFilterListBox = ({ className = "", lists }) => {
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute right-0 z-20 w-52 py-1 mt-1 overflow-auto text-sm text-neutral-900 dark:text-neutral-200 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-900 dark:ring-neutral-700">
-              {lists.map((item, index) => (
+              {lists?.map((item, index) => (
                 <Listbox.Option
                   key={index}
                   className={({ active }) =>
@@ -70,4 +69,4 @@ const ArchiveFilterListBox = ({ className = "", lists }) => {
   );
 };
 
-export default ArchiveFilterListBox;
+export default RelevanceListBox;

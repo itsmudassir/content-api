@@ -6,31 +6,22 @@ import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
 
 const LanguagesFilterBox = ({ className = "", lists }) => {
-  console.log("lists", lists);
-  const api = useSearchkit();
   const [selected, setSelected] = useState(lists[0]);
+  const api = useSearchkit();
+
   useEffect(() => {
+    
     api.toggleFilter({
-      identifier: selected.identifier,
-      value: selected.label,
+      // identifier: selected?.identifier,
+      identifier: "language",
+      value: selected?.label,
     });
     api.setPage({ size: 20, from: 0 });
     api.search();
   }, [selected]);
-  //   if (selected.label == "All Languages") {
-  //     console.log("...");
-  //   } else {
-  //     console.log(selected.label, selected.identifier);
-  //     api.toggleFilter({
-  //       identifier: selected.identifier,
-  //       value: selected.label,
-  //     });
-  //     api.setPage({ size: 20, from: 0 });
-  //     api.search();
-  //   }
-  // }, [selected]);
 
   return (
+    // <></>
     <div
       className={`nc-ArchiveFilterListBox ${className}`}
       data-nc-id="ArchiveFilterListBox"
@@ -38,7 +29,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative md:min-w-[200px]">
           <Listbox.Button as={"div"}>
-            <ButtonDropdown>{selected.label}</ButtonDropdown>
+            <ButtonDropdown>{selected?.label}</ButtonDropdown>
           </Listbox.Button>
           <Transition
             as={Fragment}
@@ -47,7 +38,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute right-0 z-20 w-52 py-1 mt-1 overflow-auto text-sm text-neutral-900 dark:text-neutral-200 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-900 dark:ring-neutral-700">
-              {lists.map((item, index) => (
+              {lists?.map((item, index) => (
                 <Listbox.Option
                   key={index}
                   className={({ active }) =>

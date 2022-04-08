@@ -24,6 +24,7 @@ import PageContentFeed from "../../containers/PageContentFeed/PageContentFeed";
 import Analytics from "../../containers/Analytics/Analytics";
 import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3"
+import EditUserProfile from "../../containers/PageEditUserProfile/PageEditUserProfile" 
 
 function App() {
   const { pathname } = useLocation();
@@ -36,8 +37,6 @@ function App() {
   return (
     <div className={"app-container" + (user && " bg-light")}>
       <BrowserRouter>
-        <Alert />
-        <Nav />
         <ScrollToTop />
         <MainNav1 />
 
@@ -80,6 +79,8 @@ function App() {
           <PrivateRoute exact path="/user-profile" component={Home} />
 
           <PrivateRoute path="/profile" component={Profile} />
+          
+          <PrivateRoute path="/edit-profile" component={EditUserProfile} />
 
           {/* <PrivateRoute path="/admin" roles={[Role.Admin]} component={Admin} /> */}
 
