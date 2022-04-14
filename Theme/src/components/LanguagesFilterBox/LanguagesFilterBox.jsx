@@ -6,18 +6,20 @@ import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
 
 const LanguagesFilterBox = ({ className = "", lists }) => {
-  const [selected, setSelected] = useState(lists[0]);
+  const [selected, setSelected] = useState(lists? lists[0]: null);
   const api = useSearchkit();
 
   useEffect(() => {
     
-    api.toggleFilter({
-      // identifier: selected?.identifier,
-      identifier: "language",
-      value: selected?.label,
-    });
-    api.setPage({ size: 20, from: 0 });
-    api.search();
+    if(selected){
+      api.toggleFilter({
+        // identifier: selected?.identifier,
+        identifier: "language",
+        value: selected?.label,
+      });
+      api.setPage({ size: 20, from: 0 });
+      api.search();
+    }
   }, [selected]);
 
   return (

@@ -5,7 +5,7 @@ import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
 import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
 import { useSearchkitVariables, useSearchkit,  } from "@searchkit/client";
 
-const PageHome = () => {
+const PageHome1 = () => {
   const api = useSearchkit();
 
   useEffect(()=>{
@@ -45,4 +45,4 @@ const PageHome = () => {
   );
 };
 
-export default PageHome;
+export default PageHome1;

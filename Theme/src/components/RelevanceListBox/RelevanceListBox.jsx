@@ -4,14 +4,21 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/solid";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
+import {useRouteMatch, useHistory} from "react-router-dom"
 
 const RelevanceListBox = ({ className = "", lists }) => {
+  const {path, url} = useRouteMatch();
+  const history = useHistory();
   const api = useSearchkit();
-  const [selected, setSelected] = useState(lists? lists[0]: null);
+  const [selected, setSelected] = useState(lists? lists[0] : null);
+  // const [selected, setSelected] = useState(urlparamsort? urlparamsort : lists[0]);
+  
+
   useEffect(() => {
     api.setSortBy(selected?.id);
     api.setPage({ size: 20, from: 0 });
     api.search();
+    // history.push(`${url}sort=${selected?.id}`)
   }, [selected]);
   
   return (

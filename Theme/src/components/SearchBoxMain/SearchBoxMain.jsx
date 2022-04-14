@@ -7,6 +7,10 @@ import {
 
 import "./SearchBoxMain.css";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import queryString from "query-string";
+import {  useSearchkit,  } from "@searchkit/client";
+
 
 // export class SearchBoxMain extends Component {
 //   constructor(props) {
@@ -15,12 +19,15 @@ import { useHistory } from "react-router-dom";
 //       text: "",
 //     };
 //   }
-const SearchBoxMain = () => {
+const SearchBoxMain = ({ pageType }) => {
   const [name, setName] = useState("");
   const history = useHistory();
+
   const handleNameInput = (e) => {
     setName(e.target);
   };
+
+  // const api = useSearchkit();
 
   return (
     <div>
@@ -150,12 +157,27 @@ const SearchBoxMain = () => {
           //     }
           // }
           onValueSelected={function (value, cause, source) {
+            // if (pageType == "searchpage") {
+            //   api.setQuery(value);
+            //   api.setPage({ size: 20, from: 0 });
+            //   api.search();
+            // }
+            const queryParams = queryString.parse(window.location.search);
+            console.log("XXXXXXXXXX", queryParams);
+            const newQueryParams = {
+              ...queryParams,
+              query: value,
+            };
+
             history.push({
               pathname: "/discover/discover_content",
               // state: { query: value },
-              state: { query: value },
+              search: queryString.stringify(newQueryParams),
             });
-            console.log("current value: ", value);
+
+            // history.push(`/discover/discover_content?query=${value}`);
+
+            // console.log("current value: ", value);
           }}
           // onQueryChange={
           //     function(prevQuery, nextQuery) {

@@ -16,6 +16,7 @@ import { Profile } from "../profile/Index";
 // import { Admin } from "../admin/Index";
 import { User } from "../user/Index";
 import PageHome from "../../containers/PageHome/PageHome";
+import PageHome1 from "../../containers/PageHome/PageHome1";
 import MainNav1 from "../../components/Header/MainNav1";
 import ScrollToTop from "../../routers/ScrollToTop";
 import PageSearch from "../../containers/PageSearch/PageSearch";
@@ -48,7 +49,8 @@ function App() {
           <PrivateRoute
             exact
             path={`/discover/discover_search`}
-            component={PageHome}
+            // component={PageHome}
+            component={PageHome1}
           />
 
           <PrivateRoute

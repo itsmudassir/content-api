@@ -17,12 +17,13 @@ import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropD
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
 import RelevanceListBox from "../../components/RelevanceListBox/RelevanceListBox";
 import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
+import queryString from "query-string";
 
 export const PageSearchProps = {
   className: String,
 };
 
-const query = gql`
+const query1 = gql`
   query resultSet(
     $query: String
     $filters: [SKFiltersSet]
@@ -111,49 +112,87 @@ const query = gql`
   }
 `;
 
-const LANGFILTER = [
-  { label: "English", identifier: "language", id: "English" },
-  { label: "Greek", identifier: "language", id: "Greek" },
-  { label: "Dutch", identifier: "language", id: "Dutch" },
-  { label: "French", identifier: "language", id: "French" },
-  { label: "German", identifier: "language", id: "German" },
-];
-
 const PageSearch = ({ className = "" }) => {
   const RtkData = useGetAllFavouritePostsbyUserQuery();
-  //Get cardCategory name or searchBox input from searchPage
-  const location = useLocation();
-  // console.log("Topic se aaya  ", location.state.topic);
-  // console.log("Query se aaya  ", location.state.query);
 
+  //Get cardCategory name or searchBox input from searchPage
+  const { search, location } = useLocation();
+  // var category = "unset";
+  // var query =  "unset";
+  var { category, query } = queryString.parse(search);
+  //  var urlParams = queryString.parse(search);
+  //  if(urlParams){
+  //    category =  urlParams.category
+  //    query =  urlParams.query
+  //   }
   const api = useSearchkit();
 
   const variables = useSearchkitVariables();
   var flag = false;
   let newData;
 
+  // useEffect(() => {
+  //   if (category) {
+  //     api.toggleFilter({
+  //       identifier: "category",
+  //       value: category,
+  //     });
+  //     api.setPage({ size: 20, from: 0 });
+  //     api.search();
+  //   }
+  //   if (query) {
+  //     api.setQuery(query);
+  //     api.setPage({ size: 20, from: 0 });
+
+  //     api.search();
+  //   }
+  //   flag = true;
+  // }, []);
+
   useEffect(() => {
-    if (location?.state?.topic) {
+    // if (category && query) {
+    //   console.log("BOTH")
+    //   api.setQuery(query);
+    //   api.setPage({ size: 20, from: 0 });
+    //   api.search();
+
+    //     api.toggleFilter({
+    //       identifier: "category",
+    //       value: category,
+    //     });
+    //     api.setPage({ size: 20, from: 0 });
+    //     api.search();
+    // }
+    
+    if (query && !category) {
+      console.log("ONLY QUERY")
+      api.setQuery(query);
+      api.setPage({ size: 20, from: 0 });
+      api.search();
+    }
+
+    if (category && !query) {
+      console.log("ONLY CATEGORY")
       api.toggleFilter({
         identifier: "category",
-        value: location.state.topic,
+        value: category,
       });
       api.setPage({ size: 20, from: 0 });
       api.search();
     }
-    if (location?.state?.query) {
-      api.setQuery(location.state.query);
-      api.setPage({ size: 20, from: 0 });
-      api.search();
-    }
     flag = true;
-  }, []);
+  }, [category, query]);
 
-  const { data, loading, error } = useQuery(query, { variables });
-  const sortOptions = data?.results.summary.sortOptions;
-  const langaugeList = data?.results.facets[5].entries;
 
-  console.log(langaugeList);
+  const { data, loading, error } = useQuery(query1, { variables });
+  if (data) {
+    var sortOptions = data?.results.summary.sortOptions;
+    // const langaugeList = data?.results.facets[5].entries;
+    var langaugeList = data?.results.facets.filter(
+      (item) => item.identifier == "language"
+    )[0].entries;
+    // console.log(langaugeList);
+  }
   // if (data && flag) {
   //   console.log(variables);
   // }
@@ -173,7 +212,7 @@ const PageSearch = ({ className = "" }) => {
   //     }
   //   });
   // }
-
+  console.log(api.getFilters());
   if (data) {
     console.log(data);
 
@@ -197,7 +236,7 @@ const PageSearch = ({ className = "" }) => {
         // return allFavoriteFolder[""];
       }
     });
-    console.log(newData);
+    // console.log(newData);
   }
 
   if (error) {
@@ -217,16 +256,15 @@ const PageSearch = ({ className = "" }) => {
         <Helmet>
           <title>Nc || Search Page Template</title>
         </Helmet>
-        <SearchBoxMain />
+        <SearchBoxMain pageType="searchpage" />
       </div>
 
       <div className="container py-16 lg:py-28 space-y-16 lg:space-y-28">
         <main>
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex space-x-2.5">
-
               {!loading ? <LanguagesFilterBox lists={langaugeList} /> : null}
-              
+
               <DateRangeDropDown facet={data?.results?.facets} />
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
@@ -262,7 +300,7 @@ const PageSearch = ({ className = "" }) => {
             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center"
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            <CustomPagination data={data?.results} />
+            {/* <CustomPagination data={data?.results} /> */}
           </div>
         </main>
       </div>
