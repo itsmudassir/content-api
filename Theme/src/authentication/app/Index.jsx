@@ -43,12 +43,11 @@ function App() {
 
         <Switch>
           <Route exact path={`/`}>
-            <Redirect to={`/discover/discover_search`} />
+            <Redirect to={`/discover`} />
           </Route>
 
           <PrivateRoute
-            exact
-            path={`/discover/discover_search`}
+            path={`/discover`}
             // component={PageHome}
             component={PageHome1}
           />
@@ -62,7 +61,8 @@ function App() {
           <PrivateRoute path={"/content-feed"} component={PageContentFeed} />
 
           <PrivateRoute
-            path={"/discover/dicover_insights"}
+          exact
+            path={"/discover/analytics"}
             component={Analytics}
           />
 

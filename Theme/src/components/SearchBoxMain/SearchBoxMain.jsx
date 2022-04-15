@@ -19,7 +19,7 @@ import {  useSearchkit,  } from "@searchkit/client";
 //       text: "",
 //     };
 //   }
-const SearchBoxMain = ({ pageType }) => {
+const SearchBoxMain = ({ loading }) => {
   const [name, setName] = useState("");
   const history = useHistory();
 
@@ -157,23 +157,23 @@ const SearchBoxMain = ({ pageType }) => {
           //     }
           // }
           onValueSelected={function (value, cause, source) {
-            // if (pageType == "searchpage") {
-            //   api.setQuery(value);
-            //   api.setPage({ size: 20, from: 0 });
-            //   api.search();
-            // }
-            const queryParams = queryString.parse(window.location.search);
-            console.log("XXXXXXXXXX", queryParams);
-            const newQueryParams = {
-              ...queryParams,
-              query: value,
-            };
+            
+              // api.setQuery(value);
+              // api.setPage({ size: 20, from: 0 });
+              // api.search();
+            
+            // const queryParams = queryString.parse(window.location.search);
+            // console.log("XXXXXXXXXX", queryParams);
+            // const newQueryParams = {
+            //   ...queryParams,
+            //   query: value,
+            // };
 
-            history.push({
-              pathname: "/discover/discover_content",
-              // state: { query: value },
-              search: queryString.stringify(newQueryParams),
-            });
+            // history.push({
+            //   pathname: "/discover/discover_content",
+            //   // state: { query: value },
+            //   search: queryString.stringify(newQueryParams),
+            // });
 
             // history.push(`/discover/discover_content?query=${value}`);
 

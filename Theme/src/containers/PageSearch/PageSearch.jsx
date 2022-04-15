@@ -212,7 +212,6 @@ const PageSearch = ({ className = "" }) => {
   //     }
   //   });
   // }
-  console.log(api.getFilters());
   if (data) {
     console.log(data);
 
@@ -256,10 +255,10 @@ const PageSearch = ({ className = "" }) => {
         <Helmet>
           <title>Nc || Search Page Template</title>
         </Helmet>
-        <SearchBoxMain pageType="searchpage" />
+        {/* <SearchBoxMain pageType="searchpage" /> */}
       </div>
 
-      <div className="container py-16 lg:py-28 space-y-16 lg:space-y-28">
+      <div className="container py-16 lg:py-16 space-y-16 lg:space-y-28">
         <main>
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex space-x-2.5">
