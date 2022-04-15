@@ -8,7 +8,7 @@ import { useRouteMatch, Route, useHistory, Link } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
-
+import PageCategory from "../PageCategory/PageCategory"
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -139,9 +139,6 @@ const PageHome1 = () => {
   // the format should look like year-month-day
   //  take date fromat help from search kit react small project
   //-----------------
-  // create a useEffect
-  // dependendy: [searchQuery]
-  // with searchkit api set the date filter
   return (
     <div className="nc-PageHome relative">
       <Helmet>
@@ -226,7 +223,7 @@ const PageHome1 = () => {
 
               <Tab.Panel>
                 <Route exact path={`${path}/discover_category`}>
-                  <h1>Tab 3</h1>
+                <PageCategory/>
                 </Route>
               </Tab.Panel>
             </Tab.Panels>

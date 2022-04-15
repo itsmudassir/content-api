@@ -26,6 +26,7 @@ import Analytics from "../../containers/Analytics/Analytics";
 import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3"
 import EditUserProfile from "../../containers/PageEditUserProfile/PageEditUserProfile" 
+import PageCategorySearch from "../../containers/PageCategory/PageCategorySearch"
 
 function App() {
   const { pathname } = useLocation();
@@ -56,6 +57,12 @@ function App() {
             exact
             path={`/discover/discover_content`}
             component={PageSearch}
+          />
+
+          <PrivateRoute
+            exact
+            path={`/category-search`}
+            component={PageCategorySearch}
           />
 
           <PrivateRoute path={"/content-feed"} component={PageContentFeed} />

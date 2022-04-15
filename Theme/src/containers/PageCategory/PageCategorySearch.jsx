@@ -25,13 +25,113 @@ export const PageSearchProps = {
   className: String,
 };
 
+const gqlQuery = gql`
+  query resultSet(
+    $query: String
+    $filters: [SKFiltersSet]
+    $page: SKPageInput
+    $sortBy: String
+  ) {
+    results(query: $query, filters: $filters) {
+      summary {
+        total
+        appliedFilters {
+          id
+          identifier
+          display
+          label
+          ... on DateRangeSelectedFilter {
+            dateMin
+            dateMax
+            __typename
+          }
 
+          ... on ValueSelectedFilter {
+            value
+            __typename
+          }
+          __typename
+        }
+        sortOptions {
+          id
+          label
+          __typename
+        }
+        query
+        __typename
+      }
+      hits(page: $page, sortBy: $sortBy) {
+        page {
+          total
+          totalPages
+          pageNumber
+          from
+          size
+          __typename
+        }
+        sortedBy
 
-const PageSearch = ({ className = "", data, loading, error }) => {
+        items {
+          ... on ResultHit {
+            id
+            fields {
+              article_length
+              category
+              authors
+              date_download
+              language
+              facebook_shares
+              readtime
+              sentiment
+              url
+              image_url
+              twitter_shares
+              maintext
+              source_domain
+              title
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      facets {
+        identifier
+        type
+        label
+        display
+        entries {
+          label
+          count
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+
+const PageCategorySearch = ({ className = "" }) => {
+  const location = useLocation();
+  const api = useSearchkit();
+  const variables = useSearchkitVariables();
+  const { data, loading, error } = useQuery(gqlQuery, { variables });
   const RtkData = useGetAllFavouritePostsbyUserQuery();
   let newData;
-  console.log(data, loading, error);
-  
+  console.log(location.state.category);
+
+  useEffect(() => {
+    api.toggleFilter({
+      identifier: "category",
+      value: location.state.category,
+    });
+    api.setPage({ size: 20, from: 0 });
+    api.search();
+  }, []);
+
   const sortOptions = data?.results.summary.sortOptions;
   const langaugeList = data?.results.facets.filter(
     (item) => item.identifier == "language"
@@ -113,7 +213,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
               }}
             >
               {" "}
-              <LoadingVideo /> 
+              <LoadingVideo />
             </div>
           )}
 
@@ -130,4 +230,4 @@ const PageSearch = ({ className = "", data, loading, error }) => {
 };
 
 // export default withSearchkit(withSearchkitRouting(PageSearch));
-export default PageSearch;
+export default PageCategorySearch;
