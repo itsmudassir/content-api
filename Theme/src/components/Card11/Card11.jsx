@@ -39,7 +39,8 @@ const Card11 = ({
   const [isHover, setIsHover] = useState(false);
 
   const pushData = () => {
-    history.push(`${path}/mainpostpage/${id}`, cardvalue);
+    // history.push(`${path}/mainpostpage/${id}`, cardvalue);
+    history.push(`/mainpostpage/${id}`, cardvalue);
 
     console.log("data tranfered");
   };

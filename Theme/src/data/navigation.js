@@ -366,7 +366,7 @@ export const NAVIGATION_DEMO = [
   },
   {
     id: ncNanoId(),
-    href: "/discover/analytics",
+    href: "/analytics",
     name: "Analytics",
   },
 

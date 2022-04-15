@@ -18,203 +18,26 @@ import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
 import RelevanceListBox from "../../components/RelevanceListBox/RelevanceListBox";
 import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
 import queryString from "query-string";
+import { useRouteMatch, Route } from "react-router-dom";
+import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3";
 
 export const PageSearchProps = {
   className: String,
 };
 
-const query1 = gql`
-  query resultSet(
-    $query: String
-    $filters: [SKFiltersSet]
-    $page: SKPageInput
-    $sortBy: String
-  ) {
-    results(query: $query, filters: $filters) {
-      summary {
-        total
-        appliedFilters {
-          id
-          identifier
-          display
-          label
-          ... on DateRangeSelectedFilter {
-            dateMin
-            dateMax
-            __typename
-          }
 
-          ... on ValueSelectedFilter {
-            value
-            __typename
-          }
-          __typename
-        }
-        sortOptions {
-          id
-          label
-          __typename
-        }
-        query
-        __typename
-      }
-      hits(page: $page, sortBy: $sortBy) {
-        page {
-          total
-          totalPages
-          pageNumber
-          from
-          size
-          __typename
-        }
-        sortedBy
 
-        items {
-          ... on ResultHit {
-            id
-            fields {
-              article_length
-              category
-              authors
-              date_download
-              language
-              facebook_shares
-              readtime
-              sentiment
-              url
-              image_url
-              twitter_shares
-              maintext
-              source_domain
-              title
-              __typename
-            }
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      facets {
-        identifier
-        type
-        label
-        display
-        entries {
-          label
-          count
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-
-const PageSearch = ({ className = "" }) => {
+const PageSearch = ({ className = "", data, loading, error }) => {
   const RtkData = useGetAllFavouritePostsbyUserQuery();
-
-  //Get cardCategory name or searchBox input from searchPage
-  const { search, location } = useLocation();
-  // var category = "unset";
-  // var query =  "unset";
-  var { category, query } = queryString.parse(search);
-  //  var urlParams = queryString.parse(search);
-  //  if(urlParams){
-  //    category =  urlParams.category
-  //    query =  urlParams.query
-  //   }
-  const api = useSearchkit();
-
-  const variables = useSearchkitVariables();
-  var flag = false;
   let newData;
+  console.log(data, loading, error);
+  
+  const sortOptions = data?.results.summary.sortOptions;
+  const langaugeList = data?.results.facets.filter(
+    (item) => item.identifier == "language"
+  )[0].entries;
 
-  // useEffect(() => {
-  //   if (category) {
-  //     api.toggleFilter({
-  //       identifier: "category",
-  //       value: category,
-  //     });
-  //     api.setPage({ size: 20, from: 0 });
-  //     api.search();
-  //   }
-  //   if (query) {
-  //     api.setQuery(query);
-  //     api.setPage({ size: 20, from: 0 });
-
-  //     api.search();
-  //   }
-  //   flag = true;
-  // }, []);
-
-  useEffect(() => {
-    // if (category && query) {
-    //   console.log("BOTH")
-    //   api.setQuery(query);
-    //   api.setPage({ size: 20, from: 0 });
-    //   api.search();
-
-    //     api.toggleFilter({
-    //       identifier: "category",
-    //       value: category,
-    //     });
-    //     api.setPage({ size: 20, from: 0 });
-    //     api.search();
-    // }
-    
-    if (query && !category) {
-      console.log("ONLY QUERY")
-      api.setQuery(query);
-      api.setPage({ size: 20, from: 0 });
-      api.search();
-    }
-
-    if (category && !query) {
-      console.log("ONLY CATEGORY")
-      api.toggleFilter({
-        identifier: "category",
-        value: category,
-      });
-      api.setPage({ size: 20, from: 0 });
-      api.search();
-    }
-    flag = true;
-  }, [category, query]);
-
-
-  const { data, loading, error } = useQuery(query1, { variables });
   if (data) {
-    var sortOptions = data?.results.summary.sortOptions;
-    // const langaugeList = data?.results.facets[5].entries;
-    var langaugeList = data?.results.facets.filter(
-      (item) => item.identifier == "language"
-    )[0].entries;
-    // console.log(langaugeList);
-  }
-  // if (data && flag) {
-  //   console.log(variables);
-  // }
-  // allfavoriteFolder = { 123: "123", 234: "234" };
-  // if (data && RtkData.isFetching == false) {
-  //   console.log(data);
-  //   console.log(RtkData);
-  //   data?.results?.hits?.items?.map(({ id }) => {
-  //     if (RtkData) {
-  //       return RtkData?.data?.map((item) => {
-  //         if (item.post_id == undefined || id == undefined) {
-  //         }
-  //         if (id == item.post_id) {
-  //           console.log(id, item.post_id);
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
-  if (data) {
-    console.log(data);
-
     var allFavoriteFolder = {};
     RtkData?.data?.filter((item) => {
       if (item.post_id !== undefined) {
@@ -250,7 +73,6 @@ const PageSearch = ({ className = "" }) => {
 
   return (
     <>
-      {/* {/ <h1>{!labelfromcatCard ? "" : labelfromcatCard}</h1> /} */}
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
           <title>Nc || Search Page Template</title>
@@ -291,7 +113,8 @@ const PageSearch = ({ className = "" }) => {
               }}
             >
               {" "}
-              <LoadingVideo />
+              {/* <LoadingVideo />  */}
+              Loading...
             </div>
           )}
 

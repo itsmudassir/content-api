@@ -5,19 +5,131 @@ import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
 import PageSearch from "../../containers/PageSearch/PageSearch";
 import { Tab } from "@headlessui/react";
 import { useRouteMatch, Route, useHistory, Link } from "react-router-dom";
+import { gql, useQuery } from "@apollo/client";
+import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
+import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+const gqlQuery = gql`
+  query resultSet(
+    $query: String
+    $filters: [SKFiltersSet]
+    $page: SKPageInput
+    $sortBy: String
+  ) {
+    results(query: $query, filters: $filters) {
+      summary {
+        total
+        appliedFilters {
+          id
+          identifier
+          display
+          label
+          ... on DateRangeSelectedFilter {
+            dateMin
+            dateMax
+            __typename
+          }
+
+          ... on ValueSelectedFilter {
+            value
+            __typename
+          }
+          __typename
+        }
+        sortOptions {
+          id
+          label
+          __typename
+        }
+        query
+        __typename
+      }
+      hits(page: $page, sortBy: $sortBy) {
+        page {
+          total
+          totalPages
+          pageNumber
+          from
+          size
+          __typename
+        }
+        sortedBy
+
+        items {
+          ... on ResultHit {
+            id
+            fields {
+              article_length
+              category
+              authors
+              date_download
+              language
+              facebook_shares
+              readtime
+              sentiment
+              url
+              image_url
+              twitter_shares
+              maintext
+              source_domain
+              title
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      facets {
+        identifier
+        type
+        label
+        display
+        entries {
+          label
+          count
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+
 const PageHome1 = () => {
+  //state
+  const [searchQuery, setSearchQuery] = useState();
+
+  // hooks
   const history = useHistory();
   const { path, url } = useRouteMatch();
+  const api = useSearchkit();
+  const variables = useSearchkitVariables();
 
-//   useEffect(()=>history.push(`${url}/discover_search`),[]);
+  const { data, loading, error } = useQuery(gqlQuery, { variables });
 
-  // const [searchQuery, setsearchQuery]=  usesstate("");
-  //
+  useEffect(() => history.push(`${url}/discover_search`), []);
+
+  useEffect(() => {
+    // last 3 months date searchkit filter
+    api.toggleFilter({
+      identifier: "date_download",
+      dateMin: "2022-02-17",
+      dateMax: "2022-03-18",
+    });
+    // api.setSortBy("relevance");
+    api.setPage({ size: 20, from: 0 });
+    api.search();
+    console.log(searchQuery, "XXXXXXXXXXXXXX");
+  }, [searchQuery]);
+
+  console.log(data, loading, error);
 
   // range: () => ({
   //     startDate: moment().endOf("day").toDate(),
@@ -37,10 +149,11 @@ const PageHome1 = () => {
       </Helmet>
       {/* {/ Call the  Auto Complete Search Box /} */}
 
-      {/* // just pass loading prop no ternary here */}
-      {/* use not loading ternary to show search box */}
-      {/* pass state var setsearchQuery as a prop */}
-      <SearchBoxMain pageType="categorypage" />
+      {!loading ? (
+        <SearchBoxMain  setSearchQuery={setSearchQuery} />
+      ) : (
+        null
+      )}
       {/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */}
 
       <div className=" w-full px-2 py-5 sm:px-0">
@@ -100,20 +213,19 @@ const PageHome1 = () => {
           <div className="flex justify-center">
             <Tab.Panels className="mt-2">
               <Tab.Panel>
-                {/* <PageSearch searchkitObj={data ,Loading, error}/>  */}
-                <Route  path={`${path}/discover_search`}>
-                  <PageSearch />
+                <Route exact path={`${path}/discover_search`}>
+                  <PageSearch data={data} loading={loading} error={error} />
                 </Route>
               </Tab.Panel>
 
               <Tab.Panel>
-                <Route  path={`${path}/discover_insights`}>
+                <Route exact path={`${path}/discover_insights`}>
                   <h1>Tab 2</h1>
                 </Route>
               </Tab.Panel>
 
               <Tab.Panel>
-                <Route  path={`${path}/discover_category`}>
+                <Route exact path={`${path}/discover_category`}>
                   <h1>Tab 3</h1>
                 </Route>
               </Tab.Panel>

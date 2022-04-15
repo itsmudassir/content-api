@@ -61,14 +61,14 @@ function App() {
           <PrivateRoute path={"/content-feed"} component={PageContentFeed} />
 
           <PrivateRoute
-          exact
-            path={"/discover/analytics"}
+            exact
+            path={"/analytics"}
             component={Analytics}
           />
 
           <PrivateRoute
             exact
-            path={"/discover/discover_content/mainpostpage/:id"}
+            path={"/mainpostpage/:id"}
             component={PageSingleTemplate3}
           />
 

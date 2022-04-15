@@ -7,8 +7,6 @@ import {
 
 import "./SearchBoxMain.css";
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
-import queryString from "query-string";
 import {  useSearchkit,  } from "@searchkit/client";
 
 
@@ -19,9 +17,10 @@ import {  useSearchkit,  } from "@searchkit/client";
 //       text: "",
 //     };
 //   }
-const SearchBoxMain = ({ loading }) => {
+const SearchBoxMain = ({setSearchQuery}) => {
   const [name, setName] = useState("");
   const history = useHistory();
+  const api = useSearchkit();
 
   const handleNameInput = (e) => {
     setName(e.target);
@@ -157,10 +156,11 @@ const SearchBoxMain = ({ loading }) => {
           //     }
           // }
           onValueSelected={function (value, cause, source) {
-            
-              // api.setQuery(value);
-              // api.setPage({ size: 20, from: 0 });
-              // api.search();
+          
+              api.setQuery(value);
+              api.setPage({ size: 20, from: 0 });
+              api.search();
+              setSearchQuery(value);
             
             // const queryParams = queryString.parse(window.location.search);
             // console.log("XXXXXXXXXX", queryParams);
