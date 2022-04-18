@@ -3,12 +3,12 @@ import { Helmet } from "react-helmet";
 import SectionSliderNewCategories from "../../components/SectionSliderNewCategories/SectionSliderNewCategories";
 import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
 import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
-import { useSearchkitVariables, useSearchkit,  } from "@searchkit/client";
+import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 
 const PageCategory = () => {
   const api = useSearchkit();
 
-  useEffect(()=>{
+  useEffect(() => {
     // if(api.canResetSearch()){
     //   api.setQuery('')
     //   api.search()
@@ -19,8 +19,8 @@ const PageCategory = () => {
     api.removeFiltersByIdentifier("category");
     // api.setQuery(null);
     api.search();
-  },[]);
-
+  }, []);
+  //.
   // const { data, error, loading } = useGetAllFavouritePostsbyUserQuery();
   // console.log(data);
   return (
@@ -30,7 +30,7 @@ const PageCategory = () => {
       </Helmet>
       {/* {/ Call the  Auto Complete Search Box /} */}
       {/* <SearchBoxMain pageType="categorypage" /> */}
-      
+
       <div className="relative overflow-hidden pt-6">
         <div className="container relative">
           {/* {/ Category Cards /} */}
