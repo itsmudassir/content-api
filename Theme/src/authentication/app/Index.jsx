@@ -26,7 +26,6 @@ import Analytics from "../../containers/Analytics/Analytics";
 import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3"
 import EditUserProfile from "../../containers/PageEditUserProfile/PageEditUserProfile" 
-import PageCategorySearch from "../../containers/PageCategory/PageCategorySearch"
 
 function App() {
   const { pathname } = useLocation();
@@ -44,11 +43,12 @@ function App() {
 
         <Switch>
           <Route exact path={`/`}>
-            <Redirect to={`/discover`} />
+            <Redirect to={`/discover/discover_search`} />
           </Route>
 
           <PrivateRoute
-            path={`/discover`}
+            exact
+            path={`/discover/discover_search`}
             // component={PageHome}
             component={PageHome1}
           />
@@ -59,23 +59,16 @@ function App() {
             component={PageSearch}
           />
 
-          <PrivateRoute
-            exact
-            path={`/category-search`}
-            component={PageCategorySearch}
-          />
-
           <PrivateRoute path={"/content-feed"} component={PageContentFeed} />
 
           <PrivateRoute
-            exact
-            path={"/analytics"}
+            path={"/discover/dicover_insights"}
             component={Analytics}
           />
 
           <PrivateRoute
             exact
-            path={"/mainpostpage/:id"}
+            path={"/discover/discover_content/mainpostpage/:id"}
             component={PageSingleTemplate3}
           />
 

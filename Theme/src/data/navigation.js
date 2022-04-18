@@ -354,7 +354,7 @@ const discoveryDropdwonItems = [
 export const NAVIGATION_DEMO = [
   {
     id: ncNanoId(),
-    href: "/discover",
+    href: "/discover/discover_search",
     name: "Search",
     // type: "dropdown",
     // children: demoChildMenus,
@@ -366,7 +366,7 @@ export const NAVIGATION_DEMO = [
   },
   {
     id: ncNanoId(),
-    href: "/analytics",
+    href: "/discover/dicover_insights",
     name: "Analytics",
   },
 

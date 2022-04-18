@@ -7,8 +7,9 @@ import {
 
 import "./SearchBoxMain.css";
 import { useHistory } from "react-router-dom";
-import {  useSearchkit,  } from "@searchkit/client";
-
+import { Link } from "react-router-dom";
+import queryString from "query-string";
+import { useSearchkit } from "@searchkit/client";
 
 // export class SearchBoxMain extends Component {
 //   constructor(props) {
@@ -17,16 +18,17 @@ import {  useSearchkit,  } from "@searchkit/client";
 //       text: "",
 //     };
 //   }
-const SearchBoxMain = ({setSearchQuery}) => {
+const SearchBoxMain = ({ pageType , category}) => {
+  // const [query, setQuery] = useSearchkitQueryValue()
   const [name, setName] = useState("");
   const history = useHistory();
-  const api = useSearchkit();
 
   const handleNameInput = (e) => {
     setName(e.target);
+    // setQuery(e.target);
   };
 
-  // const api = useSearchkit();
+  const api = useSearchkit();
 
   return (
     <div>
@@ -116,6 +118,7 @@ const SearchBoxMain = ({setSearchQuery}) => {
           ]}
           onChange={handleNameInput}
           value={name}
+          // value={query}
           // value={this.state.text}
           // onChange={(value, searchComponent, e) => {
           //   // Perform actions after updating the value
@@ -156,24 +159,44 @@ const SearchBoxMain = ({setSearchQuery}) => {
           //     }
           // }
           onValueSelected={function (value, cause, source) {
-          
-              api.setQuery(value);
-              api.setPage({ size: 20, from: 0 });
-              api.search();
-              setSearchQuery(value);
-            
-            // const queryParams = queryString.parse(window.location.search);
-            // console.log("XXXXXXXXXX", queryParams);
-            // const newQueryParams = {
-            //   ...queryParams,
-            //   query: value,
-            // };
+            if (pageType == "searchpage") {
+              // setQuery(value)
+              const customState = {
+                query: value,
+                sortBy: "",
+                filters: [
+                  {
+                    //make dateMin, dateMax with moment js of last 3 months. 
+                    identifier: "date_download",
+                    dateMin: "2022-01-16",
+                    dateMax: "2022-09-18",
+                  },
+                  { identifier: "category", value: category },
+                ],
+                page: {
+                  size: 20,
+                  from: 0,
+                },
+              };
 
-            // history.push({
-            //   pathname: "/discover/discover_content",
-            //   // state: { query: value },
-            //   search: queryString.stringify(newQueryParams),
-            // });
+              api.setSearchState(customState);
+              api.search();
+            }
+
+            if (pageType == "categorypage") {
+              const queryParams = queryString.parse(window.location.search);
+              console.log("XXXXXXXXXX", queryParams);
+              const newQueryParams = {
+                ...queryParams,
+                query: value,
+              };
+
+              history.push({
+                pathname: "/discover/discover_content",
+                // state: { query: value },
+                search: queryString.stringify(newQueryParams),
+              });
+            }
 
             // history.push(`/discover/discover_content?query=${value}`);
 

@@ -54,7 +54,7 @@ function DatePicker({facet}) {
     setRanges(ranges)
     var startDate = moment(ranges.startDate).format("YYYY-MM-DD");
     var endDate = moment(ranges.endDate).format("YYYY-MM-DD");
-
+    console.log(startDate, endDate);
 
     console.log(ranges)
 

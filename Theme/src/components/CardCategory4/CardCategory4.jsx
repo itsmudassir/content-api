@@ -27,14 +27,12 @@ const CardCategory4 = ({
   return (
     <>
       <Link
-        // to={{
-        //   pathname: "/discover/discover_content",
-        //   search: queryString.stringify(newQueryParams)
-        // }}
         to={{
-          pathname: "/category-search",
-          state: { category: label },
+          pathname: "/discover/discover_content",
+          // state: { topic: label },
+          search: queryString.stringify(newQueryParams)
         }}
+        // to={`/discover/discover_content?category=${label}`}
         className={`nc-CardCategory4 flex flex-col ${className}`}
         // className={`nc-CardAuthorBox2 flex flex-col overflow-hidden [ nc-box-has-hover ] [ nc-dark-box-bg-has-hover ] ${className}`}
         data-nc-id="CardCategory4"
