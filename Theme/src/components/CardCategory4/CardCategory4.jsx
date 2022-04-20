@@ -17,7 +17,7 @@ const CardCategory4 = ({
   const queryParams = queryString.parse(search);
   const newQueryParams =  {
     ...queryParams,
-    category: label
+    customCateogry : label
   };
   const categories = "Follow";
   const getColorClass = () => {

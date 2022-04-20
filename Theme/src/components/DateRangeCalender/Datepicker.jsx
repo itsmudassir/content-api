@@ -3,127 +3,110 @@ import moment from "moment";
 import {
   DateRangePicker,
   defaultStaticRanges,
-  createStaticRanges
+  createStaticRanges,
 } from "react-date-range";
-import "../../../node_modules/react-date-range/dist/styles.css"; 
-import "../../../node_modules/react-date-range/dist/theme/default.css" 
-import { useSearchkit } from '@searchkit/client'
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { useSearchkit } from "@searchkit/client";
 
-function DatePicker({facet}) {
+function DatePicker() {
+  const api = useSearchkit();
 
-  const api = useSearchkit()
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
- 
+  const selectionRange = {
+    startDate: startDate,
+    endDate: endDate,
+    key: "selection",
+  };
 
   const [ranges, setRanges] = useState([
     {
       startDate: null,
       endDate: null,
-      key: "rollup"
-    }
+      key: "rollup",
+    },
   ]);
 
   const staticRanges = createStaticRanges([
-    // ...defaultStaticRanges,
+    ...defaultStaticRanges,
     {
       label: "This Year",
       range: () => ({
         startDate: moment().startOf("year").toDate(),
-        endDate: moment().endOf("day").toDate()
-      })
+        endDate: moment().endOf("day").toDate(),
+      }),
     },
     {
       label: "Last Year",
       range: () => ({
         startDate: moment().subtract(1, "years").startOf("year").toDate(),
-        endDate: moment().subtract(1, "years").endOf("year").toDate()
-      })
+        endDate: moment().subtract(1, "years").endOf("year").toDate(),
+      }),
     },
-    {
-      label: "Last 3 Months",
-      range: () => ({
-        startDate: moment().endOf("day").toDate(),
-        endDate: moment().subtract(3,'months').endOf("day").toDate()
-      })
-    }
   ]);
+  // console.log(ranges);
 
+  function handleSelect(range) {
+    setStartDate(range.selection.startDate);
+    setEndDate(range.selection.endDate);
+    var startDatec = moment(range.selection.startDate).format("YYYY-MM-DD");
+    var endDatec = moment(range.selection.endDate).format("YYYY-MM-DD");
+    // console.log(startDate, endDate,"---------------->");
+    console.log(startDatec, endDatec, "---------------->");
+    if (api.getFiltersByIdentifier("date_download")) {
+      console.log("if date is set%%%%%%%%%%%%%%%");
+      const customState = {
+        query: api.getQuery() || "",
+        sortBy: "",
+        filters: [
+          {
+            identifier: "date_download",
+            dateMin: startDatec,
+            dateMax: endDatec,
+          },
+        ],
+        page: {
+          size: 20,
+          from: 0,
+        },
+      };
+      var allfilter = api.getFilters();
+      for (let i = 0; i < allfilter.length; i++) {
+        var filter = allfilter[i];
 
-  const Filter = (ranges)=>{
-
-    setRanges(ranges)
-    var startDate = moment(ranges.startDate).format("YYYY-MM-DD");
-    var endDate = moment(ranges.endDate).format("YYYY-MM-DD");
-    console.log(startDate, endDate);
-
-    console.log(ranges)
-
-    {
-      facet.map((value)=>{
-
-
-
-    if (value.identifier=="date_download"){
-
-
-
-       api.toggleFilter({ identifier: value.identifier,   dateMin: startDate, dateMax: endDate })
-        api.setPage({ size: 20, from: 0 })
-
-        api.search()
-   }
-
-  })
+        if (filter.identifier !== "date_download") {
+          customState.filters.push(filter);
+        }
+      }
+      api.setSearchState(customState);
+      api.search();
+    } else {
+      api.toggleFilter({
+        identifier: "date_download",
+        dateMin: startDatec,
+        dateMax: endDatec,
+      });
+      api.setPage({ size: 20, from: 0 });
+      api.search();
     }
 
-   
-
-  
-
-  //   if (facet.identifier=="date_download"){
-  //     console.log( "ON line 63")
-  //      api.toggleFilter({ identifier: facet.identifier,   dateMin: startDate, dateMax: endDate })
-  //       api.setPage({ size: 20, from: 0 })
-
-  //       api.search()
-  //  }
-
- 
-
+    //  api.toggleFilter({ identifier: "date_download",   dateMin:startDatec  , dateMax:endDatec })
+    //   api.setPage({ size: 20, from: 0 })
+    //   api.search()
+    //
+    // }
   }
- 
-
-
   return (
-    <>
-      <h1></h1>
     <DateRangePicker
       startDatePlaceholder="Start Date"
       endDatePlaceholder="End Date"
-      ranges={ranges}
-      // onChange={(ranges) => { 
-      //   setRanges([ranges.rollup])
-      //   var startDate = moment(ranges.rollup.startDate).format("YYYY-MM-DD");
-      //   var endDate = moment(ranges.rollup.endDate).format("YYYY-MM-DD");
-
-      //   console.log(facet , "in line 61")
-
-      //   if (facet.identifier=="date_download"){
-      //     console.log( "ON line 63")
-      //      api.toggleFilter({ identifier: facet.identifier,   dateMin: startDate, dateMax: endDate })
-      //       api.setPage({ size: 20, from: 0 })
-
-      //       api.search()
-      //  }}}
-       onChange={()=>Filter(ranges)}
+      ranges={[selectionRange]}
+      onChange={handleSelect}
       staticRanges={staticRanges}
-      // staticRanges={[]}
       inputRanges={[]}
-
-
     />
-    </>
-
   );
 }
 

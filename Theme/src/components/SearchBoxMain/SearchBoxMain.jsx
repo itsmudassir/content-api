@@ -159,6 +159,7 @@ const SearchBoxMain = ({ pageType , category}) => {
           //     }
           // }
           onValueSelected={function (value, cause, source) {
+
             if (pageType == "searchpage") {
               // setQuery(value)
               const customState = {
@@ -171,16 +172,31 @@ const SearchBoxMain = ({ pageType , category}) => {
                     dateMin: "2022-01-16",
                     dateMax: "2022-09-18",
                   },
-                  { identifier: "category", value: category },
+                  // { identifier: "category", value: category },
                 ],
+
                 page: {
                   size: 20,
                   from: 0,
                 },
               };
-
+                if(category){
+                  customState.filters.push({ identifier: "category", value: category })
+                }
               api.setSearchState(customState);
               api.search();
+
+              const queryParams = queryString.parse(window.location.search);
+              const newQueryParams = {
+                ...queryParams,
+                customQuery: value,
+              };
+
+              history.push({
+                pathname: "/discover/discover_content",
+                // state: { query: value },
+                search: queryString.stringify(newQueryParams),
+              });
             }
 
             if (pageType == "categorypage") {
@@ -188,7 +204,7 @@ const SearchBoxMain = ({ pageType , category}) => {
               console.log("XXXXXXXXXX", queryParams);
               const newQueryParams = {
                 ...queryParams,
-                query: value,
+                customQuery: value,
               };
 
               history.push({

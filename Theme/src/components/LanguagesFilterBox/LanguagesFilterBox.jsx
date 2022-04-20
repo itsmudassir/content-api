@@ -6,11 +6,28 @@ import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
 
 const LanguagesFilterBox = ({ className = "", lists }) => {
-  const [selected, setSelected] = useState(lists? lists[0]: null);
+  // const [selected, setSelected] = useState(lists? lists[0]: null);
+  // const [selected, setSelected] = useState();
+  let selected = null
   const api = useSearchkit();
 
-  useEffect(() => {
+  // useEffect(() => {
     
+  //   if(selected){
+  //     api.toggleFilter({
+  //       // identifier: selected?.identifier,
+  //       identifier: "language",
+  //       value: selected?.label,
+  //     });
+  //     api.setPage({ size: 20, from: 0 });
+  //     api.search();
+  //   }
+  // }, [selected]);
+
+  const handelOnChange =  (e)=>{
+    console.log("CHANGED");
+    // setSelected(e)
+    selected = e;
     if(selected){
       api.toggleFilter({
         // identifier: selected?.identifier,
@@ -20,18 +37,19 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
       api.setPage({ size: 20, from: 0 });
       api.search();
     }
-  }, [selected]);
-
+  }
+console.log(selected);
   return (
     // <></>
     <div
       className={`nc-ArchiveFilterListBox ${className}`}
       data-nc-id="ArchiveFilterListBox"
     >
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selected} onChange={(e)=>handelOnChange(e)}>
         <div className="relative md:min-w-[200px]">
           <Listbox.Button as={"div"}>
-            <ButtonDropdown>{selected?.label}</ButtonDropdown>
+            {/* <ButtonDropdown>{selected?.label}</ButtonDropdown> */}
+            <ButtonDropdown>{"Choose language"}</ButtonDropdown>
           </Listbox.Button>
           <Transition
             as={Fragment}

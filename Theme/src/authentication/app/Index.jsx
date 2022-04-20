@@ -15,11 +15,11 @@ import { Home } from "../home/Index";
 import { Profile } from "../profile/Index";
 // import { Admin } from "../admin/Index";
 import { User } from "../user/Index";
-import PageHome from "../../containers/PageHome/PageHome";
 import PageHome1 from "../../containers/PageHome/PageHome1";
 import MainNav1 from "../../components/Header/MainNav1";
 import ScrollToTop from "../../routers/ScrollToTop";
 import PageSearch from "../../containers/PageSearch/PageSearch";
+import PageSearchMain from "../../containers/PageSearch/PageSearchMain";
 import PageDashboard from "../../containers/PageDashboard/PageDashboard";
 import PageContentFeed from "../../containers/PageContentFeed/PageContentFeed";
 import Analytics from "../../containers/Analytics/Analytics";
@@ -56,7 +56,8 @@ function App() {
           <PrivateRoute
             exact
             path={`/discover/discover_content`}
-            component={PageSearch}
+            // component={PageSearch}
+            component={PageSearchMain}
           />
 
           <PrivateRoute path={"/content-feed"} component={PageContentFeed} />
