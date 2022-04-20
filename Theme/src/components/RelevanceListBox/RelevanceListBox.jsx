@@ -4,15 +4,15 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/solid";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
-import {useRouteMatch, useHistory} from "react-router-dom"
+import { useRouteMatch, useHistory } from "react-router-dom";
 
 const RelevanceListBox = ({ className = "", lists }) => {
-  const {path, url} = useRouteMatch();
+  const { path, url } = useRouteMatch();
   const history = useHistory();
   const api = useSearchkit();
   const [selected, setSelected] = useState(lists? lists[0] : null);
   // const [selected, setSelected] = useState(urlparamsort? urlparamsort : lists[0]);
-  
+  // let selected = null;
 
   useEffect(() => {
     api.setSortBy(selected?.id);
@@ -20,16 +20,27 @@ const RelevanceListBox = ({ className = "", lists }) => {
     api.search();
     // history.push(`${url}sort=${selected?.id}`)
   }, [selected]);
-  
+
+  // const handelOnChange = (e) => {
+  //   // selected = e;
+  //   setSelected(e)
+  //   api.setSortBy(selected?.id);
+  //   api.setPage({ size: 20, from: 0 });
+  //   api.search();
+  // };
+
   return (
     <div
       className={`nc-ArchiveFilterListBox ${className}`}
       data-nc-id="ArchiveFilterListBox"
     >
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selected} onChange={(e) => setSelected(e)}>
         <div className="relative ">
-          <Listbox.Button as={"div"} >
-            <ButtonDropdown className="border border-slate-300" >{selected? selected.label : "Sort By"}</ButtonDropdown>
+          <Listbox.Button as={"div"}>
+            <ButtonDropdown className="border border-slate-300">
+              {/* {selected ? selected.label : "Sort By"} */}
+              {selected?.label}
+            </ButtonDropdown>
           </Listbox.Button>
           <Transition
             as={Fragment}

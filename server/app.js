@@ -2,6 +2,7 @@ import express from "express";
 import connectDatabase from "./src/config/databaseConnection.js";
 import { checkConnection } from "./src/config/elasticSearchConnection.js";
 import user from "./src/routes/api/userRoutes/user.Route.js";
+import insights from "./src/routes/api/insights/insights.Route.js"
 import favouritesFolder from "./src/routes/api/addToFavouriteRoutes/favouritesFolder.Route.js";
 import favouritePosts from "./src/routes/api/addToFavouriteRoutes/favouritePost.Route.js";
 import articleSearch from "./src/routes/api/articleSearchRoutes/articleSearch.Routes.js";
@@ -38,6 +39,7 @@ app.use("/api/favouritesFolder", favouritesFolder);
 app.use("/api/favouritePosts", favouritePosts);
 app.use("/api/articleSearch", articleSearch);
 app.use("/api/customTopicSearch", customTopicSearch);
+app.use("/api/insights", insights);
 
 // error handling middleware
 app.use(errorHandler);
