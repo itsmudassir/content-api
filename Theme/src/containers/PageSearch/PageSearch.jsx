@@ -82,23 +82,9 @@ let val;
         {/* <SearchBoxMain pageType="searchpage" category={customCateogry}/> */}
       </div>
 
-      <Select
-        options={langaugeList}
-        defaultValue={val?.label}
-        onChange={(e) => {
-          console.log(e.label);
-          val = e;
-          api.toggleFilter({
-            // identifier: selected?.identifier,
-            identifier: "language",
-            value: e?.label,
-          });
-          api.setPage({ size: 20, from: 0 });
-          api.search();
-        }}
-      />
 
-      <div className="container py-16 lg:py-28 space-y-16 lg:space-y-28">
+
+      <div className="container py-10 lg:py-28 space-y-16 lg:space-y-28">
         <main>
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex space-x-2.5">

@@ -7,6 +7,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
+import PageInsights from "../PageInsights/PageInsights";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -104,27 +105,16 @@ const gqlQuery = gql`
 const PageSearchMain = ({ className = "" }) => {
   const api = useSearchkit();
   const variables = useSearchkitVariables();
+  // if (variables?.page.size) {
+  //   variables.page.size = 20;
+  // }
   const { search, location } = useLocation();
   var { customCateogry, customQuery } = queryString.parse(search);
   const { data, loading, error } = useQuery(gqlQuery, { variables });
 
   useEffect(() => {
-    // if (category && query) {
-    //   console.log("BOTH")
-    //   api.setQuery(query);
-    //   api.setPage({ size: 20, from: 0 });
-    //   api.search();
-
-    //     api.toggleFilter({
-    //       identifier: "category",
-    //       value: category,
-    //     });
-    //     api.setPage({ size: 20, from: 0 });
-    //     api.search();
-    // }
-
     if (customQuery && !customCateogry) {
-      console.log("ONLY QUERY");
+      console.log("ONLY QUERY", customQuery);
 
       const customState = {
         query: customQuery,
@@ -163,6 +153,28 @@ const PageSearchMain = ({ className = "" }) => {
     }
   }, [customCateogry, customQuery]);
 
+  useEffect(() => {
+    if (!customCateogry && !customQuery) {
+      const customState = {
+        query: "",
+        sortBy: "",
+        filters: [
+          {
+            identifier: "date_download",
+            dateMin: "2022-01-16",
+            dateMax: "2022-09-18",
+          },
+        ],
+        page: {
+          size: 20,
+          from: 0,
+        },
+      };
+
+      api.setSearchState(customState);
+      api.search();
+    }
+  }, []);
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
@@ -215,7 +227,9 @@ const PageSearchMain = ({ className = "" }) => {
               </Tab.Panel>
 
               <Tab.Panel>
-                <h1>Tab 2</h1>
+                <div className="">
+                  <PageInsights />
+                </div>
               </Tab.Panel>
             </Tab.Panels>
           </div>
@@ -227,5 +241,5 @@ const PageSearchMain = ({ className = "" }) => {
   );
 };
 
-// export default withSearchkit(withSearchkitRouting(PageSearch));
+// export default withSearchkit(withSearchkitRouting(PageSearchMain));
 export default PageSearchMain;

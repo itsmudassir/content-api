@@ -57,6 +57,7 @@
     "redux-persist": "^6.0.0",
     "rxjs": "^7.5.5",
     "sass": "^1.49.7",
+    "use-query-params": "^1.2.3",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },

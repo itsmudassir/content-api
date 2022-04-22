@@ -6,50 +6,47 @@ import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
 
 const LanguagesFilterBox = ({ className = "", lists }) => {
-  // const [selected, setSelected] = useState(lists? lists[0]: null);
-  // const [selected, setSelected] = useState();
-  let selected = null
-  const api = useSearchkit();
 
-  // useEffect(() => {
-    
-  //   if(selected){
-  //     api.toggleFilter({
-  //       // identifier: selected?.identifier,
-  //       identifier: "language",
-  //       value: selected?.label,
-  //     });
-  //     api.setPage({ size: 20, from: 0 });
-  //     api.search();
-  //   }
-  // }, [selected]);
+  const api = useSearchkit();
+  var lan=api.getFiltersByIdentifier("language")
+  var lanName=lan.map((val)=>(val.value))
+  const [selectedGlobal, setSelectedGlobal] = useState(lanName||null);
+
 
   const handelOnChange =  (e)=>{
-    console.log("CHANGED");
-    // setSelected(e)
-    selected = e;
+    var selected=e
+
+    if (selectedGlobal==selected?.label){
+      setSelectedGlobal(null)
+
+    }
+    else{
+      setSelectedGlobal(selected?.label)
+
+    }
+
     if(selected){
       api.toggleFilter({
-        // identifier: selected?.identifier,
         identifier: "language",
         value: selected?.label,
       });
+
       api.setPage({ size: 20, from: 0 });
       api.search();
     }
   }
-console.log(selected);
   return (
-    // <></>
+    <>
+    
     <div
       className={`nc-ArchiveFilterListBox ${className}`}
       data-nc-id="ArchiveFilterListBox"
     >
-      <Listbox value={selected} onChange={(e)=>handelOnChange(e)}>
+      <Listbox value={"All Languages"} onChange={(e)=>handelOnChange(e)}>
         <div className="relative md:min-w-[200px]">
           <Listbox.Button as={"div"}>
             {/* <ButtonDropdown>{selected?.label}</ButtonDropdown> */}
-            <ButtonDropdown>{"Choose language"}</ButtonDropdown>
+            <ButtonDropdown>{selectedGlobal && selectedGlobal.length>0 ? "Language : "+selectedGlobal : "Choose language"}</ButtonDropdown>
           </Listbox.Button>
           <Transition
             as={Fragment}
@@ -93,6 +90,7 @@ console.log(selected);
         </div>
       </Listbox>
     </div>
+    </>
   );
 };
 

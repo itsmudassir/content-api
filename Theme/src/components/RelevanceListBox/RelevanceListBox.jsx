@@ -4,43 +4,102 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/solid";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
-import { useRouteMatch, useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
+import { useHistory } from "react-router-dom";
+
+
+
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 const RelevanceListBox = ({ className = "", lists }) => {
-  const { path, url } = useRouteMatch();
-  const history = useHistory();
-  const api = useSearchkit();
-  const [selected, setSelected] = useState(lists? lists[0] : null);
-  // const [selected, setSelected] = useState(urlparamsort? urlparamsort : lists[0]);
-  // let selected = null;
 
+  let history = useHistory();
+
+  const location = useLocation();
+
+ 
+
+  // const {path, url} = useRouteMatch();
+  // const history = useHistory();
+
+  const api = useSearchkit();
+
+
+  
+  let query = useQuery();
+  
+  var sortStateGlobal=query.get("sort")
+  
+  
+
+  const [selected, setSelected] = useState(sortStateGlobal||"relevance");
+  
   useEffect(() => {
+
+
+ setSelected(sortStateGlobal)
+
+ }, [query]);
+  
+
+
+  const handelOnChange =  (e)=>{
+    var selected=e
+
+    if (selected==selected?.label){
+      setSelected("relevance")
+
+    }
+    else{
+      setSelected(selected?.label)
+
+    }
+
+    if(selected){
+      let searchParams = new URLSearchParams(window.location.search);
+
+      const params = new URLSearchParams({'sort': selected?.id });
+      history.replace({ pathname: location.pathname, search: searchParams.toString()+"&"+params.toString() });       
+    
+
+    //   const queryParams = new URLSearchParams(window.location.search)
+    //   const category = queryParams.get("customCateogry")
+    //   const customQuery = queryParams.get("customQuery")
+    //   var oldParams=""
+    //   if(category){
+    //     oldParams=oldParams+'customCateogry='+category
+    //   }
+    //   if(customQuery){
+    //     oldParams=oldParams+'customQuery='+customQuery
+    //   }
+
+    //   history.push({
+    //     pathname: '/discover/discover_content',
+    //     search: '?'+'sort='+selected?.id,
+    // });
+    
+
+
     api.setSortBy(selected?.id);
     api.setPage({ size: 20, from: 0 });
     api.search();
-    // history.push(`${url}sort=${selected?.id}`)
-  }, [selected]);
 
-  // const handelOnChange = (e) => {
-  //   // selected = e;
-  //   setSelected(e)
-  //   api.setSortBy(selected?.id);
-  //   api.setPage({ size: 20, from: 0 });
-  //   api.search();
-  // };
+    }
+  }
 
   return (
     <div
       className={`nc-ArchiveFilterListBox ${className}`}
       data-nc-id="ArchiveFilterListBox"
     >
-      <Listbox value={selected} onChange={(e) => setSelected(e)}>
+      <Listbox value={selected} onChange={(e)=>handelOnChange(e)}>
         <div className="relative ">
-          <Listbox.Button as={"div"}>
-            <ButtonDropdown className="border border-slate-300">
-              {/* {selected ? selected.label : "Sort By"} */}
-              {selected?.label}
-            </ButtonDropdown>
+          <Listbox.Button as={"div"} >
+            <ButtonDropdown className="border border-slate-300" >{selected ? "Sorted by : "+selected : "Sort By"}</ButtonDropdown>
           </Listbox.Button>
           <Transition
             as={Fragment}

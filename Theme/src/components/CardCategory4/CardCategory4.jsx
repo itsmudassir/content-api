@@ -66,7 +66,7 @@ const CardCategory4 = ({
             <h2
               className={`text-base sm:text-lg text-neutral-900 dark:text-neutral-100 font-medium truncate`}
             >
-              {label}
+              {label.charAt(0).toUpperCase() + label.slice(1)}
             </h2>
             <span
               className={`block mt-1 text-sm text-neutral-6000 dark:text-neutral-400`}
