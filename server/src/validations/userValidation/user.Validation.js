@@ -104,10 +104,10 @@ const resetPasswordValidation = [
 ];
 
 const updateValidation = [
-    body("email")
-        .trim()
-        .notEmpty().withMessage("Email is required")
-        .isEmail().withMessage("Email field must be a valid email"),
+    // body("email")
+    //     .trim()
+    //     // .notEmpty().withMessage("Email is required")
+    //     .isEmail().withMessage("Email field must be a valid email"),
 
     body("password")
         .trim()
@@ -147,16 +147,16 @@ const updateValidation = [
             return true;
         }),
 
-    body("title")
-        .trim()
-        .notEmpty().withMessage("Title is required")
-        .custom(value => {
-            if (!value.match(/^[a-zA-Z0-9 ]+$/)) {
-                throw new Error("Title field allowed characters A-Z, a-z, 0-9")
-            }
-            if (value.includes("  ")) {
-                throw new Error("Title field must be a proper title")
-            }
-            return true;
-        }),
+    // body("title")
+    //     .trim()
+    //     .notEmpty().withMessage("Title is required")
+    //     .custom(value => {
+    //         if (!value.match(/^[a-zA-Z0-9 ]+$/)) {
+    //             throw new Error("Title field allowed characters A-Z, a-z, 0-9")
+    //         }
+    //         if (value.includes("  ")) {
+    //             throw new Error("Title field must be a proper title")
+    //         }
+    //         return true;
+    //     }),
 ];

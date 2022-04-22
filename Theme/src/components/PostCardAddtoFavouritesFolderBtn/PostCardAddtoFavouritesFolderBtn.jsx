@@ -23,9 +23,12 @@ const PostCardAddtoFavouritesFolderBtn = ({ setPostToRedux, postData }) => {
   };
   const deletePostHandler = async ()=>{
     try{
-      const res = await deletePost(postData?.id || postData?.post_id);
-      if(res.data)cogoToast.success("Removed From favourites");
-      if(res.error)cogoToast.error(res.error.data.errorMsg);
+      
+      if(window.confirm('Are you sure You want to dislike?')){
+        const res = await deletePost(postData?.id || postData?.post_id);
+        if(res.data)cogoToast.success("Removed From favourites");
+        if(res.error)cogoToast.error(res.error.data.errorMsg);
+      }
 
     }catch(err){
       console.log("ERROR OCCOURED WHILE REMOVING POST", err);

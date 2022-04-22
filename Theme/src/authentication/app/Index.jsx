@@ -15,15 +15,17 @@ import { Home } from "../home/Index";
 import { Profile } from "../profile/Index";
 // import { Admin } from "../admin/Index";
 import { User } from "../user/Index";
-import PageHome from "../../containers/PageHome/PageHome";
+import PageHome1 from "../../containers/PageHome/PageHome1";
 import MainNav1 from "../../components/Header/MainNav1";
 import ScrollToTop from "../../routers/ScrollToTop";
 import PageSearch from "../../containers/PageSearch/PageSearch";
+import PageSearchMain from "../../containers/PageSearch/PageSearchMain";
 import PageDashboard from "../../containers/PageDashboard/PageDashboard";
 import PageContentFeed from "../../containers/PageContentFeed/PageContentFeed";
 import Analytics from "../../containers/Analytics/Analytics";
 import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3"
+import EditUserProfile from "../../containers/PageEditUserProfile/PageEditUserProfile" 
 
 function App() {
   const { pathname } = useLocation();
@@ -36,8 +38,6 @@ function App() {
   return (
     <div className={"app-container" + (user && " bg-light")}>
       <BrowserRouter>
-        <Alert />
-        <Nav />
         <ScrollToTop />
         <MainNav1 />
 
@@ -49,13 +49,15 @@ function App() {
           <PrivateRoute
             exact
             path={`/discover/discover_search`}
-            component={PageHome}
+            // component={PageHome}
+            component={PageHome1}
           />
 
           <PrivateRoute
             exact
             path={`/discover/discover_content`}
-            component={PageSearch}
+            // component={PageSearch}
+            component={PageSearchMain}
           />
 
           <PrivateRoute path={"/content-feed"} component={PageContentFeed} />
@@ -80,6 +82,8 @@ function App() {
           <PrivateRoute exact path="/user-profile" component={Home} />
 
           <PrivateRoute path="/profile" component={Profile} />
+          
+          <PrivateRoute path="/edit-profile" component={EditUserProfile} />
 
           {/* <PrivateRoute path="/admin" roles={[Role.Admin]} component={Admin} /> */}
 

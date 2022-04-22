@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
 import LanguagesFilterBox from "../../components/LanguagesFilterBox/LanguagesFilterBox";
@@ -15,181 +15,38 @@ import { useLocation } from "react-router-dom";
 import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
 import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
-
+import RelevanceListBox from "../../components/RelevanceListBox/RelevanceListBox";
 import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
+import Select from "react-select";
 
 export const PageSearchProps = {
   className: String,
 };
 
-const query = gql`
-  query resultSet(
-    $query: String
-    $filters: [SKFiltersSet]
-    $page: SKPageInput
-    $sortBy: String
-  ) {
-    results(query: $query, filters: $filters) {
-      summary {
-        total
-        appliedFilters {
-          id
-          identifier
-          display
-          label
-          ... on DateRangeSelectedFilter {
-            dateMin
-            dateMax
-            __typename
-          }
-
-          ... on ValueSelectedFilter {
-            value
-            __typename
-          }
-          __typename
-        }
-        sortOptions {
-          id
-          label
-          __typename
-        }
-        query
-        __typename
-      }
-      hits(page: $page, sortBy: $sortBy) {
-        page {
-          total
-          totalPages
-          pageNumber
-          from
-          size
-          __typename
-        }
-        sortedBy
-
-        items {
-          ... on ResultHit {
-            id
-            fields {
-              article_length
-              category
-              authors
-              date_download
-              language
-              facebook_shares
-              readtime
-              sentiment
-              url
-              image_url
-              twitter_shares
-              maintext
-              source_domain
-              title
-              __typename
-            }
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      facets {
-        identifier
-        type
-        label
-        display
-        entries {
-          label
-          count
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-
-const FILTERS = [
-  { label: "Relevance", id: "relevance" },
-  { label: "Facebook Shares", id: "facebook_shares" },
-  { label: "Twitter Shares", id: "twitter_shares" },
-  { label: "Date Download", id: "date_download" },
-];
-const LANGFILTER = [
-  { label: "English", identifier: "language", id: "English" },
-  { label: "Greek", identifier: "language", id: "Greek" },
-  { label: "Dutch", identifier: "language", id: "Dutch" },
-  { label: "French", identifier: "language", id: "French" },
-  { label: "German", identifier: "language", id: "German" },
-];
-
-const PageSearch = ({ className = "" }) => {
+const PageSearch = ({ className = "", data, loading, error }) => {
   const RtkData = useGetAllFavouritePostsbyUserQuery();
-  //Get cardCategory name or searchBox input from searchPage
-  const location = useLocation();
-  // console.log("Topic se aaya  ", location.state.topic);
-  // console.log("Query se aaya  ", location.state.query);
-
+  let newData;
   const api = useSearchkit();
 
-  const variables = useSearchkitVariables();
-  var flag = false;
-  let newData;
+  if (data) {
+    var sortOptions = data?.results.summary.sortOptions;
+    // const langaugeList = data?.results.facets[5].entries;
+    var langaugeList = data?.results.facets.filter(
+      (item) => item.identifier == "language"
+    )[0].entries;
+    // console.log(langaugeList);
+  }
 
-  useEffect(() => {
-    if (location?.state?.topic) {
-      api.toggleFilter({
-        identifier: "category",
-        value: location.state.topic,
-      });
-      api.setPage({ size: 20, from: 0 });
-      api.search();
-    }
-    if (location?.state?.query) {
-      api.setQuery(location.state.query);
-      api.setPage({ size: 20, from: 0 });
-
-      api.search();
-    }
-    flag = true;
-  }, []);
-
-  const { data, loading, error } = useQuery(query, { variables });
-
-  // if (data && flag) {
-  //   console.log(variables);
-  // }
-  // allfavoriteFolder = { 123: "123", 234: "234" };
-  // if (data && RtkData.isFetching == false) {
-  //   console.log(data);
-  //   console.log(RtkData);
-  //   data?.results?.hits?.items?.map(({ id }) => {
-  //     if (RtkData) {
-  //       return RtkData?.data?.map((item) => {
-  //         if (item.post_id == undefined || id == undefined) {
-  //         }
-  //         if (id == item.post_id) {
-  //           console.log(id, item.post_id);
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
-
-  console.log(variables);
   if (data) {
     console.log(data);
+
     var allFavoriteFolder = {};
     RtkData?.data?.filter((item) => {
       if (item.post_id !== undefined) {
         return (allFavoriteFolder[item.post_id] = item.post_id);
       }
     });
-    const jsonString = JSON.stringify(Object.assign({}, allFavoriteFolder));
-    const json_obj = JSON.parse(jsonString);
-    console.log(allFavoriteFolder);
+
     newData = data?.results?.hits?.items?.map((item) => {
       try {
         if (allFavoriteFolder[item.id] === undefined) {
@@ -203,64 +60,41 @@ const PageSearch = ({ className = "" }) => {
         // return allFavoriteFolder[""];
       }
     });
-    console.log(newData);
+    // console.log(newData);
   }
 
   if (error) {
     console.log("An error Occured" + error);
   }
 
-  if (loading) {
-    <div style={{ display: "flex", alignItems: "center" }}>
-      {" "}
-      <LoadingVideo />
-    </div>;
-  }
-
-  // if (data) {
-  //   var languageslist = [];
-  //   {
-  //     data?.results?.facets.map((items) => {
-  //       if (items.identifier == "language") {
-  //         languageslist = items?.entries?.map((item) => ({
-  //           label: item.label,
-  //           identifier: "language",
-  //           id: item.label,
-  //         }));
-  //       }
-  //       languageslist = [
-  //         ...languageslist,
-  //         {
-  //           label: "All Languages",
-  //           identifier: "language",
-  //           id: "All Languages",
-  //         },
-  //       ];
-  //     });
-  //   }
+  // if (loading) {
+  //   return <div className="flex justify-center items-center mt-4">
+  //     <LoadingVideo />
+  //   </div>;
   // }
-
+let val;
   return (
     <>
-      {/* {/ <h1>{!labelfromcatCard ? "" : labelfromcatCard}</h1> /} */}
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
           <title>Nc || Search Page Template</title>
         </Helmet>
-        <SearchBoxMain />
+        {/* <SearchBoxMain pageType="searchpage" category={customCateogry}/> */}
       </div>
 
-      <div className="container py-16 lg:py-28 space-y-16 lg:space-y-28">
+
+
+      <div className="container py-10 lg:py-28 space-y-16 lg:space-y-28">
         <main>
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex space-x-2.5">
+              {!loading ? <LanguagesFilterBox lists={langaugeList} /> : null}
 
-              <LanguagesFilterBox lists={LANGFILTER} />
               <DateRangeDropDown facet={data?.results?.facets} />
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
             <div className="flex justify-end">
-              <ArchiveFilterListBox lists={FILTERS} />
+              <RelevanceListBox lists={sortOptions} />
             </div>
           </div>
 
@@ -291,7 +125,7 @@ const PageSearch = ({ className = "" }) => {
             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center"
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            <CustomPagination data={data?.results} />
+            {/* <CustomPagination data={data?.results} /> */}
           </div>
         </main>
       </div>

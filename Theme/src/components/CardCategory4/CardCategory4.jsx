@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import NcImage from "../../components/NcImage/NcImage";
-import { Link, useRouteMatch } from "react-router-dom";
 import Badge from "../../components/Badge/Badge";
 import Button from "../Button/Button";
+import { Link, useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 const CardCategory4 = ({
   className = "",
@@ -11,17 +12,27 @@ const CardCategory4 = ({
   index,
   categoryimage,
 }) => {
+  
+  const search = useLocation();
+  const queryParams = queryString.parse(search);
+  const newQueryParams =  {
+    ...queryParams,
+    customCateogry : label
+  };
   const categories = "Follow";
   const getColorClass = () => {
     return "bg-blue-500";
   };
+
   return (
     <>
       <Link
         to={{
           pathname: "/discover/discover_content",
-          state: { topic: label },
+          // state: { topic: label },
+          search: queryString.stringify(newQueryParams)
         }}
+        // to={`/discover/discover_content?category=${label}`}
         className={`nc-CardCategory4 flex flex-col ${className}`}
         // className={`nc-CardAuthorBox2 flex flex-col overflow-hidden [ nc-box-has-hover ] [ nc-dark-box-bg-has-hover ] ${className}`}
         data-nc-id="CardCategory4"
@@ -55,7 +66,7 @@ const CardCategory4 = ({
             <h2
               className={`text-base sm:text-lg text-neutral-900 dark:text-neutral-100 font-medium truncate`}
             >
-              {label}
+              {label.charAt(0).toUpperCase() + label.slice(1)}
             </h2>
             <span
               className={`block mt-1 text-sm text-neutral-6000 dark:text-neutral-400`}

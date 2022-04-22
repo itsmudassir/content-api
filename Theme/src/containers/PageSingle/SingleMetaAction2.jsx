@@ -1,7 +1,7 @@
 import React from "react";
 import { SOCIALS_DATA } from "../../components/SocialsShare/SocialsShare";
 import NcDropDown from "../../components/NcDropDown/NcDropDown";
-import ShareBtnDropDown from "../../components/TailwindDropDown/TailwindDropDown";
+import ShareBtnDropDown from "../../components/ShareBtnDropDown/ShareBtnDropDown";
 
 const SingleMetaAction2 = ({ className = "", meta }) => {
   // console.log(meta)
