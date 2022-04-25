@@ -10,11 +10,35 @@ const DonutGraph = () => {
 
   return (
     <div className="donut">
+      <p className="pl-4 mb-8 font-semibold">Top Domains on all networks based on Published Articles</p>
       <Chart
-        options={state.options}
+        options={
+          {
+            responsive: [
+              {
+                breakpoint: 700,
+                options: {
+                  chart: {
+                    width: "90%",
+                  },
+                },
+              },
+              {
+                breakpoint: 500,
+                options: {
+                  chart: {
+                    width: "95%",
+                  },
+                },
+              },
+            ]
+          }
+        }
         series={state.series}
         type="donut"
-        width="380"
+        width="80%"
+        height={"300"}
+        
       />
     </div>
   );

@@ -8,13 +8,17 @@ import FavouriteAddFolder from "../../components/FavouriteAddFolder/FavouriteAdd
 const Analytics = () => {
   return (
     <>
+
       <FavouriteAddFolder />
       <div className="relative overflow-hidden">
-        <div className="container relative">
+        <div className="container relative ">
           {/* <BgGlassmorphism /> */}
           <SectionLargeSlider className="pt-10 pb-16 md:py-16 lg:pb-28 lg:pt-24 " />
         </div>
+
+        
         <Graphs />
+        
         <br />
         <DonutGraph />
         <br />

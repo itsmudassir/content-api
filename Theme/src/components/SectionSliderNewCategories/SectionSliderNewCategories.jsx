@@ -76,7 +76,7 @@ const SectionSliderNewCategories = ({
             // selected categories list
             <>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-8 mt-8 lg:mt-10">
-                {searchkitOutput.data.results.facets.map((items) => {
+                {searchkitOutput.data?.results?.facets.map((items) => {
                   if (items.identifier == "category") {
                     return items.entries.map((entry, index) => {
                       if (categoriesFilter.includes(entry.label))
