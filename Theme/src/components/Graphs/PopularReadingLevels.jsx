@@ -1,43 +1,55 @@
-import React , {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 
-const PopularWordCount = ({data}) => {
-    const key = data?.buckets.map(item=> item.key)
-    const doc_count = data?.buckets.map(item=> item.doc_count);
-    const avg_engagment_per_word_count = data?.buckets.map(item=>parseFloat(parseFloat(item["avg engagment per word count"].value).toFixed(1)));
+const PopularReadingLevels = ({ data }) => {
+  // states
+  const [key, setKey] = useState();
+  const [doc_count, setDoc_count] = useState();
+  const [avg_engagment_per_Reading_level, setAvg_engagment_per_Reading_level] =
+    useState();
 
-    if(!data) return null
+  useEffect(() => {
+    setKey(data?.buckets.map((item) => item.key));
+    setDoc_count(data?.buckets.map((item) => item.doc_count));
+    setAvg_engagment_per_Reading_level(
+      data?.buckets.map((item) =>
+        parseFloat(
+          parseFloat(item["avg engagment per Reading level"].value).toFixed(1)
+        )
+      )
+    ); 
+  }, [data]);
+
   return (
     <div>
       <>
-        <h4 className="pl-4 font-semibold">Popular Word Count</h4>
+        <h4 className="pl-4 font-semibold">Popular Reading Levels</h4>
         <Chart
           height={400}
           width={"100%"}
           series={[
             {
-              name: "X",
+              name: "Number of Articles",
               type: "bar",
               data: doc_count,
             },
             {
-              name: "Z",
+              name: "Engagement Per Article",
               type: "bar",
-              data: avg_engagment_per_word_count,
+              data: avg_engagment_per_Reading_level,
             },
           ]}
           options={{
             chart: {
               stacked: false,
             },
-            // colors: ["green", "blue"],
             dataLabels: {
               enabled: false,
             },
             tooltip: {
               followCursor: true,
             },
-            colors: ["#33cc33", "#0d47cd"],
+            colors: ["#4169E1", "#808080"],
             stroke: {
               width: [4, 4, 4],
             },
@@ -112,4 +124,4 @@ const PopularWordCount = ({data}) => {
   );
 };
 
-export default PopularWordCount;
+export default PopularReadingLevels;

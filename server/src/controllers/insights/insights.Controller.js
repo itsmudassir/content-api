@@ -30,6 +30,30 @@ const getInsights = async (req, res) => {
                         }
                     },
                     
+                           
+            "top_authors_by_most_articles_published": {
+                "terms": {
+                  "field": "authors",
+                  "size": 50,
+                  "order": {
+                    "_count": "desc"
+                  }
+                },
+                
+                  "aggs": {
+                    "avg engagment": {
+                      "avg": {
+                        "field": "total_engagement"
+                      }
+                    },
+                      "total engagment": {
+                      "sum": {
+                        "field": "total_engagement"
+                      }
+                    }
+                  }
+              }  ,
+              
                     
                 "top_domians_by_most_articles_published": {
                         "terms": {

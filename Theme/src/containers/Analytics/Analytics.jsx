@@ -2,7 +2,7 @@ import React from "react";
 // import BgGlassmorphism from "../../components/BgGlassmorphism/BgGlassmorphism";
 import SectionLargeSlider from "../../components/Card1Large/SectionLargeSlider";
 import Graphs from "../../components/Graphs/Graphs";
-import DonutGraph from "../../components/Graphs/DonutGraph";
+// import DonutGraph from "../../components/Graphs/DonutGraph";
 import OtherGraphs from "../../components/Graphs/OtherGraphs";
 import FavouriteAddFolder from "../../components/FavouriteAddFolder/FavouriteAddFolder";
 const Analytics = () => {
@@ -20,7 +20,7 @@ const Analytics = () => {
         <Graphs />
         
         <br />
-        <DonutGraph />
+        {/* <DonutGraph /> */}
         <br />
         <OtherGraphs />
       </div>

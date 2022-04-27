@@ -1,10 +1,18 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import Chart from "react-apexcharts";
 
 const TotalEngagementByNetwork = ({data}) => {
+
+  const [facebook, setFacebook] = useState();
+  const [twitter, setTwitter] = useState();
   
-  const twitter =  data?.twitter;
-  const facebook = data?.facebook;
+  useEffect(()=>{
+    setTwitter(parseFloat(parseFloat(data?.twitter).toFixed(1)))
+    setFacebook(parseFloat(parseFloat(data?.facebook).toFixed(1)))
+  },[data])
+  
+  // const twitter =  data?.twitter;
+  // const facebook = data?.facebook;
 
   return (
     <div>

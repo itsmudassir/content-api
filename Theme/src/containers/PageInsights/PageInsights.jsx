@@ -6,8 +6,9 @@ import AvgEngagementByNetwork from "../../components/Graphs/AvgEngagementByNetwo
 import TotalEngagementByNetwork from "../../components/Graphs/TotalEngagementByNetwork";
 import ArticlePerDateChart from "../../components/Graphs/ArticlePerDateChart";
 import PopularWordCount from "../../components/Graphs/PopularWordCount";
-import DonutGraph from "../../components/Graphs/DonutGraph";
-import OtherGraphs1 from "../../components/Graphs/OtherGraphs1";
+import PopularReadingLevels from "../../components/Graphs/PopularReadingLevels";
+import PopularDays from "../../components/Graphs/PopularDays";
+import TopDomainsDonut from "../../components/Graphs/TopDomainsDonut";
 import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
 import { useGetInsightsMutation } from "../../app/Api/contentApi";
 
@@ -21,6 +22,9 @@ const PageInsights = ({ searchKitData }) => {
   const [avgEngagementByNetwork, setAvgEngagementByNetwork] = useState();
   const [totalEngagementByNetwork, setTotalEngagementByNetwork] = useState();
   const [popular_word_count, setPopular_word_count] = useState();
+  const [popularReadingLevels, setPopularReadingLevels] = useState();
+  const [popularDays, setPopularDays] = useState();
+  const [top_domians, setTop_domians] = useState();
 
   // RTK Query
   const [getInsights, getInsightsObj] = useGetInsightsMutation();
@@ -33,7 +37,7 @@ const PageInsights = ({ searchKitData }) => {
     try {
       const res = await getInsights({
         startDate: "2022-03-01",
-        endDate: "2022-03-10",
+        endDate: "2022-03-11",
       });
       var data = res?.data?.aggregations.range.buckets[0];
       setArticlesAnalyzed(data?.doc_count);
@@ -53,13 +57,16 @@ const PageInsights = ({ searchKitData }) => {
         twitter: data?.sum_twitter_shares.value,
       });
       setPopular_word_count(data?.popular_word_count);
+      setPopularReadingLevels(data["Popular Reading Levels"]);
+      setPopularDays(data["Popular Days"]);
+      setTop_domians(data.top_domians_by_most_articles_published);
 
-      console.log(data? data: "loading...");
+      console.log(data ? data : "loading...");
     } catch (err) {
       console.log("ERROR OCCOURED WHILE FETCHING INSIGHTS", err);
     }
   }, []);
-  
+
   if (!articlesAnalyzed) return "Loading...";
   return (
     <>
@@ -89,35 +96,45 @@ const PageInsights = ({ searchKitData }) => {
           </div>
         </div>
 
-        {/* ArticlePerDateChart  */}
-        <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
-          <ArticlePerDateChart data={article_per_date} />
-        </div>                      
-
+        {/* ArticlePerDateChart  */}   
+          <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
+            <ArticlePerDateChart data={article_per_date} />
+          </div>
+   
         {/* EngagementByNetwork Charts Grid */}
         <div className="grid grid-cols-1 gap-x-2.5 lg:gap-x-5 md:grid-cols-2 mx-4 sm:mx-8">
-        <div className="px-0 sm:px-2 py-5 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
-          <AvgEngagementByNetwork data={avgEngagementByNetwork}/>
-        </div>
-        <div className="px-0 sm:px-2 py-5 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
-          <TotalEngagementByNetwork data={totalEngagementByNetwork}/>
-        </div>
+          <div className="px-0 sm:px-2 py-5 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
+            <AvgEngagementByNetwork data={avgEngagementByNetwork} />
+          </div>
+          <div className="px-0 sm:px-2 py-5 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
+            <TotalEngagementByNetwork data={totalEngagementByNetwork} />
+          </div>
         </div>
 
         {/* Popular Word Count chart */}
         <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
           <PopularWordCount data={popular_word_count} />
-        </div> 
-        
-        {/* Donut Graph  */}
-        <div className="pr-2 py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
-          <DonutGraph />
         </div>
 
-        {/* Other Graphs  */}
-        <div className="px-0 sm:px-2 py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
-          <OtherGraphs1 />
+        {/* Popular Reading Levels chart */}
+        <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
+          <PopularReadingLevels data={popularReadingLevels} />
         </div>
+
+        {/* Popular Days chart */}
+        <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
+          <PopularDays data={popularDays} />
+        </div>
+
+        {/* Donut Graph  */}
+        {
+          top_domians?
+        <div className="pr-2 py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-200">
+          {/* <TopDomainsDonut  data={top_domians}/> */}
+        </div>
+        : "loading.."
+        }
+
       </div>
     </>
   );

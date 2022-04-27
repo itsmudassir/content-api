@@ -127,11 +127,11 @@ const OtherGraphs1 = () => {
               columnWidth: "100%",
               distributed: false,
             },
-            // bar: {
-            //   columnWidth: '100%',
-            //   distributed : false,
-            //   endingShape : "rounded"
-            // },
+            bar: {
+              columnWidth: '100%',
+              distributed : false,
+              endingShape : "rounded"
+            },
           },
           dataLabels: {
             enabled: false,
