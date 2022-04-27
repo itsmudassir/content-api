@@ -227,7 +227,7 @@ const PageSearchMain = ({ className = "" }) => {
               </Tab.Panel>
 
               <Tab.Panel >
-                  <PageInsights />
+                  <PageInsights searchKitData={data}/>
               </Tab.Panel>
             </Tab.Panels>
           </div>

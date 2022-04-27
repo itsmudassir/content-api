@@ -2,10 +2,10 @@ import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import Input from "../../components/Input/Input";
 import Label from "../../components/Label/Label";
 import React, { useState } from "react";
-import { useUpdateUserMutation } from "../../app/Api/contentApi";
+// import { useUpdateUserMutation } from "../../app/Api/contentApi";
 
 const DashboardEditProfile = () => {
-  const [updateUser, updateUserObj] = useUpdateUserMutation();
+  // const [updateUser, updateUserObj] = useUpdateUserMutation();
 
   const userData = {
     userId: "62138240d6295e8e3b3a38fc",
@@ -19,10 +19,10 @@ const DashboardEditProfile = () => {
   };
   const handelSubmit = (e) => {
     e.preventDefault();
-    updateUser(userData);
+    // updateUser(userData);
     console.log(userData);
   };
-  console.log(updateUserObj);
+  // console.log(updateUserObj);
   return (
     <div className="rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
       <form className="grid md:grid-cols-2 gap-6">

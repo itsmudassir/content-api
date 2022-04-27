@@ -1,7 +1,18 @@
-import React from "react";
+import React , {useEffect, useState} from "react";
 import Chart from "react-apexcharts";
 
-const Graph2 = () => {
+const ArticlePerDateChart = ({data}) => {
+// states
+const [date , setDate]= useState();
+const [barValues , setBarValues]= useState();
+const [lineValues , setLineValues]= useState();
+
+useEffect(()=>{
+  setDate(data?.buckets.map(item=>item.key_as_string.split("T")[0]));
+  setBarValues(data?.buckets.map(item=> item.doc_count));
+  setLineValues(data?.buckets.map(item=> parseFloat(parseFloat(item.total_engagement_per_day.value).toFixed(1))))
+},[data])
+
   return (
     <div>
       <>
@@ -14,23 +25,12 @@ const Graph2 = () => {
             {
               name: "X",
               type: "bar",
-              data: [
-                21.1, 23, 33.1, 34, 44.1, 44.9, 56.5, 58.5, 21.1, 23, 33.1, 34,
-                44.1, 44.9, 56.5, 50.5, 56.5, 50.5, 21.1, 23, 33.1, 34, 21.1,
-                23, 33.1, 34, 44.1, 44.9, 56.5, 50.5, 21.1, 44.9, 56.5, 50.5,
-                21.1, 23, 44.9, 56.5, 58.5, 21.1, 23, 33.1, 34, 21.1, 23, 33.1,
-                34, 44.1, 44.9, 44.1,
-              ],
+              data: barValues,
             },
             {
               name: "Z",
               type: "line",
-              data: [
-                1.1, 1.2, 1.5, 1.5, 2.5, 2.6, 1.9, 3.2, 1.4, 2, 2.5, 1.5, 2.5,
-                2.8, 3.0, 3.0, 1.4, 2, 2.5, 1.5, 0.5, 0.8, 1.4, 2, 2.5, 1.5,
-                2.5, 2.8, 1.4, 2, 2.5, 1.5, 2.5, 2.8, 1.4, 2, 1.5, 2.5, 2.8,
-                1.4, 0.5, 0.8, 1.4, 2, 2.5, 1.4, 2, 1.5, 2.5, 1.8,
-              ],
+              data: lineValues,
             },
           ]}
           options={{
@@ -54,17 +54,7 @@ const Graph2 = () => {
               },
             },
             xaxis: {
-              categories: [
-                "25Jan",
-                "1Feb",
-                "3Feb",
-                "15Feb",
-                "22Feb",
-                "1Mar",
-                "8Mar",
-                "15Mar",
-                "22Mar",
-              ],
+              categories: date,
             },
             yaxis: [
               {
@@ -128,4 +118,4 @@ const Graph2 = () => {
   );
 };
 
-export default Graph2;
+export default ArticlePerDateChart;
