@@ -5,7 +5,7 @@ import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
 const InsightsCard = ({ title, values, hasIcons }) => {
   return (
     <>
-      <div className="flex flex-col justify-center items-start border-slate-300 w-[100%] md:w-[30%] py-2 px-3 md:py-5 md:px-3 md:mx-1 my-1 border rounded-xl">
+      <div className="flex flex-col justify-center items-start border-slate-400 w-[100%] md:w-[30%] py-2 px-3 md:py-5 md:px-3 md:mx-1 my-1 border rounded-xl">
         <p className="mb:0 sm:mb-3 text-sm font-semibold text-slate-500">
           {title}
         </p>
