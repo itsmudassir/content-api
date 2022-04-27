@@ -3,8 +3,8 @@ POST http://localhost:7777/api/insights/getInsights
 Content-Type: application/json
 
 {
-    "startDate" :"12-12-2020",
-    "endDate":"12-15-2020", 
-    "category": "sports",
-    "customQuery": "tennis"
+    "startDate" :"2022-03-01",
+    "endDate":"2022-03-10"
+    # "customQuery":"war",
+    # "category": "war"
 }

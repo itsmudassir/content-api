@@ -137,17 +137,18 @@ const contentApi = createApi({
             invalidatesTags: ["FavouritePosts"]
         }),
 
-
-        //USER QUERIES
-
-        // update user queries
-        updateUser: builder.mutation({
-            query: (params) => ({
-                url: `/api/user/${params.userId}`,
-                method: "PUT",
-                body: params.user,
-            }),
+            
+        // INSIGHTS QUERIES
+        
+        // get insights
+        getInsights: builder.mutation({
+            query: (params)=>({
+                url: `/api/insights/getInsights`,
+                method: "POST",
+                body: params
+            })
         }),
+        
     }),
 });
 
@@ -157,7 +158,6 @@ export const {
     useGetAllFavouritePostsQuery,
     useGetAllFavouritePostsbyUserQuery,
     useCreateFolderMutation,
-    useUpdateUserMutation,
     useAddPostToFavouritesFolderMutation,
     useGetAllCustomTopicsQuery,
     useDeleteCustomTopicMutation,
@@ -165,5 +165,6 @@ export const {
     useDeleteFolderMutation,
     useUpdateFolderMutation,
     useCreateTopicMutation,
-    useDeletePostByElasticIdMutation
+    useDeletePostByElasticIdMutation,
+    useGetInsightsMutation
 } = contentApi;

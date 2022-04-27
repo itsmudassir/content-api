@@ -1,5 +1,6 @@
 import React from "react";
 import Chart from "react-apexcharts";
+
 const Graphs = () => {
   return (
     <div>
@@ -11,7 +12,7 @@ const Graphs = () => {
           height={400}
           series={[
             {
-              data: [235, 10, 2],
+              data: [235, 10, 20],
             },
           ]}
           options={{
@@ -25,8 +26,8 @@ const Graphs = () => {
             colors: ["#4169E1", "#FF0000", "#66C7F4"],
             plotOptions: {
               bar: {
-                columnWidth: "40%",
-                borderRadius: 41,
+                columnWidth: "15%",
+                borderRadius: 15,
                 distributed: true,
               },
             },
@@ -37,7 +38,7 @@ const Graphs = () => {
               show: false,
             },
             xaxis: {
-              categories: [["Facebook"], ["Reddit"], ["Pinterest"]],
+              categories: ["Facebook", "Reddit", "Pinterest"],
               labels: {
                 style: {
                   colors: ["#000000"],
@@ -59,7 +60,6 @@ const Graphs = () => {
         <h4>Articles Published Over Time and Engagement</h4>
         <Chart
           type="bar"
-          width={1330}
           height={400}
           series={[
             {

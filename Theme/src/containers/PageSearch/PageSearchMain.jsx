@@ -220,16 +220,14 @@ const PageSearchMain = ({ className = "" }) => {
             </Tab>
           </Tab.List>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center ">
             <Tab.Panels className="mt-2">
               <Tab.Panel>
                 <PageSearch data={data} loading={loading} error={error} />
               </Tab.Panel>
 
-              <Tab.Panel>
-                <div className="">
-                  <PageInsights />
-                </div>
+              <Tab.Panel >
+                  <PageInsights searchKitData={data}/>
               </Tab.Panel>
             </Tab.Panels>
           </div>
