@@ -199,8 +199,6 @@ const PageSearchMain = ({ className = "" }) => {
                     : "text-black bg-gray-200 hover:text-black"
                 )
               }
-              // onClick={()=> history.push(`${url}/discover_search`)}
-              // onClick={() => console.log("XXXXXXXXXX")}
             >
               Content Feed
             </Tab>

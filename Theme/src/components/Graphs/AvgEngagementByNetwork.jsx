@@ -10,6 +10,7 @@ const AvgEngagementByNetwork = ({data}) => {
     setFacebook(parseFloat(parseFloat(data?.facebook).toFixed(1)))
   },[data])
   
+
   // const twitter =  parseFloat(parseFloat(data?.twitter).toFixed(1))
   // const facebook = parseFloat(parseFloat(data?.facebook).toFixed(1))
   return (

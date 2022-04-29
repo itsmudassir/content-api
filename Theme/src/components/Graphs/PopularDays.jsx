@@ -20,6 +20,7 @@ const PopularDays = ({ data }) => {
     ); 
   }, [data]);
 
+
   return (
     <div>
       <>

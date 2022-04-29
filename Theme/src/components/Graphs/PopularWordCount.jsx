@@ -6,8 +6,7 @@ const PopularWordCount = ({data}) => {
     const doc_count = data?.buckets.map(item=> item.doc_count);
     const avg_engagment_per_word_count = data?.buckets.map(item=>parseFloat(parseFloat(item["avg engagment per word count"].value).toFixed(1)));
 
-    if(!data) return null
-  return (
+    return (
     <div>
       <>
         <h4 className="pl-4 font-semibold">Popular Word Count</h4>
