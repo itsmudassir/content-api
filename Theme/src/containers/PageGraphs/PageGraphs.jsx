@@ -10,8 +10,9 @@ import PopularReadingLevels from "../../components/Graphs/PopularReadingLevels";
 import PopularDays from "../../components/Graphs/PopularDays";
 import TopDomainsDonut from "../../components/Graphs/TopDomainsDonut";
 import { useGetInsightsMutation } from "../../app/Api/contentApi";
+import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 
-const PageGraphs = () => {
+const PageGraphs = ({ data, searchKitData }) => {
   // states
   const [articlesAnalyzed, setArticlesAnalyzed] = useState();
   const [totalEngagements, setTotalEngagements] = useState();
@@ -25,20 +26,13 @@ const PageGraphs = () => {
   const [popularDays, setPopularDays] = useState();
   const [top_domians, setTop_domians] = useState();
 
-  // RTK Query
-  const [getInsights, getInsightsObj] = useGetInsightsMutation();
-
+ 
   // Search params parsing
   const { search, location } = useLocation();
   const { customCateogry, customQuery } = queryString.parse(search);
 
   useEffect(async () => {
     try {
-      const res = await getInsights({
-        startDate: "2022-03-01",
-        endDate: "2022-03-11",
-      });
-      var data = res?.data?.aggregations.range.buckets[0];
       setArticlesAnalyzed(data?.doc_count);
       setTotalEngagements(data?.total_engagement.value);
       setAvgEngagements(data?.avg_engagement.value);
@@ -59,15 +53,12 @@ const PageGraphs = () => {
       setPopularReadingLevels(data["Popular Reading Levels"]);
       setPopularDays(data["Popular Days"]);
       setTop_domians(data.top_domians_by_most_articles_published);
-
-      console.log(data ? data : "loading...");
     } catch (err) {
-      console.log("ERROR OCCOURED WHILE FETCHING INSIGHTS", err);
-      console.log(getInsightsObj?.error);
+      console.log("ERROR OCCOURED WHILE ASSIGNING INSIGHTS TO STATE", err);
     }
-  }, []);
+  }, [data]);
 
-  if (!articlesAnalyzed) return "Loading...";
+  if (!articlesAnalyzed) return <LoadingVideo />;
 
   return (
     <>
