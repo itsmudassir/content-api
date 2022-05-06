@@ -9,7 +9,7 @@ import PopularWordCount from "../../components/Graphs/PopularWordCount";
 import PopularReadingLevels from "../../components/Graphs/PopularReadingLevels";
 import PopularDays from "../../components/Graphs/PopularDays";
 import TopDomainsDonut from "../../components/Graphs/TopDomainsDonut";
-import { useGetInsightsMutation } from "../../app/Api/contentApi";
+import TopKeyWords from "../../components/Graphs/TopKeyWords";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 
 const PageGraphs = ({ data, searchKitData }) => {
@@ -25,8 +25,8 @@ const PageGraphs = ({ data, searchKitData }) => {
   const [popularReadingLevels, setPopularReadingLevels] = useState();
   const [popularDays, setPopularDays] = useState();
   const [top_domians, setTop_domians] = useState();
+  const [top_keywords, setTop_keywords] = useState();
 
- 
   // Search params parsing
   const { search, location } = useLocation();
   const { customCateogry, customQuery } = queryString.parse(search);
@@ -52,7 +52,8 @@ const PageGraphs = ({ data, searchKitData }) => {
       setPopular_word_count(data?.popular_word_count);
       setPopularReadingLevels(data["Popular Reading Levels"]);
       setPopularDays(data["Popular Days"]);
-      setTop_domians(data.top_domians_by_most_articles_published);
+      setTop_domians(data?.top_domians_by_most_articles_published);
+      setTop_keywords(data?.top_keywords);
     } catch (err) {
       console.log("ERROR OCCOURED WHILE ASSIGNING INSIGHTS TO STATE", err);
     }
@@ -96,10 +97,18 @@ const PageGraphs = ({ data, searchKitData }) => {
           </div>
         </div>
 
-        {/* Popular Word Count chart */}
-        <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
-          <PopularWordCount data={popular_word_count} />
+        {/* Popular-word-count and top-Keywords Charts Grid */}
+        <div className="grid grid-cols-1 gap-x-2.5 lg:gap-x-5 lg:grid-cols-2 mx-4 sm:mx-8">
+          <div className="px-0 sm:px-4 py-5 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
+            {/* Top Key Words chart */}
+            <TopKeyWords data={top_keywords} />
+          </div>
+          <div className="px-0 sm:px-2 py-5 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
+            {/* Popular Word Count chart */}
+            <PopularWordCount data={popular_word_count} />
+          </div>
         </div>
+
 
         {/* Popular Reading Levels chart */}
         <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">

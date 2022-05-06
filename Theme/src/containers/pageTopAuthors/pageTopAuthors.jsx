@@ -2,18 +2,17 @@ import React, { useMemo } from "react";
 import { useTable, useSortBy } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpLong, faArrowDownLong } from "@fortawesome/free-solid-svg-icons"
-import millify from "millify";
 
-const PageTopDomains = ({ insights }) => {
+const PageTopAuthors = ({ insights }) => {
   const data = useMemo(
-    () => insights?.top_domians_by_most_articles_published.buckets,
+    () => insights?.top_authors_by_most_articles_published.buckets,
     []
   );
-console.log(data)
+
   const columns = useMemo(
     () => [
       {
-        Header: "Websites",
+        Header: "Author Name",
         accessor: "key",
       },
       {
@@ -23,7 +22,6 @@ console.log(data)
       {
         Header: "Total Engagement",
         accessor: "total engagment.value",
-
       },
       {
         Header: "Avg. Engagement",
@@ -120,4 +118,4 @@ console.log(data)
   );
 };
 
-export default PageTopDomains;
+export default PageTopAuthors;

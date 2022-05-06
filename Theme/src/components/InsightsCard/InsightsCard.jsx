@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import millify from "millify";
 
 const InsightsCard = ({ title, values, hasIcons }) => {
   return (
@@ -11,7 +12,9 @@ const InsightsCard = ({ title, values, hasIcons }) => {
         </p>
         {!hasIcons ? (
           <>
-            <p className="text:md sm:text-lg font-semibold">{parseFloat(values).toFixed(2)}</p>
+            <p className="text:md sm:text-lg font-semibold">
+              {millify(values, {precision: 2})}
+            </p>
           </>
         ) : (
           <>
@@ -22,16 +25,20 @@ const InsightsCard = ({ title, values, hasIcons }) => {
                 className="text-blue-600 text-lg sm:text-xl"
               />
               &nbsp;
-              <p className="text:md sm:text-lg font-semibold">&nbsp;{parseFloat(values?.facebook).toFixed(2)}&nbsp;&nbsp;&nbsp;|</p>
-              &nbsp;
-              &nbsp;
+              <p className="text:md sm:text-lg font-semibold">
+                &nbsp;{millify(values?.facebook,{precision: 2})}
+                &nbsp;&nbsp;|
+              </p>
+              &nbsp; &nbsp;
               {/* twitter icon */}
               <FontAwesomeIcon
                 icon={faTwitter}
                 className="text-blue-600 text-lg sm:text-xl"
               />
               &nbsp;
-              <p className="text:md sm:text-lg font-semibold">&nbsp;{parseFloat(values?.twitter).toFixed(2)}</p>
+              <p className="text:md sm:text-lg font-semibold">
+                &nbsp;{millify(values?.twitter,{precision: 2})}
+              </p>
             </div>
           </>
         )}

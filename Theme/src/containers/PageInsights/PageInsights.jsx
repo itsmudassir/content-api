@@ -3,6 +3,7 @@ import { Tab } from "@headlessui/react";
 import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
 import PageGraphs from "../../containers/PageGraphs/PageGraphs";
 import PageTopDomains from "../../containers/PageTopDomains/PageTopDomains";
+import PageTopAuthors from "../../containers/pageTopAuthors/pageTopAuthors";
 import { useGetInsightsMutation } from "../../app/Api/contentApi";
 
 function classNames(...classes) {
@@ -82,18 +83,18 @@ const PageInsights = ({ searchKitData }) => {
             </Tab>
           </Tab.List>
 
-          <div className="flex justify-center">
-            <Tab.Panels className="">
+          <div className="flex justify-center items-center">
+            <Tab.Panels>
               <Tab.Panel>
                 <PageGraphs data={insights} searchKitData={searchKitData} />
               </Tab.Panel>
               <Tab.Panel>
-                {insights?
-                  <PageTopDomains insights={insights} />
-                  : null}
+                {insights ? <PageTopDomains insights={insights} /> : null}
               </Tab.Panel>
 
-              <Tab.Panel>top authors</Tab.Panel>
+              <Tab.Panel>
+                {insights ? <PageTopAuthors insights={insights} /> : null}
+              </Tab.Panel>
             </Tab.Panels>
           </div>
         </Tab.Group>

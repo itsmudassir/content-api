@@ -1,5 +1,7 @@
 import React,{useState, useEffect} from "react";
 import Chart from "react-apexcharts";
+import millify from "millify";
+
 
 const TotalEngagementByNetwork = ({data}) => {
 
@@ -7,12 +9,13 @@ const TotalEngagementByNetwork = ({data}) => {
   const [twitter, setTwitter] = useState();
   
   useEffect(()=>{
-    setTwitter(parseFloat(parseFloat(data?.twitter).toFixed(1)))
-    setFacebook(parseFloat(parseFloat(data?.facebook).toFixed(1)))
+    // setTwitter(parseFloat(parseFloat(data?.twitter).toFixed(1)))
+    // setFacebook(parseFloat(parseFloat(data?.facebook).toFixed(1)))
+    setTwitter(millify(data?.twitter, {precision:2}))
+    setFacebook(millify(data?.facebook, {precision:2}))
   },[data])
   
-  // const twitter =  data?.twitter;
-  // const facebook = data?.facebook;
+
 
   return (
     <div>

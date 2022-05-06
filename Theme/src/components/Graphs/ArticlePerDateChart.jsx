@@ -1,5 +1,6 @@
 import React , {useEffect, useState} from "react";
 import Chart from "react-apexcharts";
+import millify from "millify";
 
 const ArticlePerDateChart = ({data}) => {
 // states
@@ -10,7 +11,8 @@ const [lineValues , setLineValues]= useState();
 useEffect(()=>{
   setDate(data?.buckets.map(item=>item.key_as_string.split("T")[0]));
   setBarValues(data?.buckets.map(item=> item.doc_count));
-  setLineValues(data?.buckets.map(item=> parseFloat(parseFloat(item.total_engagement_per_day.value).toFixed(1))))
+  // setLineValues(data?.buckets.map(item=> parseFloat(parseFloat(item.total_engagement_per_day.value).toFixed(1))))
+  setLineValues(data?.buckets.map(item=> millify(item.total_engagement_per_day.value, {precision:2})))
 },[data])
 
   return (
@@ -23,12 +25,12 @@ useEffect(()=>{
           width={"100%"}
           series={[
             {
-              name: "X",
+              name: "Total Articles Count",
               type: "bar",
               data: barValues,
             },
             {
-              name: "Z",
+              name: "Total engagement per day",
               type: "line",
               data: lineValues,
             },
