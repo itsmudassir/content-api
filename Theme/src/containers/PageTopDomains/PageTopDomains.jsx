@@ -5,10 +5,29 @@ import { faArrowUpLong, faArrowDownLong } from "@fortawesome/free-solid-svg-icon
 import millify from "millify";
 
 const PageTopDomains = ({ insights }) => {
+
   const data = useMemo(
-    () => insights?.top_domians_by_most_articles_published.buckets,
+    () => {
+      return insights?.top_domians_by_most_articles_published.buckets.map((item)=>{
+          return {
+            key: item.key.substring(0, 30),
+            doc_count: millify(item.doc_count, {precision: 2}),
+            total_engagment: millify(item["total engagment"].value, {precision: 2}),
+            avg_engagment: millify(item["avg engagment"].value, {precision: 2})
+          }
+      })
+    },
     []
   );
+  
+  // const data = useMemo(
+  //   () => {
+  //     return insights?.top_domians_by_most_articles_published.buckets
+  //   },
+  //   []
+  // );
+
+
 console.log(data)
   const columns = useMemo(
     () => [
@@ -22,12 +41,12 @@ console.log(data)
       },
       {
         Header: "Total Engagement",
-        accessor: "total engagment.value",
+        accessor: "total_engagment",
 
       },
       {
         Header: "Avg. Engagement",
-        accessor: "avg engagment.value",
+        accessor: "avg_engagment",
       },
     ],
     []
@@ -46,6 +65,8 @@ console.log(data)
 
   return (
     <>
+
+    
       <div className="w-screen">
         <div className="p-3 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
           <div className="border border-slate-300 rounded-xl">
@@ -98,7 +119,7 @@ console.log(data)
                 {firstPageRows.map((row, i) => {
                   prepareRow(row);
                   return (
-                    <tr {...row.getRowProps()} className="border-b border-slate-200">
+                    <tr {...row.getRowProps()} className="border-b border-slate-300">
                       {row.cells.map((cell) => {
                         return (
                           <td {...cell.getCellProps()}

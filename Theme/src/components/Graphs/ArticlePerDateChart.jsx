@@ -42,9 +42,6 @@ useEffect(()=>{
             dataLabels: {
               enabled: false,
             },
-            tooltip: {
-              followCursor: true,
-            },
             colors: ["#4169E1", "#808080"],
             stroke: {
               width: [4, 4, 4],
@@ -90,11 +87,27 @@ useEffect(()=>{
               },
             ],
             tooltip: {
+              custom: function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">Number of Articles Published<p/>
+                    <p>${series[seriesIndex][dataPointIndex]} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <div/>
+                  `
+                );
+              },
               shared: false,
               intersect: true,
               x: {
                 show: false,
-              },
+              }, 
+             fixed: {
+                 enabled: false,
+                 position: 'center',
+                 offsetX: 0,
+                 offsetY: 0,
+             },
             },
             legend: {
               horizontalAlign: "left",

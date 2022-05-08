@@ -5,7 +5,7 @@ import millify from "millify";
 const PopularWordCount = ({data}) => {
     
     const key = data?.buckets.map(item=> {
-      return millify(item.key)
+      return (item.key)
     })
     const doc_count = data?.buckets.map(item=> (item.doc_count));
     // const avg_engagment_per_word_count = data?.buckets.map(item=>parseFloat(parseFloat(item["avg engagment per word count"].value).toFixed(1)));
@@ -17,6 +17,7 @@ const PopularWordCount = ({data}) => {
       <>
         <h4 className="pl-4 font-semibold">Popular Word Count</h4>
         <Chart
+          type="bar"
           height={400}
           width={"100%"}
           series={[
@@ -87,11 +88,38 @@ const PopularWordCount = ({data}) => {
               },
             ],
             tooltip: {
+              custom:[ function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">${w.globals.labels[dataPointIndex]} Word count<p/>
+                    <p>${series[seriesIndex][dataPointIndex]} Articles<p/>
+                    <div/>
+                  `
+                );
+              },
+              function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                  <div style="text-align:center; margin:10px;">
+                  <p style="font-weight: 600">${w.globals.labels[dataPointIndex]} Total Engagement<p/>
+                  <p>${series[seriesIndex][dataPointIndex]} Articles<p/>
+                  <div/>
+                  `
+                );
+              },
+            ],
               shared: false,
               intersect: true,
               x: {
                 show: false,
-              },
+              }, 
+             fixed: {
+                 enabled: false,
+                 position: 'center',
+                 offsetX: 0,
+                 offsetY: 0,
+             },
             },
             legend: {
               horizontalAlign: "left",

@@ -2,12 +2,28 @@ import React, { useMemo } from "react";
 import { useTable, useSortBy } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpLong, faArrowDownLong } from "@fortawesome/free-solid-svg-icons"
+import millify from "millify";
 
 const PageTopAuthors = ({ insights }) => {
+
   const data = useMemo(
-    () => insights?.top_authors_by_most_articles_published.buckets,
+    () => {
+      return insights?.top_authors_by_most_articles_published.buckets.map((item)=>{
+          return {
+            key: item.key.substring(0, 30),
+            doc_count: millify(item.doc_count, {precision: 2}),
+            total_engagment: millify(item["total engagment"].value, {precision: 2}),
+            avg_engagment: millify(item["avg engagment"].value, {precision: 2})
+          }
+      })
+    },
     []
   );
+  
+  // const data = useMemo(
+  //   () => insights?.top_authors_by_most_articles_published.buckets,
+  //   []
+  // );
 
   const columns = useMemo(
     () => [
@@ -21,11 +37,11 @@ const PageTopAuthors = ({ insights }) => {
       },
       {
         Header: "Total Engagement",
-        accessor: "total engagment.value",
+        accessor: "total_engagment",
       },
       {
         Header: "Avg. Engagement",
-        accessor: "avg engagment.value",
+        accessor: "avg_engagment",
       },
     ],
     []
@@ -96,7 +112,7 @@ const PageTopAuthors = ({ insights }) => {
                 {firstPageRows.map((row, i) => {
                   prepareRow(row);
                   return (
-                    <tr {...row.getRowProps()} className="border-b border-slate-200">
+                    <tr {...row.getRowProps()} className="border-b border-slate-300">
                       {row.cells.map((cell) => {
                         return (
                           <td {...cell.getCellProps()}

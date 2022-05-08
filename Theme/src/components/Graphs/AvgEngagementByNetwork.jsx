@@ -66,6 +66,18 @@ const AvgEngagementByNetwork = ({data}) => {
                 text: "Number Of Engagements",
               },
             },
+            tooltip:{
+              custom: function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">Average Engagement<p/>
+                    <p>${series[seriesIndex][dataPointIndex]} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <div/>
+                  `
+                );
+              },
+            }
             // responsive: [
             //   {
             //     breakpoint: 1000,

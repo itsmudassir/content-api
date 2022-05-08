@@ -26,6 +26,7 @@ const PopularDays = ({ data }) => {
       <>
         <h4 className="pl-4 font-semibold">Popular Days</h4>
         <Chart
+        type="bar"
           height={400}
           width={"100%"}
           series={[
@@ -95,6 +96,27 @@ const PopularDays = ({ data }) => {
               },
             ],
             tooltip: {
+              custom:[ function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">Articles Per day<p/>
+                    <p>${series[seriesIndex][dataPointIndex]} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <div/>
+                  `
+                );
+              },
+              function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">Average Interactions Per Day<p/>
+                    <p>${series[seriesIndex][dataPointIndex]} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <div/>
+                  `
+                );
+              },
+            ],
               shared: false,
               intersect: true,
               x: {
