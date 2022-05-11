@@ -7,14 +7,10 @@ const AvgEngagementByNetwork = ({data}) => {
   const [twitter, setTwitter] = useState();
   
   useEffect(()=>{
-    // setTwitter(parseFloat(parseFloat(data?.twitter).toFixed(1)))
-    setTwitter(millify(data?.twitter, {precision:2}))
-    // setFacebook(parseFloat(parseFloat(data?.facebook).toFixed(1)))
-    setFacebook(millify(data?.facebook, {precision:2}))
+    setTwitter((data?.twitter));
+    setFacebook(data?.facebook);
   },[data])
   
-  // const twitter =  parseFloat(parseFloat(data?.twitter).toFixed(1))
-  // const facebook = parseFloat(parseFloat(data?.facebook).toFixed(1))
   return (
     <div>
       <>
@@ -61,7 +57,9 @@ const AvgEngagementByNetwork = ({data}) => {
               },
             },
             yaxis: {
-
+              labels:{
+                formatter: (value)=> millify(value, {precision: 2})
+              },
               title: {
                 text: "Number Of Engagements",
               },
@@ -72,7 +70,7 @@ const AvgEngagementByNetwork = ({data}) => {
                   `
                    <div style="text-align:center; margin:10px;">
                     <p style="font-weight: 600">Average Engagement<p/>
-                    <p>${series[seriesIndex][dataPointIndex]} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <p>${millify(series[seriesIndex][dataPointIndex], {precision:2})} on ${w.globals.labels[dataPointIndex]}<p/>
                     <div/>
                   `
                 );

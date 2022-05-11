@@ -22,7 +22,7 @@ const contentApi = createApi({
     reducerPath: "contentApi",
     baseQuery: baseQuery,
     // baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7777" }),
-    tagTypes: ["FavouritesFolder", "GetCustomTopics", "FavouritePosts"],
+    tagTypes: ["FavouritesFolder", "GetCustomTopics", "FavouritePosts", "FollowedTopics"],
 
     endpoints: (builder) => ({
 
@@ -35,7 +35,7 @@ const contentApi = createApi({
             }),
             providesTags: ["FavouritesFolder"],
         }),
-
+        
         // edit the single folder
         updateFolder: builder.mutation({
             query: ({ id, ...folder }) => ({
@@ -45,7 +45,7 @@ const contentApi = createApi({
             }),
             invalidatesTags: ["FavouritesFolder"],
         }),
-
+        
         //delete folder by id
         deleteFolder: builder.mutation({
             query: ({ id }) => ({
@@ -54,7 +54,7 @@ const contentApi = createApi({
             }),
             invalidatesTags: ["FavouritesFolder"],
         }),
-
+        
         // Create Folder
         createFolder: builder.mutation({
             query: (folderName) => ({
@@ -72,7 +72,7 @@ const contentApi = createApi({
             }),
             providesTags: ["GetCustomTopics"],
         }),
-
+        
         //deleteCustomTopic
         deleteCustomTopic: builder.mutation({
             query: ({ id }) => ({
@@ -81,7 +81,7 @@ const contentApi = createApi({
             }),
             // invalidatesTags: ["GetCustomTopics"],
         }),
-
+        
         //Update CustomTopics
         updateCustomTopic: builder.mutation({
             query: ({ _id, ...rest }) => ({
@@ -99,9 +99,9 @@ const contentApi = createApi({
             }),
             // invalidatesTags: ["GetCustomTopics"],
         }),
-
+        
         //FAVOURITE POSTS QUERIES
-
+        
         // get all favourite posts by folder id
         getAllFavouritePosts: builder.query({
             query: (folderId) => ({
@@ -109,7 +109,7 @@ const contentApi = createApi({
             }),
             providesTags: ["FavouritePosts"]
         }),
-
+        
         // get all favourite posts by authenticated user
         getAllFavouritePostsbyUser: builder.query({
             query: () => ({
@@ -127,7 +127,7 @@ const contentApi = createApi({
             }),
             invalidatesTags: ["FavouritePosts"]
         }),
-
+        
         // delete single post by post id
         deletePostByElasticId: builder.mutation({
             query: (id) => ({
@@ -136,8 +136,8 @@ const contentApi = createApi({
             }),
             invalidatesTags: ["FavouritePosts"]
         }),
-
-            
+        
+        
         // INSIGHTS QUERIES
         
         // get insights
@@ -148,6 +148,40 @@ const contentApi = createApi({
                 body: params
             })
         }),
+        
+        
+        // FOLLOWED-TOPICS QUERIES
+        
+        // get all Followed topics by authenticated user_id
+        getAllFollowedTopics : builder.query({
+            query: ()=>({
+                url: "/api/followedTopics/",
+                method: "GET"
+            }),
+            providesTags: ["FollowedTopics"],
+        }),
+        
+        // Create/follow Followed-topics by topic-name with authenticated user_id
+        createFollowedTopic : builder.mutation({
+            query: (obj)=>({
+                url: "/api/followedTopics/",
+                method: "POST",
+                body: obj
+            }),
+            invalidatesTags: ["FollowedTopics"]
+        }),
+
+        // delete/unfollow Followed-topics by topic-name with authenticated user_id
+        deleteFollowedTopic : builder.mutation({
+            query: (obj)=>({
+                url: "/api/followedTopics/",
+                method: "DELETE",
+                body: obj
+            }),
+            invalidatesTags: ["FollowedTopics"]
+        }),
+        
+        
         
     }),
 });
@@ -166,5 +200,9 @@ export const {
     useUpdateFolderMutation,
     useCreateTopicMutation,
     useDeletePostByElasticIdMutation,
-    useGetInsightsMutation
+    useGetInsightsMutation,
+    useGetAllFollowedTopicsQuery,
+    useCreateFollowedTopicMutation,
+    useDeleteFollowedTopicMutation
+
 } = contentApi;

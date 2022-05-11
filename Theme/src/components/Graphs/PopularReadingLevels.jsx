@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import millify from "millify"
 
 const PopularReadingLevels = ({ data }) => {
   // states
@@ -11,13 +12,7 @@ const PopularReadingLevels = ({ data }) => {
   useEffect(() => {
     setKey(data?.buckets.map((item) => item.key));
     setDoc_count(data?.buckets.map((item) => item.doc_count));
-    setAvg_engagment_per_Reading_level(
-      data?.buckets.map((item) =>
-        parseFloat(
-          parseFloat(item["avg engagment per Reading level"].value).toFixed(1)
-        )
-      )
-    );
+    setAvg_engagment_per_Reading_level(data?.buckets.map((item) =>item["avg engagment per Reading level"].value));
   }, [data]);
 
   return (
@@ -65,6 +60,9 @@ const PopularReadingLevels = ({ data }) => {
             },
             yaxis: [
               {
+                labels:{
+                  formatter: (value)=> millify(value, {precision: 2})
+                },
                 seriesName: "Column A",
                 axisTicks: {
                   show: true,
@@ -81,6 +79,9 @@ const PopularReadingLevels = ({ data }) => {
                 show: false,
               },
               {
+                labels:{
+                  formatter: (value)=> millify(value, {precision: 2})
+                },
                 opposite: true,
                 seriesName: "Line C",
                 axisTicks: {
@@ -100,7 +101,7 @@ const PopularReadingLevels = ({ data }) => {
                 <div style="text-align:start; margin:10px;">
                 <p style="font-weight: 600">Number Of Articles<p/>
                 <div style="display: flex">
-                <p>${series[seriesIndex][dataPointIndex]} with <p/> &nbsp;
+                <p>${millify(series[seriesIndex][dataPointIndex])} with <p/> &nbsp;
                 <p style="font-weight: 600">${w.globals.labels[dataPointIndex]}<p/> &nbsp;
                 <p>Reading Level<p/>
                 <div/>
@@ -112,7 +113,7 @@ const PopularReadingLevels = ({ data }) => {
                    <div style="text-align:start; margin:10px;">
                     <p style="font-weight: 600">Engagement Per Article<p/>
                     <div style="display: flex">
-                    <p>${series[seriesIndex][dataPointIndex]} with <p/> &nbsp;
+                    <p>${millify(series[seriesIndex][dataPointIndex])} with <p/> &nbsp;
                     <p style="font-weight: 600">${w.globals.labels[dataPointIndex]}<p/> &nbsp;
                     <p>Reading Level<p/>
                     <div/>

@@ -62,7 +62,7 @@ const PageTopAuthors = ({ insights }) => {
     <>
       <div className="w-screen">
         <div className="p-3 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
-          <div className="border border-slate-300 rounded-xl">
+          <div className="border border-slate-300 rounded-xl ">
             <table {...getTableProps()} className="w-full">
               <thead className="border-b border-slate-300">
                 {headerGroups.map((headerGroup) => (

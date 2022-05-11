@@ -1,24 +1,28 @@
-import React , {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import millify from "millify";
 
-const ArticlePerDateChart = ({data}) => {
-// states
-const [date , setDate]= useState();
-const [barValues , setBarValues]= useState();
-const [lineValues , setLineValues]= useState();
+const ArticlePerDateChart = ({ data }) => {
+  // states
+  const [date, setDate] = useState();
+  const [barValues, setBarValues] = useState();
+  const [lineValues, setLineValues] = useState();
 
-useEffect(()=>{
-  setDate(data?.buckets.map(item=>item.key_as_string.split("T")[0]));
-  setBarValues(data?.buckets.map(item=> item.doc_count));
-  // setLineValues(data?.buckets.map(item=> parseFloat(parseFloat(item.total_engagement_per_day.value).toFixed(1))))
-  setLineValues(data?.buckets.map(item=> millify(item.total_engagement_per_day.value, {precision:2})))
-},[data])
+  useEffect(() => {
+    setDate(data?.buckets.map((item) => item.key_as_string.split("T")[0]));
+    setBarValues(data?.buckets.map((item) => item.doc_count));
+    // setLineValues(data?.buckets.map(item=> parseFloat(parseFloat(item.total_engagement_per_day.value).toFixed(1))))
+    setLineValues(
+      data?.buckets.map((item) => item.total_engagement_per_day.value)
+    );
+  }, [data]);
 
   return (
     <div>
       <>
-        <h4 className="pl-4 font-semibold">Articles Published Over Time and Engagement</h4>
+        <h4 className="pl-4 font-semibold">
+          Articles Published Over Time and Engagement
+        </h4>
         <Chart
           type="bar"
           height={400}
@@ -57,6 +61,11 @@ useEffect(()=>{
             },
             yaxis: [
               {
+                labels: {
+                  formatter: function (value) {
+                    return millify(value, {precision:2});
+                  },
+                },
                 seriesName: "Column A",
                 axisTicks: {
                   show: true,
@@ -68,11 +77,13 @@ useEffect(()=>{
                   text: "Average Number Of Engagements",
                 },
               },
+              
               {
-                seriesName: "Column A",
-                show: false,
-              },
-              {
+                labels: {
+                  formatter: function (value) {
+                    return millify(value, {precision:2});
+                  },
+                },
                 opposite: true,
                 seriesName: "Line C",
                 axisTicks: {
@@ -87,27 +98,25 @@ useEffect(()=>{
               },
             ],
             tooltip: {
-              custom: function({series, seriesIndex, dataPointIndex, w}) {
-                return (
-                  `
+              custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                return `
                    <div style="text-align:center; margin:10px;">
                     <p style="font-weight: 600">Number of Articles Published<p/>
                     <p>${series[seriesIndex][dataPointIndex]} on ${w.globals.labels[dataPointIndex]}<p/>
                     <div/>
-                  `
-                );
+                  `;
               },
               shared: false,
               intersect: true,
               x: {
                 show: false,
-              }, 
-             fixed: {
-                 enabled: false,
-                 position: 'center',
-                 offsetX: 0,
-                 offsetY: 0,
-             },
+              },
+              fixed: {
+                enabled: false,
+                position: "center",
+                offsetX: 0,
+                offsetY: 0,
+              },
             },
             legend: {
               horizontalAlign: "left",

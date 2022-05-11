@@ -7,6 +7,7 @@ import favouritesFolder from "./src/routes/api/addToFavouriteRoutes/favouritesFo
 import favouritePosts from "./src/routes/api/addToFavouriteRoutes/favouritePost.Route.js";
 import articleSearch from "./src/routes/api/articleSearchRoutes/articleSearch.Routes.js";
 import customTopicSearch from "./src/routes/api/customTopicSearchRoutes/customTopicSearch.Route.js";
+import followedTopics from "./src/routes/api/followedTopicsRoutes/followedTopics.Routes.js"
 import errorHandler from "./src/middlewares/errorHandler.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -40,8 +41,13 @@ app.use("/api/favouritePosts", favouritePosts);
 app.use("/api/articleSearch", articleSearch);
 app.use("/api/customTopicSearch", customTopicSearch);
 app.use("/api/insights", insights);
+app.use("/api/followedTopics", followedTopics);
 
 // error handling middleware
 app.use(errorHandler);
 
-app.listen(port, () => console.log("server running on port# " + port));
+app.listen(port, () => {
+  console.log(`server running on port# ${port}`);
+  console.log(`http://localhost:${port}`);
+}
+);
