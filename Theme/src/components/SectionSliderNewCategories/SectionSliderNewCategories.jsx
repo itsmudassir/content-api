@@ -6,6 +6,7 @@ import CardCategory4 from "../CardCategory4/CardCategory4";
 import { CategoryImage } from "../../data/CategoryImages";
 import "./Removedot.css";
 import LoadingVideo from "../LoadingVideo/LoadingVideo";
+import { useGetAllFollowedTopicsQuery } from "../../app/Api/contentApi";
 
 const renderCard = (entry, index, searchkitOutput) => {
   let categoryimage = CategoryImage(entry.label);
@@ -17,6 +18,7 @@ const renderCard = (entry, index, searchkitOutput) => {
         index={index}
         categoryimage={categoryimage}
         searchkitOutput={searchkitOutput}
+        isFollowing={entry.isFollowing}
       />
     </>
   );
@@ -55,10 +57,46 @@ const SectionSliderNewCategories = ({
   categoryCardType = "card3",
   searchkitOutput,
 }) => {
+  // states
   const [showAll, setShowAll] = useState(false);
+  const rtkData = useGetAllFollowedTopicsQuery();
+  let newData = [];
+  let followedTopics = {};
+
+
+  rtkData.data?.forEach((item) => {
+    followedTopics[item.topic] = item.topic;
+  });
+
+ 
+  searchkitOutput.data?.results?.facets.forEach((item) => {
+    if (item.identifier == "category") {
+      return item?.entries?.forEach((entry) => {
+        if (followedTopics[entry.label] == undefined) {
+          newData.push({ ...entry, isFollowing: false });
+        } else {
+          newData.push({ ...entry, isFollowing: true });
+        }
+      });
+    }
+  });
+
+  console.log(newData);
+
+   // const newData = searchkitOutput.data?.results?.facets.map((item) => {
+  //   if (item.identifier == "category") {
+  //     return item?.entries?.map((entry) => {
+  //       if (followedTopics[entry.label] == undefined) {
+  //         return { ...entry, isFollowing: false };
+  //       } else {
+  //         return { ...entry, isFollowing: true };
+  //       }
+  //     });
+  //   }
+  // });
 
   if (searchkitOutput.error) {
-    console.log("Error " + searchkitOutput.error);
+    console.log("ERROR FETCHING CATEGORIES:" + searchkitOutput.error);
   }
   // if (searchkitOutput.loading) {
   //   <LoadingVideo />;
@@ -76,20 +114,33 @@ const SectionSliderNewCategories = ({
             // selected categories list
             <>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-8 mt-8 lg:mt-10">
-                {searchkitOutput.data?.results?.facets.map((items) => {
-                  if (items.identifier == "category") {
-                    return items.entries.map((entry, index) => {
-                      if (categoriesFilter.includes(entry.label))
-                        return (
-                          <ul className="rem">
-                            <li key={index}>
-                              {renderCard(entry, index, searchkitOutput)}
-                            </li>
-                          </ul>
-                        );
-                    });
-                  }
-                })}
+                {
+                  // searchkitOutput.data?.results?.facets.map((items) => {
+                  //   if (items.identifier == "category") {
+                  //     return items.entries.map((entry, index) => {
+                  //       if (categoriesFilter.includes(entry.label))
+                  //         return (
+                  //           <ul className="rem">
+                  //             <li key={index}>
+                  //               {renderCard(entry, index, searchkitOutput)}
+                  //             </li>
+                  //           </ul>
+                  //         );
+                  //     });
+                  //   }
+                  // })
+
+                  newData?.map((entry, index) => {
+                    if (categoriesFilter.includes(entry.label))
+                      return (
+                        <ul className="rem">
+                          <li key={index}>
+                            {renderCard(entry, index, searchkitOutput)}
+                          </li>
+                        </ul>
+                      );
+                  })
+                }
               </div>
               <div className="mt-10 mb-10 flex justify-center items-center">
                 <button
@@ -104,21 +155,32 @@ const SectionSliderNewCategories = ({
             // All categories list
             <>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-8 mt-8 lg:mt-10">
-                {searchkitOutput.data.results.facets.map((items) => {
-                  if (items.identifier == "category") {
-                    return items.entries.map((entry, index) => {
-                      // if(entry.title== "war" ||entry.title== "computers" ||entry.title== "islam")
-                      return (
-                        <ul className="rem">
-                          <li key={index}>
-                            {/* {entry.label} */}
-                            {renderCard(entry, index, searchkitOutput)}
-                          </li>
-                        </ul>
-                      );
-                    });
-                  }
-                })}
+                {
+                  // searchkitOutput.data.results.facets.map((items) => {
+                  //   if (items.identifier == "category") {
+                  //     return items.entries.map((entry, index) => {
+                  //       return (
+                  //         <ul className="rem">
+                  //           <li key={index}>
+                  //             {/* {entry.label} */}
+                  //             {renderCard(entry, index, searchkitOutput)}
+                  //           </li>
+                  //         </ul>
+                  //       );
+                  //     });
+                  //   }
+                  // })
+
+                  newData?.map((entry, index) => {
+                    return (
+                      <ul className="rem">
+                        <li key={index}>
+                          {renderCard(entry, index, searchkitOutput)}
+                        </li>
+                      </ul>
+                    );
+                  })
+                }
               </div>
               <div className="mt-10 mb-10 flex justify-center items-center">
                 <button

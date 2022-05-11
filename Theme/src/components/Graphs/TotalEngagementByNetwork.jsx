@@ -1,5 +1,7 @@
 import React,{useState, useEffect} from "react";
 import Chart from "react-apexcharts";
+import millify from "millify";
+
 
 const TotalEngagementByNetwork = ({data}) => {
 
@@ -7,13 +9,10 @@ const TotalEngagementByNetwork = ({data}) => {
   const [twitter, setTwitter] = useState();
   
   useEffect(()=>{
-    setTwitter(parseFloat(parseFloat(data?.twitter).toFixed(1)))
-    setFacebook(parseFloat(parseFloat(data?.facebook).toFixed(1)))
-  },[data])
+    setTwitter(data?.twitter,);
+    setFacebook(data?.facebook);
+  },[data]);
   
-  // const twitter =  data?.twitter;
-  // const facebook = data?.facebook;
-
   return (
     <div>
       <>
@@ -59,9 +58,23 @@ const TotalEngagementByNetwork = ({data}) => {
               },
             },
             yaxis: {
-
+              labels:{
+                formatter: (value)=> millify(value, {precision: 2})
+              },
               title: {
                 text: "Number Of Engagements",
+              },
+            },
+            tooltip:{
+              custom: function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">Total Engagement<p/>
+                    <p>${millify(series[seriesIndex][dataPointIndex])} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <div/>
+                  `
+                );
               },
             },
             // responsive: [

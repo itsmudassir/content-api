@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import millify from "millify";
 
 const AvgEngagementByNetwork = ({data}) => {
   const [facebook, setFacebook] = useState();
   const [twitter, setTwitter] = useState();
   
   useEffect(()=>{
-    setTwitter(parseFloat(parseFloat(data?.twitter).toFixed(1)))
-    setFacebook(parseFloat(parseFloat(data?.facebook).toFixed(1)))
+    setTwitter((data?.twitter));
+    setFacebook(data?.facebook);
   },[data])
   
-  // const twitter =  parseFloat(parseFloat(data?.twitter).toFixed(1))
-  // const facebook = parseFloat(parseFloat(data?.facebook).toFixed(1))
   return (
     <div>
       <>
@@ -40,6 +39,7 @@ const AvgEngagementByNetwork = ({data}) => {
                 borderRadius: 15,
                 distributed: true,
               },
+              
             },
             dataLabels: {
               enabled: false,
@@ -57,11 +57,25 @@ const AvgEngagementByNetwork = ({data}) => {
               },
             },
             yaxis: {
-
+              labels:{
+                formatter: (value)=> millify(value, {precision: 2})
+              },
               title: {
                 text: "Number Of Engagements",
               },
             },
+            tooltip:{
+              custom: function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">Average Engagement<p/>
+                    <p>${millify(series[seriesIndex][dataPointIndex], {precision:2})} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <div/>
+                  `
+                );
+              },
+            }
             // responsive: [
             //   {
             //     breakpoint: 1000,

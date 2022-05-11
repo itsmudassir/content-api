@@ -61,6 +61,7 @@ const PageHome1 = () => {
       </Helmet>
       {/* {/ Call the  Auto Complete Search Box /} */}
       <SearchBoxMain pageType="categorypage" />
+      
       <div className="relative overflow-hidden pt-6">
         <div className="container relative">
           {/* {/ Category Cards /} */}

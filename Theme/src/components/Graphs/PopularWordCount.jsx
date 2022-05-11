@@ -1,27 +1,33 @@
-import React , {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import millify from "millify";
 
-const PopularWordCount = ({data}) => {
-    const key = data?.buckets.map(item=> item.key)
-    const doc_count = data?.buckets.map(item=> item.doc_count);
-    const avg_engagment_per_word_count = data?.buckets.map(item=>parseFloat(parseFloat(item["avg engagment per word count"].value).toFixed(1)));
+const PopularWordCount = ({ data }) => {
+  const key = data?.buckets.map((item) => {
+    return item.key;
+  });
+  const doc_count = data?.buckets.map((item) => item.doc_count);
+  // const avg_engagment_per_word_count = data?.buckets.map(item=>parseFloat(parseFloat(item["avg engagment per word count"].value).toFixed(1)));
+  const avg_engagment_per_word_count = data?.buckets.map(
+    (item) => item["avg engagment per word count"].value
+  );
 
-    if(!data) return null
   return (
     <div>
       <>
         <h4 className="pl-4 font-semibold">Popular Word Count</h4>
         <Chart
+          type="bar"
           height={400}
           width={"100%"}
           series={[
             {
-              name: "X",
+              name: "Total word count",
               type: "bar",
               data: doc_count,
             },
             {
-              name: "Z",
+              name: "Avg. engagment per word count",
               type: "bar",
               data: avg_engagment_per_word_count,
             },
@@ -52,6 +58,9 @@ const PopularWordCount = ({data}) => {
             },
             yaxis: [
               {
+                labels: {
+                  formatter: (value) => millify(value, { precision: 2 }),
+                },
                 seriesName: "Column A",
                 axisTicks: {
                   show: true,
@@ -68,6 +77,9 @@ const PopularWordCount = ({data}) => {
                 show: false,
               },
               {
+                labels: {
+                  formatter: (value) => millify(value, { precision: 2 }),
+                },
                 opposite: true,
                 seriesName: "Line C",
                 axisTicks: {
@@ -82,10 +94,40 @@ const PopularWordCount = ({data}) => {
               },
             ],
             tooltip: {
+              custom: [
+                function ({ series, seriesIndex, dataPointIndex, w }) {
+                  return `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">${w.globals.labels[dataPointIndex]} Word count<p/>
+                    <p>${millify(series[seriesIndex][dataPointIndex])} Articles<p/>
+                    <div/>
+                  `;
+                },
+                function ({ series, seriesIndex, dataPointIndex, w }) {
+                  return `
+                  <div style="text-align:center; margin:10px;">
+                  <p style="font-weight: 600">${w.globals.labels[dataPointIndex]} Total Engagement<p/>
+                  <p>${millify(series[seriesIndex][dataPointIndex])} Articles<p/>
+                  <div/>
+                  `;
+                },
+              ],
               shared: false,
               intersect: true,
               x: {
                 show: false,
+              },
+              y: {
+                function(value) {
+  
+                  return value + " Saad"
+                }
+            },
+              fixed: {
+                enabled: false,
+                position: "center",
+                offsetX: 0,
+                offsetY: 0,
               },
             },
             legend: {

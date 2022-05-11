@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import millify from "millify";
 
 const PopularDays = ({ data }) => {
   // states
@@ -14,17 +15,19 @@ const PopularDays = ({ data }) => {
     setAvg_engagment_per_day(
       data?.buckets.map((item) =>
         parseFloat(
-          parseFloat(item["avg engagment per day"].value).toFixed(1)
+          parseFloat(item["avg engagment per day"].value).toFixed(2)
         )
       )
     ); 
   }, [data]);
+
 
   return (
     <div>
       <>
         <h4 className="pl-4 font-semibold">Popular Days</h4>
         <Chart
+        type="bar"
           height={400}
           width={"100%"}
           series={[
@@ -64,6 +67,9 @@ const PopularDays = ({ data }) => {
             },
             yaxis: [
               {
+                labels:{
+                  formatter: (value)=> millify(value, {precision: 2})
+                },
                 seriesName: "Column A",
                 axisTicks: {
                   show: true,
@@ -80,6 +86,9 @@ const PopularDays = ({ data }) => {
                 show: false,
               },
               {
+                labels:{
+                  formatter: (value)=> millify(value, {precision: 2})
+                },
                 opposite: true,
                 seriesName: "Line C",
                 axisTicks: {
@@ -94,6 +103,27 @@ const PopularDays = ({ data }) => {
               },
             ],
             tooltip: {
+              custom:[ function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">Articles Per day<p/>
+                    <p>${millify(series[seriesIndex][dataPointIndex])} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <div/>
+                  `
+                );
+              },
+              function({series, seriesIndex, dataPointIndex, w}) {
+                return (
+                  `
+                   <div style="text-align:center; margin:10px;">
+                    <p style="font-weight: 600">Average Interactions Per Day<p/>
+                    <p>${millify(series[seriesIndex][dataPointIndex])} on ${w.globals.labels[dataPointIndex]}<p/>
+                    <div/>
+                  `
+                );
+              },
+            ],
               shared: false,
               intersect: true,
               x: {
