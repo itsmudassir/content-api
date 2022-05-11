@@ -3,30 +3,77 @@ import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
 import LanguagesFilterBox from "../../components/LanguagesFilterBox/LanguagesFilterBox";
 import { Helmet } from "react-helmet";
-import { gql, useQuery } from "@apollo/client";
-import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
-import {
-  withSearchkit,
-  withSearchkitRouting,
-  useSearchkitQueryValue,
-} from "@searchkit/client";
 import Card11 from "../../components/Card11/Card11";
 import { useLocation } from "react-router-dom";
 import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
 import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
 import RelevanceListBox from "../../components/RelevanceListBox/RelevanceListBox";
-import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
-import Select from "react-select";
-
+import {
+  useGetAllFavouritePostsbyUserQuery,
+  useIsFollowingTopicMutation,
+  useCreateFollowedTopicMutation,
+  useDeleteFollowedTopicMutation,
+} from "../../app/Api/contentApi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import queryString from "query-string";
+import cogoToast from "cogo-toast";
 export const PageSearchProps = {
   className: String,
 };
 
 const PageSearch = ({ className = "", data, loading, error }) => {
+  // states
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  // RTK-Query
+  const [isFollingTopic, isFollingTopic_obj] = useIsFollowingTopicMutation();
   const RtkData = useGetAllFavouritePostsbyUserQuery();
+  const [createFollowedTopic, createFollowedTopic_Obj] =
+    useCreateFollowedTopicMutation();
+  const [deleteFollowedTopic, deleteFollowedTopic_Obj] =
+    useDeleteFollowedTopicMutation();
+
+  // Global variable
   let newData;
-  const api = useSearchkit();
+
+  // search params || URL params
+  const { search } = useLocation();
+  var { customCateogry, customQuery } = queryString.parse(search);
+
+  // handlers
+  const followTopicHandler = async () => {
+    try {
+      const res = await createFollowedTopic({ topicName: customCateogry });
+      setIsFollowing(true);
+      if (res.data) {
+        cogoToast.success(res.data?.successMsg);
+      }
+      if (res.error) {
+        cogoToast.success(res.error?.data?.errorMsg);
+      }
+      console.log(res);
+    } catch (err) {
+      console.log("Error occoured while creating topic", err);
+    }
+  };
+
+  const unFollowTopicHandler = async () => {
+    try {
+      const res = await deleteFollowedTopic({ topicName: customCateogry });
+      setIsFollowing(false);
+      if (res.data) {
+        cogoToast.success(res.data?.successMsg);
+      }
+      if (res.error) {
+        cogoToast.success(res.error?.data?.errorMsg);
+      }
+      console.log(res);
+    } catch (err) {
+      console.log("Error occoured while creating topic", err);
+    }
+  };
 
   if (data) {
     var sortOptions = data?.results.summary.sortOptions;
@@ -36,6 +83,18 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     )[0].entries;
     // console.log(langaugeList);
   }
+
+  // useEffects
+  useEffect(async () => {
+    try {
+      const res = await isFollingTopic({ topicName: customCateogry });
+      setIsFollowing(res.data);
+      console.log(res.data);
+    } catch (err) {
+      console.log("ERROR OCCOURED WHILE FETCHING SINGLE TOPIC NAME", err);
+      console.log(isFollingTopic_obj.error);
+    }
+  }, []);
 
   if (data) {
     console.log(data);
@@ -72,7 +131,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   //     <LoadingVideo />
   //   </div>;
   // }
-let val;
+  let val;
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
@@ -82,15 +141,34 @@ let val;
         {/* <SearchBoxMain pageType="searchpage" category={customCateogry}/> */}
       </div>
 
+      <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
-
-      <div className="container py-10 lg:py-28 space-y-16 lg:space-y-28">
+      <div className="container space-y-16 lg:space-y-28">
         <main>
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
-            <div className="flex space-x-2.5">
+            <div className="flex justify-start items-center space-x-2.5">
               {!loading ? <LanguagesFilterBox lists={langaugeList} /> : null}
+              {isFollowing ? (
+                <button
+                  onClick={() => unFollowTopicHandler()}
+                  className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                >
+                  <FontAwesomeIcon
+                    className="mr-1 text-green-700"
+                    icon={faCheck}
+                  />
+                  FOLLOWING
+                </button>
+              ) : (
+                <button
+                  onClick={() => followTopicHandler()}
+                  className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                >
+                  FOLLOW
+                </button>
+              )}
 
-              <DateRangeDropDown facet={data?.results?.facets} />
+              {/* <DateRangeDropDown facet={data?.results?.facets} /> */}
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
             <div className="flex justify-end">

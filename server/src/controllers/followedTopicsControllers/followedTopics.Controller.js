@@ -6,7 +6,7 @@ import followedTopicsModel from "../../models/followedTopicsModel/followedTopics
 const createFollowedTopic = async (req, res) => {
     try {
         const { topicName } = req.body;
-        if(topicName == undefined){
+        if (topicName == undefined) {
             return res.status(400).json({ errorMsg: `Bad Request` })
         }
 
@@ -15,8 +15,8 @@ const createFollowedTopic = async (req, res) => {
             return res.status(400).json({ errorMsg: `Already following ${topicName}` }) // 400 for bad request
         }
 
-        const userId = "62399ee49884a61281edd8e3";
-        // const userId = req.user.id;
+        // const userId = "62399ee49884a61281edd8e3";
+        const userId = req.user.id;
 
         // creating topic document
         const topic = new followedTopicsModel({
@@ -38,13 +38,40 @@ const createFollowedTopic = async (req, res) => {
 // access: PROTECTED
 const readAllFollowedTopic = async (req, res) => {
     try {
-        const userId = "62399ee49884a61281edd8e3";
-        // const userId = req.user.id;
+        // const userId = "62399ee49884a61281edd8e3";
+        const userId = req.user.id;
         const topics = await followedTopicsModel.find({ userId: userId });
         return res.status(200).send(topics);
 
     } catch (err) {
         console.log("ERROR OCCOURED WHILE READING TOPICS", err);
+        res.status(500).json({ errorMsg: "Server Error" });
+    }
+
+};
+
+
+
+// route:  POST /api/followedTopics/isFollowingTopic
+// desc:   check if the topic name exist in the DB
+// access: PROTECTED
+const isFollowingTopic = async (req, res) => {
+    try {
+        const { topicName } = req.body;
+        // checking if topicName is undefined
+        if (topicName == undefined) {
+            return res.status(400).json({ errorMsg: `Bad Request, Topic name Can Not Be Empty` })
+        }
+
+        const topic = await followedTopicsModel.findOne({ topic: topicName })
+        if (!topic) {
+            return res.status(200).send(false);
+        }
+
+        return res.status(200).send(true);
+
+    } catch (err) {
+        console.log("ERROR OCCOURED WHILE READING TOPIC NAME", err);
         res.status(500).json({ errorMsg: "Server Error" });
     }
 
@@ -58,17 +85,17 @@ const deleteFollowedTopic = async (req, res) => {
     try {
 
         const { topicName } = req.body;
-        if(topicName == undefined){
+        if (topicName == undefined) {
             return res.status(400).json({ errorMsg: `Bad Request` })
         }
 
-        const response = await followedTopicsModel.findOneAndDelete({topic: topicName})
+        const response = await followedTopicsModel.findOneAndDelete({ topic: topicName })
         if (!response) {
             return res.status(400).json({ errorMsg: "Cannot Unfollow" });
         }
 
         return res.status(200).json({ successMsg: `${response.topic} unfollowed` });
-        
+
     } catch (err) {
         console.log("ERROR OCCOURED WHILE DELETING TOPIC", err);
         res.status(500).json({ errorMsg: "Server Error" });
@@ -79,5 +106,6 @@ const deleteFollowedTopic = async (req, res) => {
 export {
     createFollowedTopic,
     readAllFollowedTopic,
-    deleteFollowedTopic
+    deleteFollowedTopic,
+    isFollowingTopic
 }

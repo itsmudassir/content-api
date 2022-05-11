@@ -88,6 +88,7 @@ const PageInsights = ({ searchKitData }) => {
               <Tab.Panel>
                 <PageGraphs data={insights} searchKitData={searchKitData} />
               </Tab.Panel>
+              
               <Tab.Panel>
                 {insights ? <PageTopDomains insights={insights} /> : null}
               </Tab.Panel>
