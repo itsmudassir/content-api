@@ -13,6 +13,7 @@ const TotalEngagementByNetwork = ({data}) => {
     setFacebook(data?.facebook);
   },[data]);
   
+
   return (
     <div>
       <>
@@ -52,7 +53,7 @@ const TotalEngagementByNetwork = ({data}) => {
               categories: ["Facebook", "Twitter"],
               labels: {
                 style: {
-                  colors: ["#000000"],
+                  colors: "#000000",
                   fontSize: "12px",
                 },
               },

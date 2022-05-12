@@ -10,7 +10,7 @@ const AvgEngagementByNetwork = ({data}) => {
     setTwitter((data?.twitter));
     setFacebook(data?.facebook);
   },[data])
-  
+
   return (
     <div>
       <>

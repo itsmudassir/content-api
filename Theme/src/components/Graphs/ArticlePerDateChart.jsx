@@ -11,7 +11,6 @@ const ArticlePerDateChart = ({ data }) => {
   useEffect(() => {
     setDate(data?.buckets.map((item) => item.key_as_string.split("T")[0]));
     setBarValues(data?.buckets.map((item) => item.doc_count));
-    // setLineValues(data?.buckets.map(item=> parseFloat(parseFloat(item.total_engagement_per_day.value).toFixed(1))))
     setLineValues(
       data?.buckets.map((item) => item.total_engagement_per_day.value)
     );

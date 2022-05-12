@@ -21,4 +21,13 @@ Content-Type: application/json
     "topicName": "computer3"
 }
 
+###
+
+# check if the topic-name exist
+post http://localhost:7777/api/followedTopics/isFollowingTopic
+Content-Type: application/json
+
+{
+    "topicName": "drugs2"
+}
 

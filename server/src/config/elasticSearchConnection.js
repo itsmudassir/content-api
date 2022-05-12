@@ -6,7 +6,7 @@ const type = "_doc";
 
 
 
-const host = "http://43.251.253.107:1200";
+const host = "http://43.251.253.107:2500";
 
 //  const host = "https://x8dkko05bk:nw4qm909rg@content-system-v4-4554244877.us-west-2.bonsaisearch.net:443";
 

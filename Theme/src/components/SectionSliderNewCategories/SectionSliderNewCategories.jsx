@@ -63,12 +63,10 @@ const SectionSliderNewCategories = ({
   let newData = [];
   let followedTopics = {};
 
-
   rtkData.data?.forEach((item) => {
     followedTopics[item.topic] = item.topic;
   });
 
- 
   searchkitOutput.data?.results?.facets.forEach((item) => {
     if (item.identifier == "category") {
       return item?.entries?.forEach((entry) => {
@@ -80,20 +78,6 @@ const SectionSliderNewCategories = ({
       });
     }
   });
-
-  console.log(newData);
-
-   // const newData = searchkitOutput.data?.results?.facets.map((item) => {
-  //   if (item.identifier == "category") {
-  //     return item?.entries?.map((entry) => {
-  //       if (followedTopics[entry.label] == undefined) {
-  //         return { ...entry, isFollowing: false };
-  //       } else {
-  //         return { ...entry, isFollowing: true };
-  //       }
-  //     });
-  //   }
-  // });
 
   if (searchkitOutput.error) {
     console.log("ERROR FETCHING CATEGORIES:" + searchkitOutput.error);
@@ -114,33 +98,16 @@ const SectionSliderNewCategories = ({
             // selected categories list
             <>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-8 mt-8 lg:mt-10">
-                {
-                  // searchkitOutput.data?.results?.facets.map((items) => {
-                  //   if (items.identifier == "category") {
-                  //     return items.entries.map((entry, index) => {
-                  //       if (categoriesFilter.includes(entry.label))
-                  //         return (
-                  //           <ul className="rem">
-                  //             <li key={index}>
-                  //               {renderCard(entry, index, searchkitOutput)}
-                  //             </li>
-                  //           </ul>
-                  //         );
-                  //     });
-                  //   }
-                  // })
-
-                  newData?.map((entry, index) => {
-                    if (categoriesFilter.includes(entry.label))
-                      return (
-                        <ul className="rem">
-                          <li key={index}>
-                            {renderCard(entry, index, searchkitOutput)}
-                          </li>
-                        </ul>
-                      );
-                  })
-                }
+                {newData?.map((entry, index) => {
+                  if (categoriesFilter.includes(entry.label))
+                    return (
+                      <ul className="rem">
+                        <li key={index}>
+                          {renderCard(entry, index, searchkitOutput)}
+                        </li>
+                      </ul>
+                    );
+                })}
               </div>
               <div className="mt-10 mb-10 flex justify-center items-center">
                 <button
@@ -155,32 +122,15 @@ const SectionSliderNewCategories = ({
             // All categories list
             <>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-8 mt-8 lg:mt-10">
-                {
-                  // searchkitOutput.data.results.facets.map((items) => {
-                  //   if (items.identifier == "category") {
-                  //     return items.entries.map((entry, index) => {
-                  //       return (
-                  //         <ul className="rem">
-                  //           <li key={index}>
-                  //             {/* {entry.label} */}
-                  //             {renderCard(entry, index, searchkitOutput)}
-                  //           </li>
-                  //         </ul>
-                  //       );
-                  //     });
-                  //   }
-                  // })
-
-                  newData?.map((entry, index) => {
-                    return (
-                      <ul className="rem">
-                        <li key={index}>
-                          {renderCard(entry, index, searchkitOutput)}
-                        </li>
-                      </ul>
-                    );
-                  })
-                }
+                {newData?.map((entry, index) => {
+                  return (
+                    <ul className="rem">
+                      <li key={index}>
+                        {renderCard(entry, index, searchkitOutput)}
+                      </li>
+                    </ul>
+                  );
+                })}
               </div>
               <div className="mt-10 mb-10 flex justify-center items-center">
                 <button

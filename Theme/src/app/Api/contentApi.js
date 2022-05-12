@@ -180,6 +180,16 @@ const contentApi = createApi({
             }),
             invalidatesTags: ["FollowedTopics"]
         }),
+
+        // check if the topic-name exist in DB
+        isFollowingTopic: builder.mutation({
+            query: (obj)=>({
+                url: "/api/followedTopics/isFollowingTopic",
+                method: "POST",
+                body: obj
+            }),
+            invalidatesTags:["FollowedTopics"]
+        }),
         
         
         
@@ -203,6 +213,7 @@ export const {
     useGetInsightsMutation,
     useGetAllFollowedTopicsQuery,
     useCreateFollowedTopicMutation,
-    useDeleteFollowedTopicMutation
+    useDeleteFollowedTopicMutation,
+    useIsFollowingTopicMutation,
 
 } = contentApi;
