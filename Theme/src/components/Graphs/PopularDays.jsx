@@ -13,11 +13,7 @@ const PopularDays = ({ data }) => {
     setKey(data?.buckets.map((item) => item.key));
     setDoc_count(data?.buckets.map((item) => item.doc_count));
     setAvg_engagment_per_day(
-      data?.buckets.map((item) =>
-        parseFloat(
-          parseFloat(item["avg engagment per day"].value).toFixed(2)
-        )
-      )
+      data?.buckets.map((item) =>item["avg engagment per day"].value)
     ); 
   }, [data]);
 
