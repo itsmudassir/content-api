@@ -123,7 +123,7 @@ const PageGraphs = ({ data, searchKitData }) => {
         {/* Donut Graph  */}
         {top_domians ? (
           <div className="pr-2 py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
-            {/* <TopDomainsDonut  data={top_domians}/> */}
+            <TopDomainsDonut  data={top_domians}/>
           </div>
         ) : (
           "loading.."

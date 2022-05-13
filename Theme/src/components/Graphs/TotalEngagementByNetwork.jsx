@@ -5,13 +5,13 @@ import millify from "millify";
 
 const TotalEngagementByNetwork = ({data}) => {
 
-  const [facebook, setFacebook] = useState();
-  const [twitter, setTwitter] = useState();
+  // const [facebook, setFacebook] = useState();
+  // const [twitter, setTwitter] = useState();
   
-  useEffect(()=>{
-    setTwitter(data?.twitter,);
-    setFacebook(data?.facebook);
-  },[data]);
+  // useEffect(()=>{
+  //   setTwitter(data?.twitter);
+  //   setFacebook(data?.facebook);
+  // },[data]);
   
 
   return (
@@ -24,7 +24,7 @@ const TotalEngagementByNetwork = ({data}) => {
           height={400}
           series={[
             {
-              data: [facebook, twitter],
+              data: [data?.facebook, data?.twitter],
             },
           ]}
           options={{

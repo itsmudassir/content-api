@@ -3,37 +3,32 @@ import Chart from "react-apexcharts";
 
 const TopDomainsDonut = ({data}) => {
   // states
-  const [key, setKey] = useState();
-  const [doc_count, setDoc_count] = useState();
-  const [avg_engagment, setAvg_engagment] =
-    useState();
+  // const [key, setKey] = useState();
+  // const [doc_count, setDoc_count] = useState();
+  // const [avg_engagment, setAvg_engagment] =
+  //   useState();
 
-  useEffect(() => {
-    setKey(data?.buckets.map((item) => item.key));
-   setDoc_count(data?.buckets.map((item) => item.doc_count));
-     setAvg_engagment(
-      data?.buckets.map((item) =>
-        parseFloat(
-          parseFloat(item["avg engagment"].value).toFixed(1)
-        )
-      )
-    ); 
-  }, [data]);
+  // useEffect(() => {
+  //   setKey(data?.buckets.map((item) => item.key));
+  //  setDoc_count(data?.buckets.map((item) => item.doc_count));
+  //    setAvg_engagment(
+  //     data?.buckets.map((item) =>
+  //       parseFloat(
+  //         parseFloat(item["avg engagment"].value).toFixed(1)
+  //       )
+  //     )
+  //   ); 
+  // }, [data]);
 
 
-  const state2 = {
-    options: {},
-    series: doc_count,
-    // labels: ['Apple', 'Mango', 'Orange', 'Watermelon'],
-  };
-console.log(doc_count)
+  
   return (
     <div className="donut">
       <p className="pl-4 mb-8 font-semibold">Top Domains on all networks based on Published Articles</p>
       <Chart
         options={
           {
-            
+            labels:data?.buckets.map((item) => item.key) ,
             responsive: [
               {
                 breakpoint: 700,
@@ -54,7 +49,7 @@ console.log(doc_count)
             ]
           }
         }
-        series={state2.series}
+        series={data?.buckets.map((item) => item.doc_count)}
         type="donut"
         width="80%"
         height={"300"}
@@ -64,3 +59,4 @@ console.log(doc_count)
   );
 };
 export default TopDomainsDonut;
+
