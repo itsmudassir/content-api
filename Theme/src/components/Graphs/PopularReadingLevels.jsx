@@ -45,7 +45,7 @@ const PopularReadingLevels = ({ data }) => {
             tooltip: {
               followCursor: true,
             },
-            colors: ["#4169E1", "#808080"],
+            colors: ["#4169E1", "#66C7F4"],
             stroke: {
               width: [4, 4, 4],
             },

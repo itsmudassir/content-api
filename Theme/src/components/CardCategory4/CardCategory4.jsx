@@ -142,19 +142,19 @@ const CardCategory4 = ({
           {/* <Button>
           <Badge name={categories} className="absolute bottom-[100px] left-1 z-20" />
         </Button> */}
-          <div className="flex items-center mt-4">
-            <div className={`w-10 h-10 ${getColorClass()} rounded-full`}></div>
+          <div className="flex justify-center items-center mt-4">
+            {/* <div className={` w-10 h-10 ${getColorClass()} rounded-full`}></div> */}
             <div className="ml-3 truncate">
               <h2
                 className={`text-base sm:text-lg text-neutral-900 dark:text-neutral-100 font-medium truncate`}
               >
                 {label.charAt(0).toUpperCase() + label.slice(1)}
               </h2>
-              <span
+              {/* <span
                 className={`block mt-1 text-sm text-neutral-6000 dark:text-neutral-400`}
               >
                 {count} Articles
-              </span>
+              </span> */}
             </div>
           </div>
         </Link>

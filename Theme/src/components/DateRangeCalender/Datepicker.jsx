@@ -4,10 +4,15 @@ import {
   DateRangePicker,
   defaultStaticRanges,
   createStaticRanges,
+  DateRange,
+  DefinedRange,
 } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { useSearchkit } from "@searchkit/client";
+import "./DateRangeCalender.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 // import {  useEffect } from "react";
 
@@ -15,36 +20,24 @@ import { useSearchkit } from "@searchkit/client";
 
 // import queryString from "query-string";
 
-
-
-function DatePicker() {
-
-
-  const queryParams = new URLSearchParams(window.location.search)
-  const sort = queryParams.get("sort")
+function DatePicker({toggleDisplay}) {
+  const queryParams = new URLSearchParams(window.location.search);
+  const sort = queryParams.get("sort");
   // const { search, location } = useLocation();
   // var { sort } = queryString.parse(search);
-  console.log(sort)
+  console.log(sort);
   const api = useSearchkit();
-  const [currentSort, setCurrentSort] = useState(sort||"relevance");
+  const [currentSort, setCurrentSort] = useState(sort || "relevance");
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
-
   // useEffect(() => {
-
 
   //   alert(currentSort)
   //   setCurrentSort(sort)
 
-   
   //   }, [sort]);
-
-
-
-
-
 
   const selectionRange = {
     startDate: startDate,
@@ -80,8 +73,6 @@ function DatePicker() {
   // console.log(ranges);
 
   function handleSelect(range) {
-
-
     setStartDate(range.selection.startDate);
     setEndDate(range.selection.endDate);
     var startDatec = moment(range.selection.startDate).format("YYYY-MM-DD");
@@ -89,10 +80,10 @@ function DatePicker() {
     // console.log(startDate, endDate,"---------------->");
     console.log(startDatec, endDatec, "---------------->");
     if (api.getFiltersByIdentifier("date_download")) {
-      console.log("if date is set%%%%%%%%%%%%%%%");
+      console.log("if date is set %%%%%%%%%%%%%%%");
       const customState = {
         query: api.getQuery() || "",
-        sortBy: currentSort||"",
+        sortBy: currentSort || "",
         filters: [
           {
             identifier: "date_download",
@@ -130,16 +121,42 @@ function DatePicker() {
     //   api.search()
     //
     // }
+
+    toggleDisplay(false);
   }
   return (
-    <DateRangePicker
-      startDatePlaceholder="Start Date"
-      endDatePlaceholder="End Date"
-      ranges={[selectionRange]}
-      onChange={handleSelect}
-      staticRanges={staticRanges}
-      inputRanges={[]}
-    />
+    <>
+      {/* <DateRangePicker
+        startDatePlaceholder="Start Date"
+        endDatePlaceholder="End Date"
+        ranges={[selectionRange]}
+        onChange={handleSelect}
+        staticRanges={staticRanges}
+        inputRanges={[]}
+      /> */}
+
+      <div className="flex flex-col sm:flex-row ">
+        <div className="flex flex-row justify-between">
+          <DefinedRange
+            startDatePlaceholder="Start Date"
+            endDatePlaceholder="End Date"
+            ranges={[selectionRange]}
+            onChange={handleSelect}
+            staticRanges={staticRanges}
+            inputRanges={[]}
+          />
+          <FontAwesomeIcon onClick={()=> toggleDisplay(false)} icon={faCircleXmark} className="cancelButton"/>
+        </div>
+        <DateRange
+          startDatePlaceholder="Start Date"
+          endDatePlaceholder="End Date"
+          ranges={[selectionRange]}
+          onChange={handleSelect}
+          staticRanges={staticRanges}
+          inputRanges={[]}
+        />
+      </div>
+    </>
   );
 }
 
