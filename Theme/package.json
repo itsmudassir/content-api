@@ -49,6 +49,7 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.28.1",
     "react-json-tree": "^0.16.1",
+    "react-loading": "^2.0.3",
     "react-pagination-js": "^2.0.0",
     "react-player": "^2.9.0",
     "react-redux": "^7.2.6",

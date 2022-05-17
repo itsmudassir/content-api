@@ -1,8 +1,5 @@
 import React, { FC } from "react";
 
-// export interface LoadingVideoProps {
-//   className?: string;
-// }
 
 const LoadingVideo = ({ className = "" }) => {
   return (

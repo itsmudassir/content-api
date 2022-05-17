@@ -3,6 +3,7 @@ import { useTable, useSortBy } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpLong, faArrowDownLong } from "@fortawesome/free-solid-svg-icons"
 import millify from "millify";
+import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 
 const PageTopDomains = ({ insights }) => {
 
@@ -62,6 +63,12 @@ console.log(data)
     );
   // const firstPageRows = rows.slice(0, 20);
   const firstPageRows = rows;
+
+  if (!insights) {
+    return <div className="flex justify-center items-center mt-4">
+      <LoadingVideo />
+    </div>;
+  }
 
   return (
     <>

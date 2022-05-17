@@ -4,7 +4,7 @@ import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import { withSearchkit, withSearchkitRouting } from "@searchkit/client";
 import CardCategory4 from "../CardCategory4/CardCategory4";
 import { CategoryImage } from "../../data/CategoryImages";
-import "./Removedot.css";
+import "./SectionSliderNewCategories.css";
 import LoadingVideo from "../LoadingVideo/LoadingVideo";
 import { useGetAllFollowedTopicsQuery } from "../../app/Api/contentApi";
 

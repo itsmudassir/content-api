@@ -11,7 +11,8 @@ import PopularDays from "../../components/Graphs/PopularDays";
 import TopDomainsDonut from "../../components/Graphs/TopDomainsDonut";
 import TopKeyWords from "../../components/Graphs/TopKeyWords";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
-import Tooltip from "../../components/ToolTip/Tooltip"
+
+
 const PageGraphs = ({ data, searchKitData }) => {
   // states
   const [articlesAnalyzed, setArticlesAnalyzed] = useState();

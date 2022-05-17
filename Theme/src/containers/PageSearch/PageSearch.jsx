@@ -136,7 +136,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   //     <LoadingVideo />
   //   </div>;
   // }
-  let val;
+  
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">

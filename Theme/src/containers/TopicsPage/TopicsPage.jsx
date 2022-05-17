@@ -18,8 +18,10 @@ import ButtonCircle from "../../components/Button/ButtonCircle";
 import Input from "../../components/Input/Input";
 import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import cogoToast from "cogo-toast"
+import cogoToast from "cogo-toast";
 import Card12 from "../../components/Card11/Card12";
+import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
+import ReactLoading from "react-loading";
 
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
@@ -109,62 +111,68 @@ const TopicsPage = ({ className = "" }) => {
                   ➕
                 </button>
               </li>
-              {getAllCustomTopics.data?.map(({ name, _id }, index) => {
-                return (
-                  <li key={index}>
-                    <div>
-                      <NavLink
-                        className="flex px-6 py-2.5 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
-                        activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
-                        to={`${url}/custom_topics/${_id}`}
-                        onClick={() => {
-                          setId(_id);
-                        }}
-                        onMouseEnter={(e) => {
-                          setToggleTopicButtonsHide(true);
-                          setToggleTopicButtonsHideId(_id);
-                        }}
-                        onMouseLeave={(e) => {
-                          setToggleTopicButtonsHide(false);
-                          setToggleTopicButtonsHideId("");
-                        }}
-                      >
-                        {name}
-                        <span style={{ marginLeft: "20px" }}>
-                          {toggleTopicButtonsHide &&
-                          toggleTopicButtonsHideId === _id ? (
-                            <>
-                              <button
-                                onClick={() => {
-                                  setId(_id);
-                                }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faPen}
-                                  style={{ color: "gray", fontSize: "12px" }}
-                                />
-                              </button>
+              {!getAllCustomTopics.data ? (
+                <li className="flex justify-center items-center">
+                  <ReactLoading type="bubbles" color="#9c4be7" width={"30%"} />
+                </li>
+              ) : (
+                getAllCustomTopics.data?.map(({ name, _id }, index) => {
+                  return (
+                    <li key={index}>
+                      <div>
+                        <NavLink
+                          className="flex px-6 py-2.5 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+                          activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
+                          to={`${url}/custom_topics/${_id}`}
+                          onClick={() => {
+                            setId(_id);
+                          }}
+                          onMouseEnter={(e) => {
+                            setToggleTopicButtonsHide(true);
+                            setToggleTopicButtonsHideId(_id);
+                          }}
+                          onMouseLeave={(e) => {
+                            setToggleTopicButtonsHide(false);
+                            setToggleTopicButtonsHideId("");
+                          }}
+                        >
+                          {name}
+                          <span style={{ marginLeft: "20px" }}>
+                            {toggleTopicButtonsHide &&
+                            toggleTopicButtonsHideId === _id ? (
+                              <>
+                                <button
+                                  onClick={() => {
+                                    setId(_id);
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faPen}
+                                    style={{ color: "gray", fontSize: "12px" }}
+                                  />
+                                </button>
 
-                              <button
-                                style={{ paddingLeft: "12px" }}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  deletePost({ id: _id });
-                                }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faTrashCan}
-                                  style={{ color: "gray", fontSize: "12px" }}
-                                />
-                              </button>
-                            </>
-                          ) : null}
-                        </span>
-                      </NavLink>
-                    </div>
-                  </li>
-                );
-              })}
+                                <button
+                                  style={{ paddingLeft: "12px" }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    deletePost({ id: _id });
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faTrashCan}
+                                    style={{ color: "gray", fontSize: "12px" }}
+                                  />
+                                </button>
+                              </>
+                            ) : null}
+                          </span>
+                        </NavLink>
+                      </div>
+                    </li>
+                  );
+                })
+              )}
             </ul>
 
             {/* FAVOURITES FOLDER */}
@@ -181,97 +189,110 @@ const TopicsPage = ({ className = "" }) => {
                 </button>
               </li>
 
-              {getAllFolders.data?.map(({ folderName, _id }, index) => {
-                return (
-                  <>
-                    {toggleFolderNameHide && toggleFolderNameHideId === _id ? (
-                      <form className="mt-0  relative max-w-[80%]" key={_id}>
-                        <Input
-                          rounded="rounded-md"
-                          aria-required
-                          value={folderNameState}
-                          onChange={(e) => setFolderNameState(e.target.value)}
-                          placeholder="folder Name"
-                          type="text"
-                        />
+              {!getAllCustomTopics.data ? (
+                <li className="flex justify-center items-center">
+                  <ReactLoading type="bubbles" color="#9c4be7" width={"30%"} />
+                </li>
+              ) : (
+                getAllFolders.data?.map(({ folderName, _id }, index) => {
+                  return (
+                    <>
+                      {toggleFolderNameHide &&
+                      toggleFolderNameHideId === _id ? (
+                        <form className="mt-0  relative max-w-[80%]" key={_id}>
+                          <Input
+                            rounded="rounded-md"
+                            aria-required
+                            value={folderNameState}
+                            onChange={(e) => setFolderNameState(e.target.value)}
+                            placeholder="folder Name"
+                            type="text"
+                          />
 
-                        <ButtonCircle
-                          onClick={RemoveClick}
-                          type="submit"
-                          className="absolute transform top-1/2 -translate-y-1/2 right-1"
-                        >
-                          <i className="la la-remove text-red-700"></i>
-                        </ButtonCircle>
-                        <ButtonCircle
-                          onClick={SaveClick}
-                          type="submit"
-                          className="absolute transform top-1/2 -translate-y-1/2 right-7"
-                        >
-                          <i className="las la-check text-green-700"></i>
-                        </ButtonCircle>
-                      </form>
-                    ) : (
-                      <li key={_id}>
-                        <NavLink
-                          className="flex px-6 py-2.5 m-0 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
-                          activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
-                          // to={`/topics/${_id}`}
-                          to={`${url}/favourite-posts/${_id}`}
-                          onClick={() => {
-                            setFolderID(_id);
-                          }}
-                          onMouseEnter={(e) => {
-                            setToggleButtonsHide(true);
-                            setToggleButtonsHideId(_id);
-                          }}
-                          onMouseLeave={(e) => {
-                            setToggleButtonsHide(false);
-                            setToggleButtonsHideId("");
-                          }}
-                        >
-                          {folderName}
+                          <ButtonCircle
+                            onClick={RemoveClick}
+                            type="submit"
+                            className="absolute transform top-1/2 -translate-y-1/2 right-1"
+                          >
+                            <i className="la la-remove text-red-700"></i>
+                          </ButtonCircle>
+                          <ButtonCircle
+                            onClick={SaveClick}
+                            type="submit"
+                            className="absolute transform top-1/2 -translate-y-1/2 right-7"
+                          >
+                            <i className="las la-check text-green-700"></i>
+                          </ButtonCircle>
+                        </form>
+                      ) : (
+                        <li key={_id}>
+                          <NavLink
+                            className="flex px-6 py-2.5 m-0 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+                            activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
+                            // to={`/topics/${_id}`}
+                            to={`${url}/favourite-posts/${_id}`}
+                            onClick={() => {
+                              setFolderID(_id);
+                            }}
+                            onMouseEnter={(e) => {
+                              setToggleButtonsHide(true);
+                              setToggleButtonsHideId(_id);
+                            }}
+                            onMouseLeave={(e) => {
+                              setToggleButtonsHide(false);
+                              setToggleButtonsHideId("");
+                            }}
+                          >
+                            {folderName}
 
-                          <span style={{ marginLeft: "20px" }}>
-                            {toggleButtonsHide &&
-                            toggleButtonsHideId === _id ? (
-                              <>
-                                <button
-                                  onClick={(e) => {
-                                    e.preventDefault();
+                            <span style={{ marginLeft: "20px" }}>
+                              {toggleButtonsHide &&
+                              toggleButtonsHideId === _id ? (
+                                <>
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
 
-                                    setFolderNameState(folderName);
-                                    setToggleFolderNameHide(true);
-                                    setToggleFolderNameHideId(_id);
-                                  }}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faPen}
-                                    style={{ color: "gray", fontSize: "12px" }}
-                                  />
-                                </button>
+                                      setFolderNameState(folderName);
+                                      setToggleFolderNameHide(true);
+                                      setToggleFolderNameHideId(_id);
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faPen}
+                                      style={{
+                                        color: "gray",
+                                        fontSize: "12px",
+                                      }}
+                                    />
+                                  </button>
 
-                                <button
-                                  style={{ paddingLeft: "12px" }}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    deleteFolder({ id: _id });
-                                  }}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faTrashCan}
-                                    style={{ color: "gray", fontSize: "12px" }}
-                                  />
-                                </button>
-                              </>
-                            ) : null}
-                          </span>
-                        </NavLink>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      </li>
-                    )}
-                  </>
-                );
-              })}
+                                  <button
+                                    style={{ paddingLeft: "12px" }}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      deleteFolder({ id: _id });
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faTrashCan}
+                                      style={{
+                                        color: "gray",
+                                        fontSize: "12px",
+                                      }}
+                                    />
+                                  </button>
+                                </>
+                              ) : null}
+                            </span>
+                          </NavLink>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </li>
+                      )}
+                    </>
+                  );
+                })
+              )}
             </ul>
           </div>
 
@@ -313,7 +334,6 @@ const TopicsPage = ({ className = "" }) => {
                   return (
                     <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
                       {cardData?.data?.map((value, index) => {
-                        console.log(value);
                         return (
                           <>
                             <Card12 key={index} cardItems={value} />
