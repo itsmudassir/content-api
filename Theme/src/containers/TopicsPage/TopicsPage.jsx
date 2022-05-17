@@ -112,8 +112,8 @@ const TopicsPage = ({ className = "" }) => {
                 </button>
               </li>
               {!getAllCustomTopics.data ? (
-                <li className="flex justify-center items-center">
-                  <ReactLoading type="bubbles" color="#9c4be7" width={"30%"} />
+                <li className="flex sm:justify-start lg:justify-center items-center">
+                  <ReactLoading type="bubbles" color="#9c4be7" className="w-32" />
                 </li>
               ) : (
                 getAllCustomTopics.data?.map(({ name, _id }, index) => {
@@ -190,9 +190,9 @@ const TopicsPage = ({ className = "" }) => {
               </li>
 
               {!getAllCustomTopics.data ? (
-                <li className="flex justify-center items-center">
-                  <ReactLoading type="bubbles" color="#9c4be7" width={"30%"} />
-                </li>
+                <li className="flex sm:justify-start lg:justify-center items-center">
+                <ReactLoading type="bubbles" color="#9c4be7" className="w-32" />
+              </li>
               ) : (
                 getAllFolders.data?.map(({ folderName, _id }, index) => {
                   return (

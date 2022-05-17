@@ -39,10 +39,10 @@ const TopDomainsDonut = ({data}) => {
                 },
               },
               {
-                breakpoint: 500,
+                breakpoint: 550,
                 options: {
                   chart: {
-                    width: "95%",
+                    width: "100%",
                   },
                 },
               },

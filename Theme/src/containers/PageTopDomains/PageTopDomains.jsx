@@ -72,11 +72,9 @@ console.log(data)
 
   return (
     <>
-
-    
       <div className="w-screen">
         <div className="p-3 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
-          <div className="border border-slate-300 rounded-xl">
+          <div className="border border-slate-300 rounded-xl overflow-x-scroll">
             <table {...getTableProps()} className="w-full">
               <thead className="border-b border-slate-300">
                 {headerGroups.map((headerGroup) => (
@@ -90,7 +88,7 @@ console.log(data)
                         )}
                         className="py-4"
                       >
-                        <div className="flex justify-start items-center px-4">
+                        <div className="flex justify-start items-center px-4 text-xs sm:text-sm">
                         {column.render("Header")}
                         {/* Add a sort direction indicator */}
                         <span>
@@ -98,20 +96,20 @@ console.log(data)
                             ? column.isSortedDesc
                             ? (
                               <div className="ml-2 flex justify-center items-center">
-                                <FontAwesomeIcon icon={faArrowUpLong} className="text-sm text-slate-400"/>
-                                <FontAwesomeIcon icon={faArrowDownLong} className="text-sm" />
+                                <FontAwesomeIcon icon={faArrowUpLong} className="text-xs sm:text-sm text-slate-400"/>
+                                <FontAwesomeIcon icon={faArrowDownLong} className="text-xs sm:text-sm" />
                               </div>
                             )
                             : (
                               <div className="ml-2 flex justify-center items-center">
-                                <FontAwesomeIcon icon={faArrowUpLong} className="text-sm"/>
-                                <FontAwesomeIcon icon={faArrowDownLong} className="text-sm text-slate-400" />
+                                <FontAwesomeIcon icon={faArrowUpLong} className="text-xs sm:text-sm"/>
+                                <FontAwesomeIcon icon={faArrowDownLong} className="text-xs sm:text-sm text-slate-400" />
                               </div>
                             )
                             :(
                               <div className="ml-2 flex justify-center items-center">
-                                <FontAwesomeIcon icon={faArrowUpLong} className="text-sm"/>
-                                <FontAwesomeIcon icon={faArrowDownLong} className="text-sm" />
+                                <FontAwesomeIcon icon={faArrowUpLong} className="text-xs sm:text-sm"/>
+                                <FontAwesomeIcon icon={faArrowDownLong} className="text-xs sm:text-sm" />
                               </div>
                             ) 
                             }
@@ -126,7 +124,7 @@ console.log(data)
                 {firstPageRows.map((row, i) => {
                   prepareRow(row);
                   return (
-                    <tr {...row.getRowProps()} className="border-b border-slate-300">
+                    <tr {...row.getRowProps()} className="text-xs sm:text-sm border-b border-slate-300">
                       {row.cells.map((cell) => {
                         return (
                           <td {...cell.getCellProps()}

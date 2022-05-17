@@ -43,12 +43,13 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   const followTopicHandler = async () => {
     try {
       const res = await createFollowedTopic({ topicName: customCateogry });
-      setIsFollowing(true);
       if (res.data) {
         cogoToast.success(res.data?.successMsg);
+        setIsFollowing(true);
       }
       if (res.error) {
         cogoToast.success(res.error?.data?.errorMsg);
+        setIsFollowing(false);
       }
       console.log(res);
     } catch (err) {

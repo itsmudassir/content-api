@@ -128,7 +128,7 @@ const CardCategory4 = ({
             {/* <div className={` w-10 h-10 ${getColorClass()} rounded-full`}></div> */}
             <div className="truncate">
               <h2
-                className={`text-base sm:text-lg text-white font-semibold truncate`}
+                className={`text-base sm:text-lg text-white font-semibold truncate z-50`}
               >
                 {label.charAt(0).toUpperCase() + label.slice(1)}
               </h2>
