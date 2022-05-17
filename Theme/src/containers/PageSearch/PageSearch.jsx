@@ -19,9 +19,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import queryString from "query-string";
 import cogoToast from "cogo-toast";
-export const PageSearchProps = {
-  className: String,
-};
 
 const PageSearch = ({ className = "", data, loading, error }) => {
   // states
@@ -46,16 +43,21 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   const followTopicHandler = async () => {
     try {
       const res = await createFollowedTopic({ topicName: customCateogry });
-      setIsFollowing(true);
       if (res.data) {
         cogoToast.success(res.data?.successMsg);
+        setIsFollowing(true);
       }
       if (res.error) {
         cogoToast.success(res.error?.data?.errorMsg);
+        setIsFollowing(false);
       }
       console.log(res);
     } catch (err) {
       console.log("Error occoured while creating topic", err);
+      console.log(
+        "Error occoured while creating topic",
+        createFollowedTopic_Obj
+      );
     }
   };
 
@@ -72,6 +74,10 @@ const PageSearch = ({ className = "", data, loading, error }) => {
       console.log(res);
     } catch (err) {
       console.log("Error occoured while creating topic", err);
+      console.log(
+        "Error occoured while creating topic",
+        deleteFollowedTopic_Obj
+      );
     }
   };
 
@@ -131,7 +137,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   //     <LoadingVideo />
   //   </div>;
   // }
-  let val;
+  
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
@@ -147,31 +153,61 @@ const PageSearch = ({ className = "", data, loading, error }) => {
         <main>
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex justify-start items-center space-x-2.5">
+              {/* ============ Language filter dropdown Button =============== */}
               {!loading ? <LanguagesFilterBox lists={langaugeList} /> : null}
-              {isFollowing ? (
-                <button
-                  onClick={() => unFollowTopicHandler()}
-                  className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                >
-                  <FontAwesomeIcon
-                    className="mr-1 text-green-700"
-                    icon={faCheck}
-                  />
-                  FOLLOWING
-                </button>
-              ) : (
-                <button
-                  onClick={() => followTopicHandler()}
-                  className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                >
-                  FOLLOW
-                </button>
-              )}
 
-              {/* <DateRangeDropDown facet={data?.results?.facets} /> */}
+              {/* ============ Date Range =============== */}
+              <DateRangeDropDown facet={data?.results?.facets} />
+
+              {/* ========== follow button div ============  */}
+              <div className="hidden sm:block">
+                {isFollowing ? (
+                  <button
+                    onClick={() => unFollowTopicHandler()}
+                    className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                  >
+                    <FontAwesomeIcon
+                      className="mr-1 text-green-700"
+                      icon={faCheck}
+                    />
+                    FOLLOWING
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => followTopicHandler()}
+                    className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                  >
+                    FOLLOW
+                  </button>
+                )}
+              </div>
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
-            <div className="flex justify-end">
+            <div className="flex justify-between items-center">
+              {/* ========== follow button div ============  */}
+              <div className="sm:hidden">
+                {isFollowing ? (
+                  <button
+                    onClick={() => unFollowTopicHandler()}
+                    className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                  >
+                    <FontAwesomeIcon
+                      className="mr-1 text-green-700"
+                      icon={faCheck}
+                    />
+                    FOLLOWING
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => followTopicHandler()}
+                    className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                  >
+                    FOLLOW
+                  </button>
+                )}
+              </div>
+
+              {/*======= relevence dropdown button ============*/}
               <RelevanceListBox lists={sortOptions} />
             </div>
           </div>

@@ -4,18 +4,18 @@ import millify from "millify";
 
 const PopularDays = ({ data }) => {
   // states
-  const [key, setKey] = useState();
-  const [doc_count, setDoc_count] = useState();
-  const [avg_engagment_per_day, setAvg_engagment_per_day] =
-    useState();
+  // const [key, setKey] = useState();
+  // const [doc_count, setDoc_count] = useState();
+  // const [avg_engagment_per_day, setAvg_engagment_per_day] =
+  //   useState();
 
-  useEffect(() => {
-    setKey(data?.buckets.map((item) => item.key));
-    setDoc_count(data?.buckets.map((item) => item.doc_count));
-    setAvg_engagment_per_day(
-      data?.buckets.map((item) =>item["avg engagment per day"].value)
-    ); 
-  }, [data]);
+  // useEffect(() => {
+  //   setKey(data?.buckets.map((item) => item.key));
+  //   setDoc_count(data?.buckets.map((item) => item.doc_count));
+  //   setAvg_engagment_per_day(
+  //     data?.buckets.map((item) =>item["avg engagment per day"].value)
+  //   ); 
+  // }, [data]);
 
 
   return (
@@ -30,12 +30,12 @@ const PopularDays = ({ data }) => {
             {
               name: "Articles Per Day",
               type: "bar",
-              data: doc_count,
+              data: data?.buckets.map((item) => item.doc_count),
             },
             {
               name: "Average Interactions Per Day",
               type: "bar",
-              data: avg_engagment_per_day,
+              data:  data?.buckets.map((item) =>item["avg engagment per day"].value),
             },
           ]}
           options={{
@@ -59,7 +59,7 @@ const PopularDays = ({ data }) => {
               },
             },
             xaxis: {
-              categories: key,
+              categories: data?.buckets.map((item) => item.key),
             },
             yaxis: [
               {

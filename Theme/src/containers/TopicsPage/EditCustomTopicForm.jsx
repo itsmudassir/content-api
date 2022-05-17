@@ -18,7 +18,9 @@ import {
 
 const widgetPostsDemo = DEMO_POSTS.filter((_, i) => i > 2 && i < 7);
 
+
 const EditCustomTopicForm = (values) => {
+
   const history = useHistory();
   const [updateCustomTopic, { isError, isLoading }] =
     useUpdateCustomTopicMutation();
@@ -62,7 +64,6 @@ const EditCustomTopicForm = (values) => {
   // }
 
   useEffect(() => {
-    console.log("Insidde useeffect");
     setAny_keywords_list(values?.topicData?.selection?.any_keywords);
     setMust_also_keywords_list(
       values?.topicData?.selection?.must_also_keywords

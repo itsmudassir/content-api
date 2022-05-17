@@ -4,16 +4,16 @@ import millify from "millify"
 
 const PopularReadingLevels = ({ data }) => {
   // states
-  const [key, setKey] = useState();
-  const [doc_count, setDoc_count] = useState();
-  const [avg_engagment_per_Reading_level, setAvg_engagment_per_Reading_level] =
-    useState();
+  // const [key, setKey] = useState();
+  // const [doc_count, setDoc_count] = useState();
+  // const [avg_engagment_per_Reading_level, setAvg_engagment_per_Reading_level] =
+  //   useState();
 
-  useEffect(() => {
-    setKey(data?.buckets.map((item) => item.key));
-    setDoc_count(data?.buckets.map((item) => item.doc_count));
-    setAvg_engagment_per_Reading_level(data?.buckets.map((item) =>item["avg engagment per Reading level"].value));
-  }, [data]);
+  // useEffect(() => {
+  //   setKey(data?.buckets.map((item) => item.key));
+  //   setDoc_count(data?.buckets.map((item) => item.doc_count));
+  //   setAvg_engagment_per_Reading_level(data?.buckets.map((item) =>item["avg engagment per Reading level"].value));
+  // }, [data]);
 
   return (
     <div>
@@ -27,12 +27,12 @@ const PopularReadingLevels = ({ data }) => {
             {
               name: "Number of Articles",
               type: "bar",
-              data: doc_count,
+              data: data?.buckets.map((item) => item.doc_count),
             },
             {
               name: "Engagement Per Article",
               type: "bar",
-              data: avg_engagment_per_Reading_level,
+              data: data?.buckets.map((item) =>item["avg engagment per Reading level"].value),
             },
           ]}
           options={{
@@ -45,7 +45,7 @@ const PopularReadingLevels = ({ data }) => {
             tooltip: {
               followCursor: true,
             },
-            colors: ["#4169E1", "#808080"],
+            colors: ["#4169E1", "#66C7F4"],
             stroke: {
               width: [4, 4, 4],
             },
@@ -56,7 +56,7 @@ const PopularReadingLevels = ({ data }) => {
               },
             },
             xaxis: {
-              categories: key,
+              categories: data?.buckets.map((item) => item.key),
             },
             yaxis: [
               {

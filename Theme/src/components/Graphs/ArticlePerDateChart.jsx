@@ -3,19 +3,7 @@ import Chart from "react-apexcharts";
 import millify from "millify";
 
 const ArticlePerDateChart = ({ data }) => {
-  // states
-  const [date, setDate] = useState();
-  const [barValues, setBarValues] = useState();
-  const [lineValues, setLineValues] = useState();
-
-  useEffect(() => {
-    setDate(data?.buckets.map((item) => item.key_as_string.split("T")[0]));
-    setBarValues(data?.buckets.map((item) => item.doc_count));
-    setLineValues(
-      data?.buckets.map((item) => item.total_engagement_per_day.value)
-    );
-  }, [data]);
-
+ 
   return (
     <div>
       <>
@@ -30,12 +18,12 @@ const ArticlePerDateChart = ({ data }) => {
             {
               name: "Total Articles Count",
               type: "bar",
-              data: barValues,
+              data: data?.buckets.map((item) => item.doc_count),
             },
             {
               name: "Total engagement per day",
               type: "line",
-              data: lineValues,
+              data: data?.buckets.map((item) => item.total_engagement_per_day.value),
             },
           ]}
           options={{
@@ -56,7 +44,7 @@ const ArticlePerDateChart = ({ data }) => {
               },
             },
             xaxis: {
-              categories: date,
+              categories: data?.buckets.map((item) => item.key_as_string.split("T")[0]),
             },
             yaxis: [
               {
