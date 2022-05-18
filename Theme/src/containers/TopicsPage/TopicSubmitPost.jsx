@@ -15,6 +15,7 @@ import { useSearchkitVariables } from "@searchkit/client";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
 import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
+import { useSearchkit } from '@searchkit/client'
 
 const query = gql`
   query resultSet(
@@ -114,7 +115,7 @@ const FILTERS = [
 
 const TopicSubmitPost = () => {
   /////////////////////////////////graphql code starts ////////////////////////////////////////////
-
+  const api = useSearchkit();
   const variables = useSearchkitVariables();
   if (variables?.page.size) {
     variables.page.size = 20;
@@ -189,14 +190,14 @@ const TopicSubmitPost = () => {
   // };
   const custom_topic = {
     _id: "1211",
-    userId: "",
+    userId: "asdasfsa468sa46sag",
     name: topicName,
     any_keywords: any_keywords_list,
     match_type: domainORtopic,
     must_also_keywords: must_also_keywords_list,
     must_not_contains_keywords: must_not_contains_keywords_list,
-    exclude_domains: ["exclude_domains_list.com"],
-    limit_domains_results: ["www.limit_domains_results_list"],
+    exclude_domains: exclude_domains_list, // ["exclude_domains_list.com"],
+    limit_domains_results: limit_domains_results_list, //["www.limit_domains_results_list"],
     enddate: endDate,
     startdate: startDate,
     language: language,
@@ -275,6 +276,62 @@ const TopicSubmitPost = () => {
     );
   };
 
+  useEffect(() => {
+    let filterObj = [{ "criteria": domainORtopic, "bodyORtitle": bodyORtitle }];
+    if (any_keywords_list.length !== 0) {
+      filterObj.push({
+        "any_keywords_list" : any_keywords_list
+      });
+    }
+    if (must_also_keywords_list.length !== 0) {
+      filterObj.push({
+        "must_also_keywords_list" : must_also_keywords_list
+      });
+    }
+    if (must_not_contains_keywords_list.length !== 0) {
+      filterObj.push({
+        "must_not_contains_keywords_list" : must_not_contains_keywords_list
+      });
+    }
+    if (exclude_domains_list.length !== 0) {
+      filterObj.push({
+        "exclude_domains_list" : exclude_domains_list
+      });
+    }
+    if (limit_domains_results_list.length !== 0) {
+      filterObj.push({
+        "limit_domains_results_list" : limit_domains_results_list
+      });
+    }
+    if (startDate !== null) {
+      filterObj.push({
+        "startDate" : startDate
+      });
+    }
+    if (endDate !== null) {
+      filterObj.push({
+        "endDate" : endDate
+      });
+    }
+    if (language !== null) {
+      filterObj.push({
+        "language" : language
+      });
+    }
+    if (engagement !== null) {
+      filterObj.push({
+        "engagement" : engagement
+      });
+    }
+    console.log("CUSTOM TOPIC ",filterObj);
+    let jsonob= JSON.stringify(filterObj)
+    api.toggleFilter({ identifier: "CustomFilter",  value: jsonob})
+    api.setPage({ size: 20, from: 0 })
+    api.search()
+  }, [engagement,language,endDate,startDate,bodyORtitle,exclude_domains_list,any_keywords_list, must_also_keywords_list,must_not_contains_keywords_list]);
+
+
+  console.log("SEARCHKIT DATA",data);
   return (
     <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
       {/* {/ form container /} */}
@@ -522,8 +579,8 @@ const TopicSubmitPost = () => {
           onClick={(e) => {
             e.preventDefault();
 
-            createTopic(custom_topic);
-            console.log("in update btn", custom_topic);
+            // createTopic(custom_topic);
+            // console.log("Custom Topic", filterObj);
           }}
           className="md:col-span-2"
         >
