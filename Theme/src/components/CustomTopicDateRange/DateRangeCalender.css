@@ -1,0 +1,147 @@
+
+.css-button {
+  font-family: Arial;
+  color: #666666;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px #dcdcdc solid;
+  /* / background: #eaeaec; / */
+  background: linear-gradient(180deg, #f6f6f6 5%, #ffffff 100%);
+  text-shadow: 1px 1px 1px #928e8e;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  height: 43px;
+}
+.css-button:hover {
+  background: linear-gradient(180deg, #f6f6f6 5%, #ffffff 100%);
+  border: 2px #5547de solid;
+}
+.css-button-icon {
+  margin-left: 5px;
+  padding : 0px 3px; 
+  box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
+}
+.css-button-icon svg {
+  vertical-align: middle;
+  position: relative;
+}
+.css-button-text {
+  padding: 10px 18px;
+}
+/* .css-button {
+  font-family: Arial;
+  color: #666666;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px #dcdcdc solid;
+  background: linear-gradient(180deg, #ffffff 5%, #f6f6f6 100%);
+  text-shadow: 1px 1px 1px #ffffff;
+  box-shadow: inset 1px 1px 2px 0px #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  border-radius: 74px;
+}
+.css-button:hover {
+  background: linear-gradient(180deg, #f6f6f6 5%, #ffffff 100%);
+}
+.css-button-icon {
+  margin-left: 5px;
+  padding-bottom: 5px;
+  padding-left: 3px;
+  box-shadow: rgba(0, 0, 0, 0.14) -1px 0px 0px inset;
+}
+.css-button-icon svg {
+  vertical-align: middle;
+  position: relative;
+}
+.css-button-text {
+  padding: 10px 18px;
+} */
+
+
+.Datepicker {
+  position: absolute; 
+  z-index: 20;
+  top: 45px;
+  right: -465px;
+  background-color: white;
+  border: 1px solid #c0b7e3;
+  box-shadow: -1px 8px 14px -2px rgba(0,0,0,0.75);
+-webkit-box-shadow: -1px 8px 14px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: -1px 8px 14px -2px rgba(0,0,0,0.75);
+}
+.cancelButton{
+  display: none;
+}
+
+
+/* .rdrDefinedRangesWrapper {
+  display: none;
+} */
+
+@media only screen and  (max-width: 900px){
+  .Datepicker{
+  top: 45px;
+  right: -365px;
+} 
+}
+
+  @media only screen and  (max-width: 800px){
+    .Datepicker{
+      top: 45px;
+      right: -365px;
+    } 
+}
+
+@media only screen and  (max-width: 768px){
+  .Datepicker{
+    top: 45px;
+    right: -280px;
+  } 
+}
+
+@media only screen and  (max-width: 639px){
+  .Datepicker{
+    top: 45px;
+    right: -150px;
+  } 
+}
+
+@media only screen and  (max-width: 580px){
+  .Datepicker{
+    top: 45px;
+    right: -130px;
+  } 
+}
+
+@media only screen and  (max-width: 550px){
+  .Datepicker{
+    top: 45px;
+    right: -110px;
+  } 
+}
+
+@media only screen and  (max-width: 500px){
+  .Datepicker{
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    padding: 15px;
+  } 
+  .cancelButton{
+    display: block;
+    color: #b3b3b3;
+    font-size: 28px;
+  }
+}
+
+
+
+
+

@@ -48,7 +48,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
         setIsFollowing(true);
       }
       if (res.error) {
-        cogoToast.success(res.error?.data?.errorMsg);
+        cogoToast.error(res.error?.data?.errorMsg);
         setIsFollowing(false);
       }
       console.log(res);
@@ -81,15 +81,16 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     }
   };
 
+  
   if (data) {
     var sortOptions = data?.results.summary.sortOptions;
     // const langaugeList = data?.results.facets[5].entries;
     var langaugeList = data?.results.facets.filter(
       (item) => item.identifier == "language"
     )[0].entries;
-    // console.log(langaugeList);
   }
 
+  
   // useEffects
   useEffect(async () => {
     try {
@@ -137,7 +138,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   //     <LoadingVideo />
   //   </div>;
   // }
-  
+
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">

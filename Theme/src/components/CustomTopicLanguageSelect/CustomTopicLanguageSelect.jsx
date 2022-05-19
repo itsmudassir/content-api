@@ -2,48 +2,31 @@ import React, { FC } from "react";
 import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/solid";
-import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
-import { useSearchkit } from "@searchkit/client";
+import ButtonDropdown from "../ButtonDropdown/ButtonDropdown";
+import { list } from "postcss";
 
-const LanguagesFilterBox = ({ className = "", lists }) => {
-  const api = useSearchkit();
-  var lan = api.getFiltersByIdentifier("language");
-  var lanName = lan.map((val) => val.value);
-  const [selectedGlobal, setSelectedGlobal] = useState(lanName || null);
+const CustomTopicLanguageSelect = ({ className, lists, setlanguage }) => {
+  const [selected, setSelected] = useState(list[0]);
 
-  const handelOnChange = (e) => {
-    var selected = e;
-
-    if (selectedGlobal == selected?.label) {
-      setSelectedGlobal(null);
-    } else {
-      setSelectedGlobal(selected?.label);
+  useEffect(() => {
+    if(selected){
+      setlanguage(selected.label);
     }
+    // console.log(selected?.label);
+  }, [selected]);
 
-    if (selected) {
-      api.toggleFilter({
-        identifier: "language",
-        value: selected?.label,
-      });
-
-      api.setPage({ size: 20, from: 0 });
-      api.search();
-    }
-  };
   return (
     <>
       <div
         className={`nc-ArchiveFilterListBox ${className}`}
         data-nc-id="ArchiveFilterListBox"
       >
-        <Listbox value={"All Languages"} onChange={(e) => handelOnChange(e)}>
+        <Listbox value={selected} onChange={setSelected}>
           <div className="relative md:min-w-[200px]">
             <Listbox.Button as={"div"}>
               {/* <ButtonDropdown>{selected?.label}</ButtonDropdown> */}
-              <ButtonDropdown>
-                {selectedGlobal && selectedGlobal.length > 0
-                  ? "Language : " + selectedGlobal
-                  : "Choose language"}
+              <ButtonDropdown onClick={(e) => e.preventDefault()}>
+                {selected ? selected.label : "Choose language"}
               </ButtonDropdown>
             </Listbox.Button>
             <Transition
@@ -92,4 +75,4 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
   );
 };
 
-export default LanguagesFilterBox;
+export default CustomTopicLanguageSelect;
