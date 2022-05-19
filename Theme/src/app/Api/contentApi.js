@@ -26,7 +26,7 @@ const contentApi = createApi({
 
     endpoints: (builder) => ({
 
-        // FAVOURITE FOLDER QUERIES
+        //=========== FAVOURITE FOLDER QUERIES =============
 
         // get all favourite folders
         getAllFolders: builder.query({
@@ -65,6 +65,9 @@ const contentApi = createApi({
             invalidatesTags: ["FavouritesFolder"],
         }),
 
+
+        // ============== Custom Topics ===============
+
         //Get All Customtopic
         getAllCustomTopics: builder.query({
             query: () => ({
@@ -91,6 +94,8 @@ const contentApi = createApi({
             }),
             // invalidatesTags: ["GetCustomTopics"],
         }),
+
+        // create customTopic 
         createTopic: builder.mutation({
             query: (topicFields) => ({
                 url: "/api/customTopicSearch/createcustomtopic",
@@ -99,8 +104,19 @@ const contentApi = createApi({
             }),
             // invalidatesTags: ["GetCustomTopics"],
         }),
+
+        // editCreateCustsomtopic
+        editCreateCustsomtopic: builder.mutation({
+            query: (obj)=>({
+                url: "/api/customTopicSearch/editCreateCustsomtopic",
+                method: "POST",
+                body: obj 
+            }),
+        }),
         
-        //FAVOURITE POSTS QUERIES
+
+
+        //============== FAVOURITE POSTS QUERIES ============
         
         // get all favourite posts by folder id
         getAllFavouritePosts: builder.query({
@@ -138,7 +154,7 @@ const contentApi = createApi({
         }),
         
         
-        // INSIGHTS QUERIES
+        //============== INSIGHTS QUERIES ===============
         
         // get insights
         getInsights: builder.mutation({
@@ -150,7 +166,7 @@ const contentApi = createApi({
         }),
         
         
-        // FOLLOWED-TOPICS QUERIES
+        //========== FOLLOWED-TOPICS QUERIES ============
         
         // get all Followed topics by authenticated user_id
         getAllFollowedTopics : builder.query({
@@ -205,6 +221,7 @@ export const {
     useAddPostToFavouritesFolderMutation,
     useGetAllCustomTopicsQuery,
     useDeleteCustomTopicMutation,
+    useEditCreateCustsomtopicMutation,
     useUpdateCustomTopicMutation,
     useDeleteFolderMutation,
     useUpdateFolderMutation,

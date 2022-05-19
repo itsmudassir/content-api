@@ -7,7 +7,7 @@ import WidgetPosts from "../../components/WidgetPosts/WidgetPosts";
 import Chip from "../../components/chip/chip";
 import ExcludeResultInputField from "../../components/ExcludeResultInputField/ExcludeResultInputField";
 import LimitResultInputField from "../../components/LimitResultInputField/LimitResultInputField";
-import { useCreateTopicMutation } from "../../app/Api/contentApi";
+import { useCreateTopicMutation, useEditCreateCustsomtopicMutation } from "../../app/Api/contentApi";
 import cogoToast from "cogo-toast";
 import { gql, useQuery } from "@apollo/client";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
@@ -197,7 +197,7 @@ const TopicSubmitPost = () => {
   console.log(variables?.page.size);
 
   var { data, error, loading } = useQuery(query, { variables });
-
+  
   if (error) {
     cogoToast.error("This is a error message", {
       position: "top-left",
@@ -210,40 +210,44 @@ const TopicSubmitPost = () => {
       <LoadingVideo />
     </div>;
   }
-
+  
   // states
   const [topicName, setTopicName] = useState(null); // topic name
-
+  
   // selection
   const [domainORtopic, setDomainORtopic] = useState("topics"); // match_type
-
+  
   const [any_keywords_list, setAny_keywords_list] = useState([]); // any_keywords_list
   const [any_keywords_value, setAny_keywords_value] = useState(""); // any_keywords_value
-
+  
   const [must_also_keywords_list, setMust_also_keywords_list] = useState([]); // must_also_keywords_list
   const [must_also_keywords_value, setMust_also_keywords_value] = useState(""); // must_also_keywords_value
-
+  
   const [must_not_contains_keywords_list, setMust_not_contains_keywords_list] =
     useState([]); // must_not_contains_keywords_list
   const [
     must_not_contains_keywords_value,
     setMust_not_contains_keywords_value,
   ] = useState(""); // must_not_contains_keywords_value
-
+  
   const [exclude_domains_list, setExclude_domains_list] = useState([]); // exclude_domains
   const [limit_domains_results_list, setLimit_domains_results_list] = useState(
     []
-  ); // limit_domains_results
+    ); // limit_domains_results
+    
+    // filters
+    const [bodyORtitle, setBodyORtitle] = useState("titles");
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [language, setlanguage] = useState(null);
+    const [engagement, setEngagement] = useState(null);
 
-  // filters
-  const [bodyORtitle, setBodyORtitle] = useState("titles");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [language, setlanguage] = useState(null);
-  const [engagement, setEngagement] = useState(null);
-  const [createTopic, { isError, isLoading }] = useCreateTopicMutation();
 
-  const custom_topic = {
+    // RTK-Query 
+    const [createTopic, { isError, isLoading }] = useCreateTopicMutation();
+    const [editCreateCustsomtopic,editCreateCustsomtopic_Obj] = useEditCreateCustsomtopicMutation();
+    
+    const custom_topic = {
     _id: "1211",
     userId: "asdasfsa468sa46sag",
     name: topicName,
@@ -333,7 +337,7 @@ const TopicSubmitPost = () => {
   };
 
   // USE-EFFECTS
-  useEffect(() => {
+  useEffect( async () => {
     let filterObj = [{ criteria: domainORtopic, bodyORtitle: bodyORtitle }];
     if (any_keywords_list.length !== 0) {
       filterObj.push({
@@ -380,12 +384,28 @@ const TopicSubmitPost = () => {
         engagement: engagement,
       });
     }
+
+    try{
+      // RTK-Query 
+      const res = await editCreateCustsomtopic({filterObj});
+      console.log(res.data);
+
+      if(res.error){
+        console.log(res.error);
+      }
+    }catch(err){
+      console.log(err)
+      console.log(editCreateCustsomtopic_Obj.error);
+    }
+
     console.log("CUSTOM TOPIC ", filterObj);
     let jsonob = JSON.stringify(filterObj);
     api.toggleFilter({ identifier: "CustomFilter", value: jsonob });
     api.setPage({ size: 20, from: 0 });
     api.search();
   }, [
+    bodyORtitle,
+    domainORtopic,
     engagement,
     language,
     endDate,
