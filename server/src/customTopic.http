@@ -50,12 +50,51 @@ DELETE http://localhost:7777/api/customTopicSearch/deletecustomtopic/623319cb16d
 
 
 # get Content By Custom Topic 
-POST http://localhost:7777/api/customTopicSearch/getContentByCustomTopic2
+POST http://localhost:7777/api/customTopicSearch/editCreateCustsomtopic
 Content-Type: application/json
 
 {
-    "startDate" :"2022-03-01",
-    "endDate":"2022-03-10"
-    # "customQuery":"war",
-    # "category": "war"
+ "filterObj": [
+    {
+        "criteria": "topics",
+        "bodyORtitle": "body"
+    },
+    {
+        "any_keywords_list": [
+            "elon"
+        ]
+    },
+    {
+        "must_also_keywords_list": [
+            "tesla"
+        ]
+    },
+    {
+        "must_not_contains_keywords_list": [
+            "billgates"
+        ]
+    },
+    {
+        "exclude_domains_list": [
+            "mashable.com"
+        ]
+    },
+    {
+        "limit_domains_results_list": [
+            "newspunch.com"
+        ]
+    },
+    {
+        "startDate": "2022-03-01"
+    },
+    {
+        "endDate": "2022-03-31"
+    },
+    {
+        "language": "English"
+    },
+    {
+        "engagement": "twitter_shares"
+    }
+]
 }

@@ -7,7 +7,8 @@ import {
   getCustomTopic,
   createCustomTopic,
   getContentByCustomTopic,
-  getContentByCustomTopic2
+  editCreateCustsomtopic,
+  customTopicSearch 
 } from "../../../controllers/customTopicSearchControllers/customTopicSearch.Controller.js"
 import customTopicSearchModel from "../../../models/customTopicSearchModel/customTopicSearch.Model.js";
 import {getByCustomTopics} from "../../../services/customTopicSearchServices/customTopicSearch.Service.js"
@@ -56,9 +57,16 @@ router.get("/getcontetbycustomtopic/:id/:offset", authorize(), getContentByCusto
 
 
 
-// route:  POST /api/getContentByCustomTopic2/ 
-// desc:   reading data from elastic_search by getting query from customTopicsSearch.model by topic id
+// route:  POST /api/editCreateCustsomtopic/ 
+// desc:   
 // access: PROTECTED
-router.post("/getContentByCustomTopic2/", getContentByCustomTopic2);
+router.post("/editCreateCustsomtopic/", editCreateCustsomtopic);
+
+
+
+// route:  POST /api/customTopicSearch/ 
+// desc:   
+// access: PROTECTED
+router.post("/customTopicSearch/", customTopicSearch);
 
 export default router;

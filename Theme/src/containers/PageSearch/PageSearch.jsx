@@ -69,7 +69,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
         cogoToast.success(res.data?.successMsg);
       }
       if (res.error) {
-        cogoToast.success(res.error?.data?.errorMsg);
+        cogoToast.error(res.error?.data?.errorMsg);
       }
       console.log(res);
     } catch (err) {
