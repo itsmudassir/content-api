@@ -55,6 +55,7 @@ const SearchBoxMain = ({ pageType , category}) => {
             },
             {
               label: "Musicians",
+              value: "Musicians",
             },
           ]}
           enablePopularSuggestions={true}

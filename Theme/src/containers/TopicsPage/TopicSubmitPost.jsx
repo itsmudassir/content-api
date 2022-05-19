@@ -385,18 +385,18 @@ const TopicSubmitPost = () => {
       });
     }
 
-    try{
-      // RTK-Query 
-      const res = await editCreateCustsomtopic({filterObj});
-      console.log(res.data);
+    // try{
+    //   // RTK-Query 
+    //   const res = await editCreateCustsomtopic({filterObj});
+    //   console.log(res.data);
 
-      if(res.error){
-        console.log(res.error);
-      }
-    }catch(err){
-      console.log(err)
-      console.log(editCreateCustsomtopic_Obj.error);
-    }
+    //   if(res.error){
+    //     console.log(res.error);
+    //   }
+    // }catch(err){
+    //   console.log(err)
+    //   console.log(editCreateCustsomtopic_Obj.error);
+    // }
 
     console.log("CUSTOM TOPIC ", filterObj);
     let jsonob = JSON.stringify(filterObj);
@@ -415,6 +415,7 @@ const TopicSubmitPost = () => {
     any_keywords_list,
     must_also_keywords_list,
     must_not_contains_keywords_list,
+    limit_domains_results_list
   ]);
 
   console.log("SEARCHKIT DATA", data);
