@@ -45,3 +45,17 @@ Content-Type: application/json
 ###
 # delete a custom topic by topic-id
 DELETE http://localhost:7777/api/customTopicSearch/deletecustomtopic/623319cb16d503df34194437
+
+###
+
+
+# get Content By Custom Topic 
+POST http://localhost:7777/api/customTopicSearch/getContentByCustomTopic2
+Content-Type: application/json
+
+{
+    "startDate" :"2022-03-01",
+    "endDate":"2022-03-10"
+    # "customQuery":"war",
+    # "category": "war"
+}

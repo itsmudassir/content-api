@@ -26,7 +26,6 @@ const WidgetPosts= ({
       />
       <div className="flex flex-col divide-y divide-neutral-200 dark:divide-neutral-700">
         {posts? (posts.results?.hits.items?.slice(0, 7).map((post) => {
-          console.log(post , "Data in xxxxxxxxxxxxx")
           return(
             <Card3Small
             className="p-4 xl:px-5 xl:py-6 hover:bg-neutral-200 dark:hover:bg-neutral-700"

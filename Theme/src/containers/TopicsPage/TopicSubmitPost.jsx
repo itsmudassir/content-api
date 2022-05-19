@@ -4,18 +4,18 @@ import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import Select from "../../components/Select/Select";
 import Label from "../../components/Label/Label";
 import WidgetPosts from "../../components/WidgetPosts/WidgetPosts";
-import { DEMO_POSTS } from "../../data/posts";
 import Chip from "../../components/chip/chip";
 import ExcludeResultInputField from "../../components/ExcludeResultInputField/ExcludeResultInputField";
 import LimitResultInputField from "../../components/LimitResultInputField/LimitResultInputField";
 import { useCreateTopicMutation } from "../../app/Api/contentApi";
 import cogoToast from "cogo-toast";
 import { gql, useQuery } from "@apollo/client";
-import { useSearchkitVariables } from "@searchkit/client";
+import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
-import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
-import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
-import { useSearchkit } from '@searchkit/client'
+import CustomTopicLanguageSelect from "../../components/CustomTopicLanguageSelect/CustomTopicLanguageSelect";
+import CustomTopicSortSelect from "../../components/CustomTopicSortSelect/CustomTopicSortSelect"
+import DateRangeDropDown from "../../components/CustomTopicDateRange/DateRangeDropDown"
+
 
 const query = gql`
   query resultSet(
@@ -106,15 +106,89 @@ const query = gql`
   }
 `;
 
-const FILTERS = [
-  { label: "Relevance", id: "relevance" },
-  { label: "Facebook Shares", id: "facebook_shares" },
-  { label: "Twitter Shares", id: "twitter_shares" },
-  { label: "Date Download", id: "date_download" },
+const LanguagesList = [
+  {
+    label: "English",
+    count: 25190,
+  },
+  {
+    label: "Greek",
+    count: 515,
+  },
+  {
+    label: "Spanish",
+    count: 492,
+  },
+  {
+    label: "German",
+    count: 229,
+  },
+  {
+    label: "Italian",
+    count: 168,
+  },
+  {
+    label: "French",
+    count: 138,
+  },
+  {
+    label: "Dutch",
+    count: 129,
+  },
+  {
+    label: "Russian",
+    count: 60,
+  },
+  {
+    label: "Romanian",
+    count: 32,
+  },
+  {
+    label: "Arabic",
+    count: 30,
+  },
+  {
+    label: "Japanese",
+    count: 27,
+  },
+  {
+    label: "Telugu",
+    count: 13,
+  },
+  {
+    label: "Portuguese",
+    count: 8,
+  },
+  {
+    label: "Turkish",
+    count: 7,
+  },
+];
+
+const sortingList = [
+  {
+    id: "relevance",
+    label: "Relevance",
+  },
+  {
+    id: "facebook_shares",
+    label: "Facebook Shares",
+  },
+  {
+    id: "twitter_shares",
+    label: "Twitter Shares",
+  },
+  {
+    id: "date_download",
+    label: "Date Download",
+  },
+  {
+    id: "total_engagement",
+    label: "Total Engagement",
+  },
 ];
 
 const TopicSubmitPost = () => {
-  /////////////////////////////////graphql code starts ////////////////////////////////////////////
   const api = useSearchkit();
   const variables = useSearchkitVariables();
   if (variables?.page.size) {
@@ -169,25 +243,6 @@ const TopicSubmitPost = () => {
   const [engagement, setEngagement] = useState(null);
   const [createTopic, { isError, isLoading }] = useCreateTopicMutation();
 
-  // const custom_topic = {
-  //   userId: "123abc...",
-  //   name: topicName,
-  //   filters: {
-  //     type: bodyORtitle,
-  //     startdate: startDate,
-  //     enddate: endDate,
-  //     language: language,
-  //     engagement: engagement,
-  //   },
-  //   selection: {
-  //     match_type: domainORtopic,
-  //     // any_keywords: any_keywords,
-  //     // must_also_keywords: must_also_keywords,
-  //     // must_not_contains_keywords: must_not_contains_keywords,
-  //     // exclude_domains: exclude_domains,
-  //     // limit_domains_results: limit_domains_results,
-  //   },
-  // };
   const custom_topic = {
     _id: "1211",
     userId: "asdasfsa468sa46sag",
@@ -196,13 +251,14 @@ const TopicSubmitPost = () => {
     match_type: domainORtopic,
     must_also_keywords: must_also_keywords_list,
     must_not_contains_keywords: must_not_contains_keywords_list,
-    exclude_domains: exclude_domains_list, // ["exclude_domains_list.com"],
-    limit_domains_results: limit_domains_results_list, //["www.limit_domains_results_list"],
+    exclude_domains: exclude_domains_list,
+    limit_domains_results: limit_domains_results_list,
     enddate: endDate,
     startdate: startDate,
     language: language,
   };
-  // event handlers
+
+  // EVENT HANDLERS
   // any_keywords
   const any_keywords_addItem = (e) => {
     if (["Enter"].includes(e.key)) {
@@ -276,66 +332,76 @@ const TopicSubmitPost = () => {
     );
   };
 
+  // USE-EFFECTS
   useEffect(() => {
-    let filterObj = [{ "criteria": domainORtopic, "bodyORtitle": bodyORtitle }];
+    let filterObj = [{ criteria: domainORtopic, bodyORtitle: bodyORtitle }];
     if (any_keywords_list.length !== 0) {
       filterObj.push({
-        "any_keywords_list" : any_keywords_list
+        any_keywords_list: any_keywords_list,
       });
     }
     if (must_also_keywords_list.length !== 0) {
       filterObj.push({
-        "must_also_keywords_list" : must_also_keywords_list
+        must_also_keywords_list: must_also_keywords_list,
       });
     }
     if (must_not_contains_keywords_list.length !== 0) {
       filterObj.push({
-        "must_not_contains_keywords_list" : must_not_contains_keywords_list
+        must_not_contains_keywords_list: must_not_contains_keywords_list,
       });
     }
     if (exclude_domains_list.length !== 0) {
       filterObj.push({
-        "exclude_domains_list" : exclude_domains_list
+        exclude_domains_list: exclude_domains_list,
       });
     }
     if (limit_domains_results_list.length !== 0) {
       filterObj.push({
-        "limit_domains_results_list" : limit_domains_results_list
+        limit_domains_results_list: limit_domains_results_list,
       });
     }
     if (startDate !== null) {
       filterObj.push({
-        "startDate" : startDate
+        startDate: startDate,
       });
     }
     if (endDate !== null) {
       filterObj.push({
-        "endDate" : endDate
+        endDate: endDate,
       });
     }
     if (language !== null) {
       filterObj.push({
-        "language" : language
+        language: language,
       });
     }
     if (engagement !== null) {
       filterObj.push({
-        "engagement" : engagement
+        engagement: engagement,
       });
     }
-    console.log("CUSTOM TOPIC ",filterObj);
-    let jsonob= JSON.stringify(filterObj)
-    api.toggleFilter({ identifier: "CustomFilter",  value: jsonob})
-    api.setPage({ size: 20, from: 0 })
-    api.search()
-  }, [engagement,language,endDate,startDate,bodyORtitle,exclude_domains_list,any_keywords_list, must_also_keywords_list,must_not_contains_keywords_list]);
+    console.log("CUSTOM TOPIC ", filterObj);
+    let jsonob = JSON.stringify(filterObj);
+    api.toggleFilter({ identifier: "CustomFilter", value: jsonob });
+    api.setPage({ size: 20, from: 0 });
+    api.search();
+  }, [
+    engagement,
+    language,
+    endDate,
+    startDate,
+    bodyORtitle,
+    exclude_domains_list,
+    any_keywords_list,
+    must_also_keywords_list,
+    must_not_contains_keywords_list,
+  ]);
 
-
-  console.log("SEARCHKIT DATA",data);
+  console.log("SEARCHKIT DATA", data);
   return (
     <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
-      {/* {/ form container /} */}
-      <form className="basis-2/3  grid md:grid-cols-2 gap-6">
+      {/* {/ div container /} */}
+      <div className="basis-2/3  grid md:grid-cols-2 gap-6">
         <label className="block md:col-span-2">
           <Label className="font-bold text-lg">Topic Name</Label>
           <Input
@@ -519,32 +585,29 @@ const TopicSubmitPost = () => {
           <Label className="font-bold text-lg">Set Default Filters</Label>
         </label>
 
-        {/* Set Default Filters */}
 
+        {/* Set Default Filters */}
+        {/* ============== Date Range DropDown ================= */}
         <div className="grid grid-cols-12 md:col-span-2 gap-2">
           <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
-            <DateRangeDropDown facet={data?.results?.facets} />
+            <DateRangeDropDown setStartDate={setStartDate} setEndDate={setEndDate}/>
           </label>
 
+        {/* ============== Language SelectBox ================= */}
           <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
             <span className="mt-1 bg-gray-100">
-              <ArchiveFilterListBox lists={FILTERS} />
+              <CustomTopicLanguageSelect setlanguage={setlanguage} lists={LanguagesList} />
             </span>
           </label>
 
+        {/* ============== Sorting SelectBox ================= */}
           <label className="col-span-6 sm:col-span-4 md:col-span-3">
-            <Select
-              onChange={(e) => setlanguage(e.target.value)}
-              className="mt-1 rounded bg-gray-100 border-slate-300"
-            >
-              <option value="-1">Select language</option>
-              <option value="English">English</option>
-              <option value="German">German</option>
-              <option value="French">French</option>
-            </Select>
+            <CustomTopicSortSelect setEngagement={setEngagement} lists={sortingList}/>
           </label>
         </div>
 
+
+        {/* ======= Matching Criteria Radio BUttons ========= */}
         <label className="block md:col-span-2 mt-5">
           <Label className="font-bold text-lg">Matching Criteria</Label>
           <div className="mt-3">
@@ -568,13 +631,16 @@ const TopicSubmitPost = () => {
               checked={bodyORtitle == "body"}
               onClick={() => setBodyORtitle("body")}
               className="w-3.5 h-3.5"
-            />
+              />
             <label className="text-sm ml-4 font-normal" htmlFor="body">
               Match query in titles and body content
             </label>
           </div>
         </label>
 
+
+
+        {/* ============== Submit Button ============== */}
         <ButtonPrimary
           onClick={(e) => {
             e.preventDefault();
@@ -586,10 +652,10 @@ const TopicSubmitPost = () => {
         >
           Save
         </ButtonPrimary>
-      </form>
+      </div>
 
-      {/* {/ CONTENT FEED CONTAINER /} */}
 
+      {/* ============= CONTENT FEED CONTAINER ============*/}
       <div className="basis-1/3	">
         <WidgetPosts posts={data} />
       </div>
