@@ -1,0 +1,32 @@
+.searchbox {
+    border-radius: 20px;
+    padding-left: 30px;
+    /* box-shadow: 10px 10px 10px 10px rgb(155, 171, 240); */
+  }
+  .searchbox:focus {
+    outline: none;
+    border-color: #3990d8;
+    box-shadow: 0 0 10px #3987c7;
+  }
+  
+  .suggestionlist {
+    display: block !important;
+    width: 87% !important;
+    border: 1px solid #ccc;
+    background-color: rgb(199, 50, 50) !important;
+    font-size: 0.9rem;
+    z-index: 3;
+    position: absolute;
+    top: 42px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-height: 405px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    left: 7%;
+  }
+  .css-41txtf-IconWrapper {
+    min-width: 38px;
+  }
+  

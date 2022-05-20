@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import SectionSliderNewCategories from "../../components/SectionSliderNewCategories/SectionSliderNewCategories";
 import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
-import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
+import SBox from "../../components/SBox/SBox"
 import { useSearchkitVariables, useSearchkit,  } from "@searchkit/client";
 import { gql, useQuery } from "@apollo/client";
 
@@ -61,7 +61,7 @@ const PageHome1 = () => {
       </Helmet>
       {/* {/ Call the  Auto Complete Search Box /} */}
       <SearchBoxMain pageType="categorypage" />
-      
+      <SBox pageType="categorypage"/>
       <div className="relative overflow-hidden pt-6">
         <div className="container relative">
           {/* {/ Category Cards /} */}

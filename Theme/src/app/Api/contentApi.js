@@ -7,13 +7,11 @@ const baseQuery = fetchBaseQuery({
     prepareHeaders: (headers, { getState }) => {
         const user = accountService.userValue;
         const token = user.jwtToken;
-
         // If we have a token set in state, let's assume that we should be passing it.
         if (token) {
             headers.set('Authorization', `Bearer ${token}`)
         }
-
-        return headers
+        return headers;
     },
 })
 
@@ -23,17 +21,18 @@ const contentApi = createApi({
     baseQuery: baseQuery,
     // baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7777" }),
     tagTypes: ["FavouritesFolder", "GetCustomTopics", "FavouritePosts", "FollowedTopics"],
-
+    
     endpoints: (builder) => ({
-
+        
         //=========== FAVOURITE FOLDER QUERIES =============
-
+        
         // get all favourite folders
         getAllFolders: builder.query({
             query: () => ({
                 url: "/api/favouritesFolder/",
             }),
-            providesTags: ["FavouritesFolder"],
+            providesTags: ["FavouritesFolder"], // for auto-fetching
+            keepUnusedDataFor: 0,   // makes caching time 0 (zero) || no caching
         }),
         
         // edit the single folder

@@ -33,8 +33,8 @@ const createCustomTopic = async (req, res) => {
         topicsFields.selection = {};
         topicsFields.filters = {};
 
-        // topicsFields.userId = req.user.id;
-        topicsFields.userId = "622a0c7b24abda1ef66718c7";
+        topicsFields.userId = req.user.id;
+        // topicsFields.userId = "622a0c7b24abda1ef66718c7";
 
         if (req.body.name != undefined) {
             topicsFields.name = req.body.name;
@@ -137,15 +137,15 @@ const getCustomTopic = async (req, res) => {
 const getCustomTopics = async (req, res) => {
 
     try {
-        // const userId = req.user.id;
-        const userId = "622a0c7b24abda1ef66718c7";
+        const userId = req.user.id;
+        // const userId = "622a0c7b24abda1ef66718c7";
 
         const customTopics = await customTopicSearchModel.find({ userId: userId }).cache({
             key: userId
         });
 
         if (customTopics.length == 0) {
-            return res.status(404).json({ errorMsg: "topics not found" });
+            return res.status(200).json({ InformationMsg: "No custom topics yet" })
         }
 
         return res.status(200).json(customTopics);

@@ -7,15 +7,14 @@ import WidgetPosts from "../../components/WidgetPosts/WidgetPosts";
 import Chip from "../../components/chip/chip";
 import ExcludeResultInputField from "../../components/ExcludeResultInputField/ExcludeResultInputField";
 import LimitResultInputField from "../../components/LimitResultInputField/LimitResultInputField";
-import { useCreateTopicMutation, useEditCreateCustsomtopicMutation } from "../../app/Api/contentApi";
+import { useCreateTopicMutation } from "../../app/Api/contentApi";
 import cogoToast from "cogo-toast";
 import { gql, useQuery } from "@apollo/client";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import CustomTopicLanguageSelect from "../../components/CustomTopicLanguageSelect/CustomTopicLanguageSelect";
-import CustomTopicSortSelect from "../../components/CustomTopicSortSelect/CustomTopicSortSelect"
-import DateRangeDropDown from "../../components/CustomTopicDateRange/DateRangeDropDown"
-
+import CustomTopicSortSelect from "../../components/CustomTopicSortSelect/CustomTopicSortSelect";
+import DateRangeDropDown from "../../components/CustomTopicDateRange/DateRangeDropDown";
 
 const query = gql`
   query resultSet(
@@ -189,6 +188,41 @@ const sortingList = [
 ];
 
 const TopicSubmitPost = () => {
+  // states
+  const [topicName, setTopicName] = useState(null); // topic name
+
+  // selection
+  // const [domainORtopic, setDomainORtopic] = useState("topics"); // match_type
+
+  const [any_keywords_list, setAny_keywords_list] = useState([]); // any_keywords_list
+  const [any_keywords_value, setAny_keywords_value] = useState(""); // any_keywords_value
+
+  const [must_also_keywords_list, setMust_also_keywords_list] = useState([]); // must_also_keywords_list
+  const [must_also_keywords_value, setMust_also_keywords_value] = useState(""); // must_also_keywords_value
+
+  const [must_not_contains_keywords_list, setMust_not_contains_keywords_list] =
+    useState([]); // must_not_contains_keywords_list
+  const [
+    must_not_contains_keywords_value,
+    setMust_not_contains_keywords_value,
+  ] = useState(""); // must_not_contains_keywords_value
+
+  const [exclude_domains_list, setExclude_domains_list] = useState([]); // exclude_domains
+  const [limit_domains_results_list, setLimit_domains_results_list] = useState(
+    []
+  ); // limit_domains_results
+
+  // filters
+  const [bodyORtitle, setBodyORtitle] = useState("titles");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [language, setlanguage] = useState(null);
+  const [engagement, setEngagement] = useState(null);
+
+  // RTK-Query
+  const [createTopic, { isError, isLoading }] = useCreateTopicMutation();
+
+  // SEARCH-KIT
   const api = useSearchkit();
   const variables = useSearchkitVariables();
   if (variables?.page.size) {
@@ -197,62 +231,18 @@ const TopicSubmitPost = () => {
   console.log(variables?.page.size);
 
   var { data, error, loading } = useQuery(query, { variables });
-  
+
   if (error) {
     cogoToast.error("This is a error message", {
       position: "top-left",
     });
   }
 
-  if (loading) {
-    <div style={{ display: "flex", alignItems: "center" }}>
-      {" "}
-      <LoadingVideo />
-    </div>;
-  }
-  
-  // states
-  const [topicName, setTopicName] = useState(null); // topic name
-  
-  // selection
-  const [domainORtopic, setDomainORtopic] = useState("topics"); // match_type
-  
-  const [any_keywords_list, setAny_keywords_list] = useState([]); // any_keywords_list
-  const [any_keywords_value, setAny_keywords_value] = useState(""); // any_keywords_value
-  
-  const [must_also_keywords_list, setMust_also_keywords_list] = useState([]); // must_also_keywords_list
-  const [must_also_keywords_value, setMust_also_keywords_value] = useState(""); // must_also_keywords_value
-  
-  const [must_not_contains_keywords_list, setMust_not_contains_keywords_list] =
-    useState([]); // must_not_contains_keywords_list
-  const [
-    must_not_contains_keywords_value,
-    setMust_not_contains_keywords_value,
-  ] = useState(""); // must_not_contains_keywords_value
-  
-  const [exclude_domains_list, setExclude_domains_list] = useState([]); // exclude_domains
-  const [limit_domains_results_list, setLimit_domains_results_list] = useState(
-    []
-    ); // limit_domains_results
-    
-    // filters
-    const [bodyORtitle, setBodyORtitle] = useState("titles");
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [language, setlanguage] = useState(null);
-    const [engagement, setEngagement] = useState(null);
-
-
-    // RTK-Query 
-    const [createTopic, { isError, isLoading }] = useCreateTopicMutation();
-    const [editCreateCustsomtopic,editCreateCustsomtopic_Obj] = useEditCreateCustsomtopicMutation();
-    
-    const custom_topic = {
+  const custom_topic = {
     _id: "1211",
     userId: "asdasfsa468sa46sag",
     name: topicName,
     any_keywords: any_keywords_list,
-    match_type: domainORtopic,
     must_also_keywords: must_also_keywords_list,
     must_not_contains_keywords: must_not_contains_keywords_list,
     exclude_domains: exclude_domains_list,
@@ -337,8 +327,8 @@ const TopicSubmitPost = () => {
   };
 
   // USE-EFFECTS
-  useEffect( async () => {
-    let filterObj = [{ criteria: domainORtopic, bodyORtitle: bodyORtitle }];
+  useEffect(async () => {
+    let filterObj = [{ bodyORtitle: bodyORtitle }];
     if (any_keywords_list.length !== 0) {
       filterObj.push({
         any_keywords_list: any_keywords_list,
@@ -385,27 +375,12 @@ const TopicSubmitPost = () => {
       });
     }
 
-    // try{
-    //   // RTK-Query 
-    //   const res = await editCreateCustsomtopic({filterObj});
-    //   console.log(res.data);
-
-    //   if(res.error){
-    //     console.log(res.error);
-    //   }
-    // }catch(err){
-    //   console.log(err)
-    //   console.log(editCreateCustsomtopic_Obj.error);
-    // }
-
     console.log("CUSTOM TOPIC ", filterObj);
     let jsonob = JSON.stringify(filterObj);
     api.toggleFilter({ identifier: "CustomFilter", value: jsonob });
     api.setPage({ size: 20, from: 0 });
     api.search();
   }, [
-    bodyORtitle,
-    domainORtopic,
     engagement,
     language,
     endDate,
@@ -415,10 +390,17 @@ const TopicSubmitPost = () => {
     any_keywords_list,
     must_also_keywords_list,
     must_not_contains_keywords_list,
-    limit_domains_results_list
+    limit_domains_results_list,
   ]);
 
   console.log("SEARCHKIT DATA", data);
+
+  if (loading) {
+    <div style={{ display: "flex", alignItems: "center" }}>
+      {" "}
+      <LoadingVideo />
+    </div>;
+  }
   return (
     <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
       {/* {/ div container /} */}
@@ -435,9 +417,10 @@ const TopicSubmitPost = () => {
 
         <label className="block md:col-span-2">
           <Label className="font-bold text-lg">Build Your Query</Label>
-          <p className="mt-1 text-sm text-neutral-500 ">let's start by</p>
 
-          <div className="mt-2">
+          {/* <p className="mt-1 text-sm text-neutral-500 ">let's start by</p> */}
+
+          {/* <div className="mt-2">
             <input
               type="radio"
               id="topics"
@@ -450,7 +433,7 @@ const TopicSubmitPost = () => {
             <label className="text-sm ml-4 font-normal" htmlFor="topics">
               Adding topics and keywords
             </label>
-          </div>
+          </div> 
           <div className="mt-2">
             <input
               type="radio"
@@ -464,7 +447,7 @@ const TopicSubmitPost = () => {
             <label className="text-sm ml-4 font-normal" htmlFor="domians">
               Adding domins as sources
             </label>
-          </div>
+          </div> */}
 
           <p className="mt-5 text-base text-neutral-500 font-medium">
             Each result must contain at least <b>ONE</b> one of these keywords
@@ -606,27 +589,34 @@ const TopicSubmitPost = () => {
           <Label className="font-bold text-lg">Set Default Filters</Label>
         </label>
 
-
         {/* Set Default Filters */}
         {/* ============== Date Range DropDown ================= */}
         <div className="grid grid-cols-12 md:col-span-2 gap-2">
           <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
-            <DateRangeDropDown setStartDate={setStartDate} setEndDate={setEndDate}/>
+            <DateRangeDropDown
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+            />
           </label>
 
-        {/* ============== Language SelectBox ================= */}
+          {/* ============== Language SelectBox ================= */}
           <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
             <span className="mt-1 bg-gray-100">
-              <CustomTopicLanguageSelect setlanguage={setlanguage} lists={LanguagesList} />
+              <CustomTopicLanguageSelect
+                setlanguage={setlanguage}
+                lists={LanguagesList}
+              />
             </span>
           </label>
 
-        {/* ============== Sorting SelectBox ================= */}
+          {/* ============== Sorting SelectBox ================= */}
           <label className="col-span-6 sm:col-span-4 md:col-span-3">
-            <CustomTopicSortSelect setEngagement={setEngagement} lists={sortingList}/>
+            <CustomTopicSortSelect
+              setEngagement={setEngagement}
+              lists={sortingList}
+            />
           </label>
         </div>
-
 
         {/* ======= Matching Criteria Radio BUttons ========= */}
         <label className="block md:col-span-2 mt-5">
@@ -652,14 +642,12 @@ const TopicSubmitPost = () => {
               checked={bodyORtitle == "body"}
               onClick={() => setBodyORtitle("body")}
               className="w-3.5 h-3.5"
-              />
+            />
             <label className="text-sm ml-4 font-normal" htmlFor="body">
               Match query in titles and body content
             </label>
           </div>
         </label>
-
-
 
         {/* ============== Submit Button ============== */}
         <ButtonPrimary
@@ -674,7 +662,6 @@ const TopicSubmitPost = () => {
           Save
         </ButtonPrimary>
       </div>
-
 
       {/* ============= CONTENT FEED CONTAINER ============*/}
       <div className="basis-1/3	">

@@ -1,5 +1,5 @@
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -28,14 +28,15 @@ const TopicsPage = ({ className = "" }) => {
   const [folderID, setFolderID] = useState();
   const [Id, setId] = useState();
   const [showModal, setshowModal] = useState(false);
+  const [allFolders, setAllFolders] = useState(false);
 
   let { path, url } = useRouteMatch();
 
   const getAllFolders = useGetAllFoldersQuery();
-  console.log(getAllFolders);
-  const cardData = useGetAllFavouritePostsQuery(folderID);
+  const favouritePosts = useGetAllFavouritePostsQuery(folderID);
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
+  console.log(getAllCustomTopics);
   const customData = useGetAllCustomTopicsQuery(Id);
   // const getAllCustomPosts = useGetAllCustomTopicsQuery(Id);
 
@@ -113,7 +114,17 @@ const TopicsPage = ({ className = "" }) => {
               </li>
               {!getAllCustomTopics.data ? (
                 <li className="flex sm:justify-start lg:justify-center items-center">
-                  <ReactLoading type="bubbles" color="#9c4be7" className="w-32" />
+                  <ReactLoading
+                    type="bubbles"
+                    color="#9c4be7"
+                    className="w-32"
+                  />
+                </li>
+              ) : getAllCustomTopics.data?.InformationMsg ? (
+                <li className="flex justify-start items-center">
+                  <p className="text-sm ml-6 text-slate-400">
+                    {getAllCustomTopics.data.InformationMsg}
+                  </p>
                 </li>
               ) : (
                 getAllCustomTopics.data?.map(({ name, _id }, index) => {
@@ -189,12 +200,22 @@ const TopicsPage = ({ className = "" }) => {
                 </button>
               </li>
 
-              {!getAllCustomTopics.data ? (
+              {!getAllFolders?.data ? (
                 <li className="flex sm:justify-start lg:justify-center items-center">
-                <ReactLoading type="bubbles" color="#9c4be7" className="w-32" />
-              </li>
+                  <ReactLoading
+                    type="bubbles"
+                    color="#9c4be7"
+                    className="w-32"
+                  />
+                </li>
+              ) : getAllFolders.data?.InformationMsg ? (
+                <li className="flex justify-start items-center">
+                  <p className="text-sm ml-6 text-slate-400">
+                    {getAllFolders.data.InformationMsg}
+                  </p>
+                </li>
               ) : (
-                getAllFolders.data?.map(({ folderName, _id }, index) => {
+                getAllFolders?.data?.map(({ folderName, _id }, index) => {
                   return (
                     <>
                       {toggleFolderNameHide &&
@@ -333,7 +354,7 @@ const TopicsPage = ({ className = "" }) => {
                 render={() => {
                   return (
                     <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
-                      {cardData?.data?.map((value, index) => {
+                      {favouritePosts?.data?.map((value, index) => {
                         return (
                           <>
                             <Card12 key={index} cardItems={value} />

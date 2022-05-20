@@ -8,3 +8,18 @@ Content-Type: application/json
     # "customQuery":"war",
     # "category": "war"
 }
+
+###
+
+POST http://localhost:7777/api/insights/getCustomTopicInsights
+Content-Type: application/json
+
+{
+    "startDate" :"2022-03-01",
+    "endDate":"2022-03-10",
+    "exclude_domains_list":["businessinsider.com"],
+    "any_keywords_list":["war"],
+    "must_not_contains_keywords_list":["fun"],
+    "limit_domains_results_list":["dailymail.co.uk"]
+
+}

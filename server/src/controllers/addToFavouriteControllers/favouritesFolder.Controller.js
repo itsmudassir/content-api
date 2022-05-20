@@ -8,19 +8,19 @@ import { validationResult } from "express-validator";
 // access: PROTECTED
 const postFavouriteFolder = async (req, res) => {
 
+    // const userId = "622a0c7b24abda1ef66718c7";
+    const userId = req.user.id;
+
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
         return res.status(400).json(validationErrors.array()[0]) // 400 for bad request
     }
 
-    if(await favouritesFolderModel.findOne({folderName: req.body.folderName})){
-        return res.status(400).json({errorMsg:"Folder name already exist"}) // 400 for bad request
+    if (await favouritesFolderModel.findOne({ folderName: req.body.folderName, userId: userId })) {
+        return res.status(400).json({ errorMsg: "Folder name already exist" }) // 400 for bad request
     }
 
     const folderName = req.body.folderName;
-    // const userId = "622a0c7b24abda1ef66718c7";
-    const userId = req.user.id;
-
     try {
         const favouritesFolder = new favouritesFolderModel({
             userId: userId,
@@ -60,7 +60,7 @@ const getSingleFavouriteFolder = async (req, res) => {
 
 
 
-// route:  GET /api/favouritesFolder/all_folders/:id
+// route:  GET /api/favouritesFolder/
 // desc:   reading all user folders by user id
 // access: PROTECTED
 const getAllFavouriteFolder = async (req, res) => {
@@ -69,8 +69,8 @@ const getAllFavouriteFolder = async (req, res) => {
         const userId = req.user.id;
         const allFolders = await favouritesFolderModel.find({ userId: userId });
 
-        if (!allFolders) {
-            return res.status(404).json({ errorMsg: "Folders not found" })
+        if (allFolders.length == 0) {
+            return res.status(200).json({ InformationMsg: "No folders yet" })
         }
 
         return res.status(200).json(allFolders);
@@ -126,8 +126,8 @@ const updateFavouriteFolder = async (req, res) => {
         return res.status(400).json(validationErrors.array()[0])
     }
 
-    if(await favouritesFolderModel.findOne({folderName: req.body.folderName})){
-        return res.status(400).json({errorMsg:"Folder name already exist"}) // 400 for bad request
+    if (await favouritesFolderModel.findOne({ folderName: req.body.folderName })) {
+        return res.status(400).json({ errorMsg: "Folder name already exist" }) // 400 for bad request
     }
     try {
         const folderName = req.body.folderName;
