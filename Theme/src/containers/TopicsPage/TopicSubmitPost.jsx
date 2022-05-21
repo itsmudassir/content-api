@@ -220,7 +220,7 @@ const TopicSubmitPost = () => {
   const [engagement, setEngagement] = useState(null);
 
   // RTK-Query
-  const [createTopic, { isError, isLoading }] = useCreateTopicMutation();
+  const [createTopic, createTopic_Obj] = useCreateTopicMutation();
 
   // SEARCH-KIT
   const api = useSearchkit();
@@ -228,7 +228,6 @@ const TopicSubmitPost = () => {
   if (variables?.page.size) {
     variables.page.size = 20;
   }
-  console.log(variables?.page.size);
 
   var { data, error, loading } = useQuery(query, { variables });
 
@@ -239,17 +238,17 @@ const TopicSubmitPost = () => {
   }
 
   const custom_topic = {
-    _id: "1211",
-    userId: "asdasfsa468sa46sag",
     name: topicName,
     any_keywords: any_keywords_list,
     must_also_keywords: must_also_keywords_list,
     must_not_contains_keywords: must_not_contains_keywords_list,
     exclude_domains: exclude_domains_list,
     limit_domains_results: limit_domains_results_list,
+    type: bodyORtitle,
     enddate: endDate,
     startdate: startDate,
     language: language,
+    engagement: engagement,
   };
 
   // EVENT HANDLERS
@@ -324,6 +323,23 @@ const TopicSubmitPost = () => {
     setLimit_domains_results_list(
       limit_domains_results_list.filter((i) => i !== item)
     );
+  };
+
+  // create custom topic in DB
+  const createCustomTopic = async (customTopic) => {
+    console.log("Custom Topic", customTopic);
+    try {
+      const res = await createTopic(customTopic);
+      console.log(res);
+      if (res.data) cogoToast.success(res.data.successMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg);
+    } catch (err) {
+      console.log("ERROR OCCOURED WHILE CREATING CUSTOM TOPIC IN DB", err);
+      console.log(
+        "ERROR OCCOURED WHILE CREATING CUSTOM TOPIC IN DB",
+        createTopic_Obj.error
+      );
+    }
   };
 
   // USE-EFFECTS
@@ -651,12 +667,7 @@ const TopicSubmitPost = () => {
 
         {/* ============== Submit Button ============== */}
         <ButtonPrimary
-          onClick={(e) => {
-            e.preventDefault();
-
-            // createTopic(custom_topic);
-            // console.log("Custom Topic", filterObj);
-          }}
+          onClick={(e) => createCustomTopic(custom_topic)}
           className="md:col-span-2"
         >
           Save

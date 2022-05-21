@@ -127,7 +127,7 @@ const TopicsPage = ({ className = "" }) => {
                   </p>
                 </li>
               ) : (
-                getAllCustomTopics.data?.map(({ name, _id }, index) => {
+                getAllCustomTopics?.data?.map(({ name, _id }, index) => {
                   return (
                     <li key={index}>
                       <div>

@@ -20,7 +20,7 @@ const contentApi = createApi({
     reducerPath: "contentApi",
     baseQuery: baseQuery,
     // baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7777" }),
-    tagTypes: ["FavouritesFolder", "GetCustomTopics", "FavouritePosts", "FollowedTopics"],
+    tagTypes: ["FavouritesFolder", "CustomTopics", "FavouritePosts", "FollowedTopics"],
     
     endpoints: (builder) => ({
         
@@ -71,17 +71,18 @@ const contentApi = createApi({
         getAllCustomTopics: builder.query({
             query: () => ({
                 url: "/api/customTopicSearch/getcustomtopics",
+                method: "GET"
             }),
-            providesTags: ["GetCustomTopics"],
+            providesTags: ["CustomTopics"],
         }),
         
         //deleteCustomTopic
         deleteCustomTopic: builder.mutation({
             query: ({ id }) => ({
-                url: `api/customTopicSearch/deletecustomtopic/${id}`,
+                url: `/api/customTopicSearch/deletecustomtopic/${id}`,
                 method: "DELETE",
             }),
-            // invalidatesTags: ["GetCustomTopics"],
+            invalidatesTags: ["CustomTopics"],
         }),
         
         //Update CustomTopics
@@ -91,7 +92,7 @@ const contentApi = createApi({
                 method: "PATCH",
                 body: rest,
             }),
-            // invalidatesTags: ["GetCustomTopics"],
+            invalidatesTags: ["CustomTopics"],
         }),
 
         // create customTopic 
@@ -101,9 +102,9 @@ const contentApi = createApi({
                 method: "POST",
                 body: topicFields,
             }),
-            // invalidatesTags: ["GetCustomTopics"],
+            invalidatesTags: ["CustomTopics"],
         }),
-
+        
         // editCreateCustsomtopic
         editCreateCustsomtopic: builder.mutation({
             query: (obj)=>({
@@ -111,6 +112,7 @@ const contentApi = createApi({
                 method: "POST",
                 body: obj 
             }),
+            invalidatesTags: ["CustomTopics"],
         }),
         
 

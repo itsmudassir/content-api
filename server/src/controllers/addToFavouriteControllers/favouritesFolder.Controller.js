@@ -16,6 +16,7 @@ const postFavouriteFolder = async (req, res) => {
         return res.status(400).json(validationErrors.array()[0]) // 400 for bad request
     }
 
+    // check if folder name already exisit in DB 
     if (await favouritesFolderModel.findOne({ folderName: req.body.folderName, userId: userId })) {
         return res.status(400).json({ errorMsg: "Folder name already exist" }) // 400 for bad request
     }
