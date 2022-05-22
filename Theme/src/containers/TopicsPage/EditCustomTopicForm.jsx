@@ -194,9 +194,9 @@ const sortingList = [
   },
 ];
 
-const EditCustomTopicForm = (values) => {
+const EditCustomTopicForm = (props) => {
   const history = useHistory();
-
+  console.log(props.topicData);
   // states
 
   const [loadedFlag, setLoadedFlag] = useState(false);
@@ -229,13 +229,13 @@ const EditCustomTopicForm = (values) => {
   const [language, setlanguage] = useState(null);
   const [engagement, setEngagement] = useState(null);
 
-  // if (values) {
+  // if (props) {
   //   setLoadedFlag(true);
-  //   console.log("In if", values);
+  //   console.log("In if", props);
   // }
 
   // RTK-Query
-  const [updateCustomTopic, { isError, isLoading }] =
+  const [updateCustomTopic, updateCustomTopic_Obj] =
     useUpdateCustomTopicMutation();
 
   // SEARCH-KIT
@@ -255,23 +255,23 @@ const EditCustomTopicForm = (values) => {
 
   // USE-EFFECTS
   useEffect(() => {
-    setAny_keywords_list(values?.topicData?.selection?.any_keywords);
+    setAny_keywords_list(props?.topicData?.selection?.any_keywords);
     setMust_also_keywords_list(
-      values?.topicData?.selection?.must_also_keywords
+      props?.topicData?.selection?.must_also_keywords
     );
     setMust_not_contains_keywords_list(
-      values?.topicData?.selection?.must_not_contains_keywords
+      props?.topicData?.selection?.must_not_contains_keywords
     );
-    setExclude_domains_list(values?.topicData?.selection?.exclude_domains);
+    setExclude_domains_list(props?.topicData?.selection?.exclude_domains);
     setLimit_domains_results_list(
-      values?.topicData?.selection?.limit_domains_results
+      props?.topicData?.selection?.limit_domains_results
     );
-    setStartDate(values?.topicData?.filters?.startdate);
-    setEndDate(values?.topicData?.filters?.enddate);
-    setTopicName(values?.topicData?.name);
-    setlanguage(values?.topicData?.filters?.language);
-    setEngagement(values?.topicData?.filters?.engagement);
-    setBodyORtitle(values?.topicData?.filters?.type);
+    setStartDate(props?.topicData?.filters?.startdate);
+    setEndDate(props?.topicData?.filters?.enddate);
+    setTopicName(props?.topicData?.name);
+    setlanguage(props?.topicData?.filters?.language);
+    setEngagement(props?.topicData?.filters?.engagement);
+    setBodyORtitle(props?.topicData?.filters?.type);
   }, []);
 
   useEffect(async () => {
@@ -322,7 +322,7 @@ const EditCustomTopicForm = (values) => {
       });
     }
 
-    console.log("CUSTOM TOPIC ", filterObj);
+    console.log("EDIT CUSTOM TOPIC ", filterObj);
     let jsonob = JSON.stringify(filterObj);
     api.toggleFilter({ identifier: "CustomFilter", value: jsonob });
     api.setPage({ size: 20, from: 0 });
@@ -413,9 +413,37 @@ const EditCustomTopicForm = (values) => {
       limit_domains_results_list.filter((i) => i !== item)
     );
   };
+
+  const updateTopic = async () => {
+    const custom_topic = {
+      name: topicName,
+      any_keywords: any_keywords_list,
+      must_also_keywords: must_also_keywords_list,
+      must_not_contains_keywords: must_not_contains_keywords_list,
+      exclude_domains: exclude_domains_list,
+      limit_domains_results: limit_domains_results_list,
+      type: bodyORtitle,
+      enddate: endDate,
+      startdate: startDate,
+      language: language,
+      engagement: engagement,
+    };
+    console.log(custom_topic);
+    try {
+      const res = await updateCustomTopic({custom_topic, id:props.topicData._id});
+      if (res.data) cogoToast.success(res.data.successMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg);
+    } catch (err) {
+      console.log("ERROR OCCOURED WHILE CREATING CUSTOM TOPIC IN DB", err);
+      console.log(
+        "ERROR OCCOURED WHILE CREATING CUSTOM TOPIC IN DB",
+        updateCustomTopic_Obj.error
+      );
+    }
+  };
   return (
     <>
-      {values ? (
+      {props ? (
         <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
           {/* {/ div container /} */}
           <div className="basis-2/3  grid md:grid-cols-2 gap-6">
@@ -425,7 +453,7 @@ const EditCustomTopicForm = (values) => {
                 type="text"
                 className="mt-1 rounded border-slate-300"
                 placeholder="give a name to your such as, 'Digital Marketing'"
-                // defaultValue={values?.topicData?.name}
+                // defaultValue={props?.topicData?.name}
                 value={topicName}
                 onChange={(e) => setTopicName(e.target.value)}
               />
@@ -670,25 +698,7 @@ const EditCustomTopicForm = (values) => {
             </label>
 
             <ButtonPrimary
-              onClick={(e) => {
-                e.preventDefault();
-                const custom_topic = {
-                  _id: values?.topicData?._id,
-                  userId: "123abc...",
-                  name: topicName,
-                  any_keywords: any_keywords_list,
-                  must_also_keywords: must_also_keywords_list,
-                  must_not_contains_keywords: must_not_contains_keywords_list,
-                  exclude_domains: exclude_domains_list,
-                  limit_domains_results: limit_domains_results_list,
-                  enddate: endDate,
-                  startdate: startDate,
-                  language: language,
-                };
-                updateCustomTopic(custom_topic);
-                // history.push("/topics");
-                console.log("in update btn", custom_topic);
-              }}
+              onClick={() => updateTopic()}
               className="md:col-span-2"
             >
               Update

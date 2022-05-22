@@ -188,6 +188,7 @@ const sortingList = [
 ];
 
 const TopicSubmitPost = () => {
+  
   // states
   const [topicName, setTopicName] = useState(null); // topic name
 

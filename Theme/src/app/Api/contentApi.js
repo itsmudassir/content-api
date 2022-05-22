@@ -74,6 +74,17 @@ const contentApi = createApi({
                 method: "GET"
             }),
             providesTags: ["CustomTopics"],
+            keepUnusedDataFor: 0,   // makes caching time 0 (zero) || no caching
+        }),
+
+        // Get Single CustomTopic
+        getSingleCustomTopic : builder.query({
+            query: (id)=>({
+                url: `/api/customTopicSearch/getcustomtopic/${id}`,
+                method: "GET"
+            }),
+            providesTags: ["CustomTopics"],
+            keepUnusedDataFor: 0,   // makes caching time 0 (zero) seconds || no caching
         }),
         
         //deleteCustomTopic
@@ -87,10 +98,10 @@ const contentApi = createApi({
         
         //Update CustomTopics
         updateCustomTopic: builder.mutation({
-            query: ({ _id, ...rest }) => ({
-                url: `/api/customTopicSearch/updatecustomtopic/${_id}`,
+            query: (params) => ({
+                url: `/api/customTopicSearch/updatecustomtopic/${params.id}`,
                 method: "PATCH",
-                body: rest,
+                body: params.custom_topic,
             }),
             invalidatesTags: ["CustomTopics"],
         }),
@@ -176,6 +187,7 @@ const contentApi = createApi({
                 method: "GET"
             }),
             providesTags: ["FollowedTopics"],
+            keepUnusedDataFor: 0,   // makes caching time 0 (zero) || no caching
         }),
         
         // Create/follow Followed-topics by topic-name with authenticated user_id
@@ -223,6 +235,7 @@ export const {
     useGetAllCustomTopicsQuery,
     useDeleteCustomTopicMutation,
     useEditCreateCustsomtopicMutation,
+    useGetSingleCustomTopicQuery,
     useUpdateCustomTopicMutation,
     useDeleteFolderMutation,
     useUpdateFolderMutation,

@@ -13,6 +13,7 @@ import {
   useDeleteCustomTopicMutation,
   useDeleteFolderMutation,
   useUpdateFolderMutation,
+  useGetSingleCustomTopicQuery,
 } from "../../app/Api/contentApi";
 import ButtonCircle from "../../components/Button/ButtonCircle";
 import Input from "../../components/Input/Input";
@@ -26,19 +27,21 @@ import ReactLoading from "react-loading";
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
   const [folderID, setFolderID] = useState();
-  const [Id, setId] = useState();
+  const [customTopicId, setCustomTopicId] = useState();
   const [showModal, setshowModal] = useState(false);
   const [allFolders, setAllFolders] = useState(false);
 
   let { path, url } = useRouteMatch();
 
+  // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
   const favouritePosts = useGetAllFavouritePostsQuery(folderID);
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
-  console.log(getAllCustomTopics);
-  const customData = useGetAllCustomTopicsQuery(Id);
-  // const getAllCustomPosts = useGetAllCustomTopicsQuery(Id);
+  const customData = useGetAllCustomTopicsQuery(customTopicId);
+  const singleCustomTopic = useGetSingleCustomTopicQuery(customTopicId);
+  console.log(singleCustomTopic);
+  // const getAllCustomPosts = useGetAllCustomTopicsQuery(customTopicId);
 
   var [deletePost, { isLoading, isError }] = useDeleteCustomTopicMutation();
 
@@ -136,7 +139,7 @@ const TopicsPage = ({ className = "" }) => {
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
                           to={`${url}/custom_topics/${_id}`}
                           onClick={() => {
-                            setId(_id);
+                            setCustomTopicId(_id);
                           }}
                           onMouseEnter={(e) => {
                             setToggleTopicButtonsHide(true);
@@ -154,7 +157,7 @@ const TopicsPage = ({ className = "" }) => {
                               <>
                                 <button
                                   onClick={() => {
-                                    setId(_id);
+                                    setCustomTopicId(_id);
                                   }}
                                 >
                                   <FontAwesomeIcon
@@ -330,10 +333,19 @@ const TopicsPage = ({ className = "" }) => {
                 render={() => {
                   return (
                     <>
-                      {customData?.isFetching == false &&
+                      {singleCustomTopic.isFetching == false &&
+                      singleCustomTopic.isError == false &&
+                      singleCustomTopic.isLoading == false ? (
+                        <EditCustomTopicForm
+                          topicData={singleCustomTopic?.data}
+                        />
+                      ) : (
+                        <div className="flex justify-center mt-20 text-2xl text-slate-500 ">Select a topic</div>
+                      )}
+                      {/* {customData?.isFetching == false &&
                         customData?.data?.map((values, index) => {
                           if (
-                            values._id == Id &&
+                            values._id == customTopicId &&
                             customData?.isSuccess == true
                           ) {
                             return (
@@ -344,7 +356,7 @@ const TopicsPage = ({ className = "" }) => {
                               </>
                             );
                           }
-                        })}
+                        })} */}
                     </>
                   );
                 }}
