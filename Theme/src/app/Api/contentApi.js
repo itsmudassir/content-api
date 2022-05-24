@@ -101,7 +101,7 @@ const contentApi = createApi({
             query: (params) => ({
                 url: `/api/customTopicSearch/updatecustomtopic/${params.id}`,
                 method: "PATCH",
-                body: params.custom_topic,
+                body: params.customTopic,
             }),
             invalidatesTags: ["CustomTopics"],
         }),

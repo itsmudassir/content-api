@@ -23,6 +23,7 @@ import cogoToast from "cogo-toast";
 import Card12 from "../../components/Card11/Card12";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import ReactLoading from "react-loading";
+import CustomTopicPosts from "./CustomTopicPosts";
 
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
@@ -137,7 +138,8 @@ const TopicsPage = ({ className = "" }) => {
                         <NavLink
                           className="flex px-6 py-2.5 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
-                          to={`${url}/custom_topics/${_id}`}
+                          to={`${url}/custom-topic-posts/${_id}`}
+                          // to={`/saad`}
                           onClick={() => {
                             setCustomTopicId(_id);
                           }}
@@ -156,8 +158,11 @@ const TopicsPage = ({ className = "" }) => {
                             toggleTopicButtonsHideId === _id ? (
                               <>
                                 <button
-                                  onClick={() => {
+                                  title="Edit Topic"
+                                  onClick={(e) => {
+                                    e.preventDefault();
                                     setCustomTopicId(_id);
+                                    history.push(`${url}/custom_topics/${_id}`);
                                   }}
                                 >
                                   <FontAwesomeIcon
@@ -167,7 +172,8 @@ const TopicsPage = ({ className = "" }) => {
                                 </button>
 
                                 <button
-                                  style={{ paddingLeft: "12px" }}
+                                  title="Delete Topic"
+                                  className="ml-4"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     deletePost({ id: _id });
@@ -329,6 +335,20 @@ const TopicsPage = ({ className = "" }) => {
 
             <Switch>
               <Route
+                path={`${path}/custom-topic-posts/:id`}
+                render={() => {
+                  return (
+                    <>
+                      {singleCustomTopic.isFetching == false &&
+                      singleCustomTopic.isError == false &&
+                      singleCustomTopic.isLoading == false ? (
+                        <CustomTopicPosts topicData={singleCustomTopic?.data} />
+                      ) : null}
+                    </>
+                  );
+                }}
+              />
+              <Route
                 path={`${path}/custom_topics/:id`}
                 render={() => {
                   return (
@@ -340,7 +360,9 @@ const TopicsPage = ({ className = "" }) => {
                           topicData={singleCustomTopic?.data}
                         />
                       ) : (
-                        <div className="flex justify-center mt-20 text-2xl text-slate-500 ">Select a topic</div>
+                        <div className="flex justify-center mt-20 text-2xl text-slate-500 ">
+                          Select a topic
+                        </div>
                       )}
                       {/* {customData?.isFetching == false &&
                         customData?.data?.map((values, index) => {

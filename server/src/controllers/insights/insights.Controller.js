@@ -619,7 +619,7 @@ const getCustomTopicInsights = async (req, res) => {
 
   
 
-        if (any_keywords_list !== null) {
+        if (any_keywords_list !== null && must_also_keywords_list !== null) {
           should.push({
             "terms": {
               "title": any_keywords_list
@@ -646,8 +646,42 @@ const getCustomTopicInsights = async (req, res) => {
             }
           })
 
+        }
 
 
+
+        if (any_keywords_list !== null && must_also_keywords_list === null) {
+          should.push({
+            "terms": {
+              "title": any_keywords_list
+            }
+          })
+
+
+          should.push({
+            "terms": {
+              "maintext": any_keywords_list
+            }
+          })
+
+
+        }
+
+
+        if (any_keywords_list === null && must_also_keywords_list !== null) {
+
+          should.push({
+            "terms": {
+              "title": must_also_keywords_list
+            }
+          })
+
+
+          should.push({
+            "terms": {
+              "maintext": must_also_keywords_list
+            }
+          })
 
         }
 

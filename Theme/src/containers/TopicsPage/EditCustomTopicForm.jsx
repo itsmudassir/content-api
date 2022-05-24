@@ -199,7 +199,7 @@ const EditCustomTopicForm = (props) => {
   console.log(props.topicData);
   // states
 
-  const [loadedFlag, setLoadedFlag] = useState(false);
+  const [timer, setTimer] = useState(false);
   const [topicName, setTopicName] = useState(""); // topic name
 
   // selection
@@ -228,6 +228,7 @@ const EditCustomTopicForm = (props) => {
   const [endDate, setEndDate] = useState(null);
   const [language, setlanguage] = useState(null);
   const [engagement, setEngagement] = useState(null);
+  const [customState, setCustomState] = useState(null);
 
   // if (props) {
   //   setLoadedFlag(true);
@@ -239,26 +240,23 @@ const EditCustomTopicForm = (props) => {
     useUpdateCustomTopicMutation();
 
   // SEARCH-KIT
-  const api = useSearchkit();
-  const variables = useSearchkitVariables();
-  if (variables?.page.size) {
-    variables.page.size = 20;
-  }
+  // const api = useSearchkit();
+  // const variables = useSearchkitVariables();
+  // if (variables?.page.size) {
+  //   variables.page.size = 20;
+  // }
+  // var { data, error, loading } = useQuery(query, { variables });
 
-  var { data, error, loading } = useQuery(query, { variables });
-
-  if (error) {
-    cogoToast.error("This is a error message", {
-      position: "top-left",
-    });
-  }
+  // if (error) {
+  //   cogoToast.error("This is a error message", {
+  //     position: "top-left",
+  //   });
+  // }
 
   // USE-EFFECTS
   useEffect(() => {
     setAny_keywords_list(props?.topicData?.selection?.any_keywords);
-    setMust_also_keywords_list(
-      props?.topicData?.selection?.must_also_keywords
-    );
+    setMust_also_keywords_list(props?.topicData?.selection?.must_also_keywords);
     setMust_not_contains_keywords_list(
       props?.topicData?.selection?.must_not_contains_keywords
     );
@@ -272,10 +270,11 @@ const EditCustomTopicForm = (props) => {
     setlanguage(props?.topicData?.filters?.language);
     setEngagement(props?.topicData?.filters?.engagement);
     setBodyORtitle(props?.topicData?.filters?.type);
-  }, []);
+  }, [props.topicData]);
 
-  useEffect(async () => {
+  useEffect(() => {
     let filterObj = [{ bodyORtitle: bodyORtitle }];
+    // let filterObj = [{ bodyORtitle: "title" }];
     if (any_keywords_list.length !== 0) {
       filterObj.push({
         any_keywords_list: any_keywords_list,
@@ -324,9 +323,24 @@ const EditCustomTopicForm = (props) => {
 
     console.log("EDIT CUSTOM TOPIC ", filterObj);
     let jsonob = JSON.stringify(filterObj);
-    api.toggleFilter({ identifier: "CustomFilter", value: jsonob });
-    api.setPage({ size: 20, from: 0 });
-    api.search();
+    const customState1 = {
+      query: "",
+      sortBy: engagement,
+
+      filters: [
+        {
+          identifier: "CustomFilter",
+          value: jsonob,
+        },
+      ],
+      page: {
+        size: 8,
+        from: 0,
+      },
+    };
+    setCustomState(jsonob);
+    // api.setSearchState(customState1);
+    // api.search();
   }, [
     engagement,
     language,
@@ -414,23 +428,26 @@ const EditCustomTopicForm = (props) => {
     );
   };
 
-  const updateTopic = async () => {
-    const custom_topic = {
-      name: topicName,
-      any_keywords: any_keywords_list,
-      must_also_keywords: must_also_keywords_list,
-      must_not_contains_keywords: must_not_contains_keywords_list,
-      exclude_domains: exclude_domains_list,
-      limit_domains_results: limit_domains_results_list,
-      type: bodyORtitle,
-      enddate: endDate,
-      startdate: startDate,
-      language: language,
-      engagement: engagement,
-    };
-    console.log(custom_topic);
+  const custom_topic = {
+    name: topicName,
+    any_keywords: any_keywords_list,
+    must_also_keywords: must_also_keywords_list,
+    must_not_contains_keywords: must_not_contains_keywords_list,
+    exclude_domains: exclude_domains_list,
+    limit_domains_results: limit_domains_results_list,
+    type: bodyORtitle,
+    enddate: endDate,
+    startdate: startDate,
+    language: language,
+    engagement: engagement,
+  };
+  const updateTopic = async (customTopic) => {
+    console.log(customTopic);
     try {
-      const res = await updateCustomTopic({custom_topic, id:props.topicData._id});
+      const res = await updateCustomTopic({
+        customTopic,
+        id: props.topicData._id,
+      });
       if (res.data) cogoToast.success(res.data.successMsg);
       if (res.error) cogoToast.error(res.error.data.errorMsg);
     } catch (err) {
@@ -441,6 +458,7 @@ const EditCustomTopicForm = (props) => {
       );
     }
   };
+
   return (
     <>
       {props ? (
@@ -698,7 +716,10 @@ const EditCustomTopicForm = (props) => {
             </label>
 
             <ButtonPrimary
-              onClick={() => updateTopic()}
+              onClick={(e) => {
+                e.preventDefault();
+                updateTopic(custom_topic);
+              }}
               className="md:col-span-2"
             >
               Update
@@ -708,7 +729,7 @@ const EditCustomTopicForm = (props) => {
           {/* {/ CONTENT FEED CONTAINER /} */}
 
           <div className="basis-1/3	">
-            <WidgetPosts posts={data} />
+            {customState ? <WidgetPosts customTopic={customState} /> : null}
           </div>
         </div>
       ) : (

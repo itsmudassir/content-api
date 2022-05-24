@@ -344,7 +344,7 @@ const TopicSubmitPost = () => {
   };
 
   // USE-EFFECTS
-  useEffect(async () => {
+  useEffect(() => {
     let filterObj = [{ bodyORtitle: bodyORtitle }];
     if (any_keywords_list.length !== 0) {
       filterObj.push({
@@ -394,8 +394,25 @@ const TopicSubmitPost = () => {
 
     console.log("CUSTOM TOPIC ", filterObj);
     let jsonob = JSON.stringify(filterObj);
-    api.toggleFilter({ identifier: "CustomFilter", value: jsonob });
-    api.setPage({ size: 20, from: 0 });
+
+    const customState = {
+      query: "",
+      sortBy: engagement,
+
+      filters: [
+        {
+          identifier: "CustomFilter",
+          value: jsonob 
+  
+        },
+      ],
+      page: {
+        size: 8,
+        from: 0,
+      },
+    };
+
+    api.setSearchState(customState);
     api.search();
   }, [
     engagement,
