@@ -21,7 +21,9 @@ import DateRangeDropDown from "../../components/CustomTopicDateRange/DateRangeDr
 import { gql, useQuery } from "@apollo/client";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import cogoToast from "cogo-toast";
-
+import {
+  useGetSingleCustomTopicQuery,
+} from "../../app/Api/contentApi";
 const widgetPostsDemo = DEMO_POSTS.filter((_, i) => i > 2 && i < 7);
 const query = gql`
   query resultSet(
@@ -194,12 +196,24 @@ const sortingList = [
   },
 ];
 
-const EditCustomTopicForm = (props) => {
-  const history = useHistory();
-  console.log(props.topicData);
-  // states
+const EditCustomTopicForm = () => {
+  var topicId = useParams();
+  topicId=topicId.id
+  console.log(topicId);
+  const singleCustomTopic = useGetSingleCustomTopicQuery(topicId);
+  console.log(singleCustomTopic);
 
-  const [timer, setTimer] = useState(false);
+  if (singleCustomTopic.data){
+    console.log(" customTopic  ",singleCustomTopic)
+  }
+  if (singleCustomTopic.isFetching){
+    console.log("fetching")
+  }
+  if (singleCustomTopic.isError){
+    console.log("error")
+  }
+  
+  const [go, setGo] = useState(false);
   const [topicName, setTopicName] = useState(""); // topic name
 
   // selection
@@ -222,80 +236,150 @@ const EditCustomTopicForm = (props) => {
     []
   ); // limit_domains_results
 
-  // filters
-  const [bodyORtitle, setBodyORtitle] = useState(null);
+  // // filters
+  const [bodyORtitle, setBodyORtitle] = useState("title");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [language, setlanguage] = useState(null);
   const [engagement, setEngagement] = useState(null);
   const [customState, setCustomState] = useState(null);
 
-  // if (props) {
-  //   setLoadedFlag(true);
-  //   console.log("In if", props);
-  // }
+
 
   // RTK-Query
   const [updateCustomTopic, updateCustomTopic_Obj] =
     useUpdateCustomTopicMutation();
 
-  // SEARCH-KIT
-  // const api = useSearchkit();
-  // const variables = useSearchkitVariables();
-  // if (variables?.page.size) {
-  //   variables.page.size = 20;
-  // }
-  // var { data, error, loading } = useQuery(query, { variables });
-
-  // if (error) {
-  //   cogoToast.error("This is a error message", {
-  //     position: "top-left",
-  //   });
-  // }
-
-  // USE-EFFECTS
   useEffect(() => {
-    setAny_keywords_list(props?.topicData?.selection?.any_keywords);
-    setMust_also_keywords_list(props?.topicData?.selection?.must_also_keywords);
-    setMust_not_contains_keywords_list(
-      props?.topicData?.selection?.must_not_contains_keywords
+    setAny_keywords_list(singleCustomTopic?.data?.selection?.any_keywords);
+    setMust_also_keywords_list(singleCustomTopic?.data?.selection?.must_also_keywords);
+    setMust_not_contains_keywords_list(singleCustomTopic?.data?.selection?.must_not_contains_keywords
     );
-    setExclude_domains_list(props?.topicData?.selection?.exclude_domains);
+    setExclude_domains_list(singleCustomTopic?.data?.selection?.exclude_domains);
     setLimit_domains_results_list(
-      props?.topicData?.selection?.limit_domains_results
+      singleCustomTopic?.data?.selection?.limit_domains_results
     );
-    setStartDate(props?.topicData?.filters?.startdate);
-    setEndDate(props?.topicData?.filters?.enddate);
-    setTopicName(props?.topicData?.name);
-    setlanguage(props?.topicData?.filters?.language);
-    setEngagement(props?.topicData?.filters?.engagement);
-    setBodyORtitle(props?.topicData?.filters?.type);
-  }, [props.topicData]);
+    setStartDate(singleCustomTopic?.data?.filters?.startdate);
+    setEndDate(singleCustomTopic?.data?.filters?.enddate);
+    setTopicName(singleCustomTopic?.data?.name);
+    setlanguage(singleCustomTopic?.data?.filters?.language);
+    setEngagement(singleCustomTopic?.data?.filters?.engagement);
+    setBodyORtitle(singleCustomTopic?.data?.filters?.type);
+    setGo(true)
+  }, [singleCustomTopic.data]);
 
   useEffect(() => {
-    let filterObj = [{ bodyORtitle: bodyORtitle }];
-    // let filterObj = [{ bodyORtitle: "title" }];
-    if (any_keywords_list.length !== 0) {
+    let filterObj = []
+    if (singleCustomTopic?.data?.filters?.type !== null) {
+      filterObj.push({
+        bodyORtitle: singleCustomTopic?.data?.filters?.type
+            });
+    }
+
+    if (singleCustomTopic?.data?.selection?.any_keywords?.length !== 0) {
+      filterObj.push({
+        any_keywords_list: singleCustomTopic?.data?.selection?.any_keywords
+      });
+    }
+    if (singleCustomTopic?.data?.selection?.must_also_keywords?.length !== 0) {
+      filterObj.push({
+        must_also_keywords_list: singleCustomTopic?.data?.selection?.must_also_keywords
+      });
+    }
+    if (singleCustomTopic?.data?.selection?.must_not_contains_keywords?.length !== 0) {
+      filterObj.push({
+        must_not_contains_keywords_list: singleCustomTopic?.data?.selection?.must_not_contains_keywords
+      });
+    }
+    if (singleCustomTopic?.data?.selection?.exclude_domains?.length !== 0) {
+      filterObj.push({
+        exclude_domains_list: singleCustomTopic?.data?.selection?.exclude_domains,
+      });
+    }
+    if (singleCustomTopic?.data?.selection?.limit_domains_results?.length !== 0) {
+      filterObj.push({
+        limit_domains_results_list:singleCustomTopic?.data?.selection?.limit_domains_results
+
+      });
+    }
+    if (singleCustomTopic?.data?.filters?.startdate !== null) {
+      filterObj.push({
+        startDate: singleCustomTopic?.data?.filters?.startdate,
+      });
+    }
+    if (singleCustomTopic?.data?.filters?.enddate !== null) {
+      filterObj.push({
+        endDate: singleCustomTopic?.data?.filters?.enddate,
+      });
+    }
+    if (singleCustomTopic?.data?.filters?.language !== null) {
+      filterObj.push({
+        language: singleCustomTopic?.data?.filters?.language,
+      });
+    }
+    if (singleCustomTopic?.data?.filters?.engagement !== null) {
+      filterObj.push({
+        engagement: singleCustomTopic?.data?.filters?.engagement,
+      });
+    }
+
+    console.log("EDIT CUSTOM TOPIC ", filterObj);
+    let jsonob = JSON.stringify(filterObj);
+    const customState1 = {
+      query: "",
+      sortBy: engagement,
+
+      filters: [
+        {
+          identifier: "CustomFilter",
+          value: jsonob,
+        },
+      ],
+      page: {
+        size: 8,
+        from: 0,
+      },
+    };
+
+    setCustomState(customState1);
+    console.log("------------customState",customState)
+    // api.setSearchState(customState1);
+    // api.search();
+  
+  }, [singleCustomTopic.data]);
+
+  
+
+  useEffect(() => {
+    if(customState){
+      console.log("Runs")
+    let filterObj = []
+    if (bodyORtitle !== null) {
+      filterObj.push({
+        bodyORtitle: bodyORtitle 
+      });
+    }
+    if (any_keywords_list?.length !== 0) {
       filterObj.push({
         any_keywords_list: any_keywords_list,
       });
     }
-    if (must_also_keywords_list.length !== 0) {
+    if (must_also_keywords_list?.length !== 0) {
       filterObj.push({
         must_also_keywords_list: must_also_keywords_list,
       });
     }
-    if (must_not_contains_keywords_list.length !== 0) {
+    if (must_not_contains_keywords_list?.length !== 0) {
       filterObj.push({
         must_not_contains_keywords_list: must_not_contains_keywords_list,
       });
     }
-    if (exclude_domains_list.length !== 0) {
+    if (exclude_domains_list?.length !== 0) {
       filterObj.push({
         exclude_domains_list: exclude_domains_list,
       });
     }
-    if (limit_domains_results_list.length !== 0) {
+    if (limit_domains_results_list?.length !== 0) {
       filterObj.push({
         limit_domains_results_list: limit_domains_results_list,
       });
@@ -321,7 +405,7 @@ const EditCustomTopicForm = (props) => {
       });
     }
 
-    console.log("EDIT CUSTOM TOPIC ", filterObj);
+    console.log("CUSTOM TOPIC ", filterObj);
     let jsonob = JSON.stringify(filterObj);
     const customState1 = {
       query: "",
@@ -338,8 +422,11 @@ const EditCustomTopicForm = (props) => {
         from: 0,
       },
     };
-    setCustomState(jsonob);
-    // api.setSearchState(customState1);
+
+    setCustomState(customState1);
+    console.log("------------customState",customState)
+  }
+    // api.setSearchState(customState);
     // api.search();
   }, [
     engagement,
@@ -446,7 +533,7 @@ const EditCustomTopicForm = (props) => {
     try {
       const res = await updateCustomTopic({
         customTopic,
-        id: props.topicData._id,
+        id: topicId,
       });
       if (res.data) cogoToast.success(res.data.successMsg);
       if (res.error) cogoToast.error(res.error.data.errorMsg);
@@ -458,284 +545,255 @@ const EditCustomTopicForm = (props) => {
       );
     }
   };
-
+  
   return (
     <>
-      {props ? (
-        <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
-          {/* {/ div container /} */}
-          <div className="basis-2/3  grid md:grid-cols-2 gap-6">
-            <label className="block md:col-span-2">
-              <Label className="font-bold text-lg">Topic Name</Label>
-              <Input
-                type="text"
-                className="mt-1 rounded border-slate-300"
-                placeholder="give a name to your such as, 'Digital Marketing'"
-                // defaultValue={props?.topicData?.name}
-                value={topicName}
-                onChange={(e) => setTopicName(e.target.value)}
-              />
-            </label>
+{singleCustomTopic.data  ? (
+    <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
+      {/* {/ div container /} */}
+      <div className="basis-2/3  grid md:grid-cols-2 gap-6">
+        <label className="block md:col-span-2">
+          <Label className="font-bold text-lg">Topic Name</Label>
+          <Input
+            type="text"
+            className="mt-1 rounded border-slate-300"
+            placeholder="give a name to your such as, 'Digital Marketing'"
+            // defaultValue={props?.topicData?.name}
+            value={topicName}
+            onChange={(e) => setTopicName(e.target.value)}
+          />
+        </label>
 
-            <label className="block md:col-span-2">
-              <Label className="font-bold text-lg">Build Your Query</Label>
-              <p className="mt-1 text-sm text-neutral-500 ">let's start by</p>
+        <label className="block md:col-span-2">
+          <Label className="font-bold text-lg">Build Your Query</Label>
+          <p className="mt-1 text-sm text-neutral-500 ">let's start by</p>
 
-              {/* <div className="mt-2">
-                <input
-                  type="radio"
-                  id="topics"
-                  // value="topics"
-                  value={domainORtopic}
-                  checked={domainORtopic == "topics"}
-                  onClick={() => setDomainORtopic("topics")}
-                  className="w-3.5 h-3.5"
-                />
-                <label className="text-sm ml-4 font-normal" htmlFor="topics">
-                  Adding topics and keywords
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  type="radio"
-                  id="domians"
-                  // value="domians"
-                  value={domainORtopic}
-                  checked={domainORtopic == "domians"}
-                  onClick={() => setDomainORtopic("domians")}
-                  className="w-3.5 h-3.5"
-                />
-                <label className="text-sm ml-4 font-normal" htmlFor="domians">
-                  Adding domins as sources
-                </label>
-              </div> */}
 
-              <p className="mt-5 text-base text-neutral-500 font-medium">
-                Each result must contain at least <b>ONE</b> one of these
-                keywords
-              </p>
-              <Input
-                className="mt-1 rounded border-slate-300"
-                placeholder="Enter your main keywords or phrases, e.g Social Media, Big Data..."
-                onChange={(e) => setAny_keywords_value(e.target.value)}
-                onKeyDown={(e) => any_keywords_addItem(e)}
-                value={any_keywords_value}
-              />
+          <p className="mt-5 text-base text-neutral-500 font-medium">
+            Each result must contain at least <b>ONE</b> one of these
+            keywords
+          </p>
+          <Input
+            className="mt-1 rounded border-slate-300"
+            placeholder="Enter your main keywords or phrases, e.g Social Media, Big Data..."
+            onChange={(e) => setAny_keywords_value(e.target.value)}
+            onKeyDown={(e) => any_keywords_addItem(e)}
+            value={any_keywords_value}
+          />
 
-              {/* {/ CHIPS /} */}
-              <div className="flex flex-wrap mt-1.5">
-                {any_keywords_list?.map((item, index) => {
-                  return (
-                    <>
-                      <div className="ml-1 mt-1" key={index}>
-                        <Chip value={item} _delete={any_keywords_deleteItem} />
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-            </label>
-
-            <label className="block md:col-span-2 mt-5">
-              <Label className="font-bold text-lg">Refine Your Query</Label>
-              <br />
-              <p className="mt-2 text-base text-neutral-500 font-medium">
-                Each result <b>MUST ALSO</b> contain <b>ONE</b> one of these
-                keywords
-              </p>
-              <Input
-                className="mt-1 rounded border-slate-300"
-                placeholder="Enter keywords or phrases, e.g tips, trends..."
-                onChange={(e) => setMust_also_keywords_value(e.target.value)}
-                onKeyDown={(e) => must_also_keywords_addItem(e)}
-                value={must_also_keywords_value}
-              />
-
-              {/* {/ CHIPS /} */}
-
-              <div className="flex flex-wrap mt-1.5">
-                {must_also_keywords_list?.map((val, index) => {
-                  return (
-                    <>
-                      <div className="ml-1 mt-1" key={index}>
-                        <Chip
-                          value={val}
-                          _delete={must_also_keywords_deleteItem}
-                        />
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-            </label>
-
-            <label className="block md:col-span-2 mt-4">
-              <p className="mt-2 text-base text-neutral-500 font-medium">
-                Each result must <b>NOT</b> contain any one of these keywords
-              </p>
-              <Input
-                className="mt-1 rounded border-slate-300"
-                placeholder="Enter keywords that you think are giving irrelevant, eg. job, course..."
-                onChange={(e) =>
-                  setMust_not_contains_keywords_value(e.target.value)
-                }
-                onKeyDown={(e) => must_not_contains_keywords_addItem(e)}
-                value={must_not_contains_keywords_value}
-              />
-              {/* {/ CHIPS /} */}
-              <div className="flex flex-wrap mt-1.5">
-                {must_not_contains_keywords_list?.map((val, index) => {
-                  return (
-                    <>
-                      <div className="ml-1 mt-1" key={index}>
-                        <Chip
-                          value={val}
-                          _delete={must_not_contains_keywords_deleteItem}
-                        />
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-            </label>
-
-            {/* {/ EXCLUDE DOMAINS /} */}
-            <label className="block md:col-span-2 mt-4">
-              <p className="mt-2 text-base text-neutral-500 font-medium">
-                <b>EXCLUDE</b> results from these domains
-              </p>
-
-              <ExcludeResultInputField
-                getSelectedvalve={exclude_domains_list_addItem}
-              />
-              {/* {/ CHIPS /} */}
-              <div className="flex flex-wrap mt-1.5">
-                {exclude_domains_list?.map((val, index) => {
-                  return (
-                    <>
-                      <div className="ml-1 mt-1" key={index}>
-                        <Chip
-                          value={val}
-                          _delete={exclude_domains_list_deleteItem}
-                        />
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-            </label>
-
-            {/* {/ LIMIT DOMAINS /} */}
-            <label className="block md:col-span-2 mt-4">
-              <p className="mt-2 text-base text-neutral-500 font-medium">
-                <b>LIMIT</b> results to these domais only
-              </p>
-
-              <LimitResultInputField
-                getSelectedvalve={limit_domains_results_list_addItem}
-              />
-              {/* {/ CHIPS /} */}
-              <div className="flex flex-wrap mt-1.5">
-                {limit_domains_results_list?.map((val, index) => {
-                  return (
-                    <>
-                      <div className="ml-1 mt-1" key={index}>
-                        <Chip
-                          value={val}
-                          _delete={limit_domains_results_list_deleteItem}
-                        />
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-            </label>
-
-            <label className="block md:col-span-2 mt-5">
-              <Label className="font-bold text-lg">Set Default Filters</Label>
-            </label>
-            {/* XXXXXXXXXXXXXXXXXXXXXXX  */}
-            {/* Set Default Filters */}
-            {/* ============== Date Range DropDown ================= */}
-            <div className="grid grid-cols-12 md:col-span-2 gap-2">
-              <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
-                <DateRangeDropDown
-                  setStartDate={setStartDate}
-                  setEndDate={setEndDate}
-                />
-              </label>
-
-              {/* ============== Language SelectBox ================= */}
-              <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
-                <span className="mt-1 bg-gray-100">
-                  <CustomTopicLanguageSelect
-                    setlanguage={setlanguage}
-                    lists={LanguagesList}
-                  />
-                </span>
-              </label>
-
-              {/* ============== Sorting SelectBox ================= */}
-              <label className="col-span-6 sm:col-span-4 md:col-span-3">
-                <CustomTopicSortSelect
-                  setEngagement={setEngagement}
-                  lists={sortingList}
-                />
-              </label>
-            </div>
-            {/* XXXXXXXXXXXXXXXXXXXXXXX  */}
-
-            <label className="block md:col-span-2 mt-5">
-              <Label className="font-bold text-lg">Matching Criteria</Label>
-              <div className="mt-3">
-                <input
-                  type="radio"
-                  id="titles"
-                  // value={bodyORtitle}
-                  checked={bodyORtitle == "titles"}
-                  onClick={() => setBodyORtitle("titles")}
-                  className="w-3.5 h-3.5"
-                />
-                <label className="text-sm ml-4 font-normal" htmlFor="titles">
-                  Match query in titles only
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  type="radio"
-                  id="body"
-                  // value={bodyORtitle}
-                  checked={bodyORtitle == "body"}
-                  onClick={() => setBodyORtitle("body")}
-                  className="w-3.5 h-3.5"
-                />
-                <label className="text-sm ml-4 font-normal" htmlFor="body">
-                  Match query in titles and body content
-                </label>
-              </div>
-            </label>
-
-            <ButtonPrimary
-              onClick={(e) => {
-                e.preventDefault();
-                updateTopic(custom_topic);
-              }}
-              className="md:col-span-2"
-            >
-              Update
-            </ButtonPrimary>
+          {/* {/ CHIPS /} */}
+          <div className="flex flex-wrap mt-1.5">
+            {any_keywords_list?.map((item, index) => {
+              return (
+                <>
+                  <div className="ml-1 mt-1" key={index}>
+                    <Chip value={item} _delete={any_keywords_deleteItem} />
+                  </div>
+                </>
+              );
+            })}
           </div>
+        </label>
 
-          {/* {/ CONTENT FEED CONTAINER /} */}
+        <label className="block md:col-span-2 mt-5">
+          <Label className="font-bold text-lg">Refine Your Query</Label>
+          <br />
+          <p className="mt-2 text-base text-neutral-500 font-medium">
+            Each result <b>MUST ALSO</b> contain <b>ONE</b> one of these
+            keywords
+          </p>
+          <Input
+            className="mt-1 rounded border-slate-300"
+            placeholder="Enter keywords or phrases, e.g tips, trends..."
+            onChange={(e) => setMust_also_keywords_value(e.target.value)}
+            onKeyDown={(e) => must_also_keywords_addItem(e)}
+            value={must_also_keywords_value}
+          />
 
-          <div className="basis-1/3	">
-            {customState ? <WidgetPosts customTopic={customState} /> : null}
+          {/* {/ CHIPS /} */}
+
+          <div className="flex flex-wrap mt-1.5">
+            {must_also_keywords_list?.map((val, index) => {
+              return (
+                <>
+                  <div className="ml-1 mt-1" key={index}>
+                    <Chip
+                      value={val}
+                      _delete={must_also_keywords_deleteItem}
+                    />
+                  </div>
+                </>
+              );
+            })}
           </div>
+        </label>
+
+        <label className="block md:col-span-2 mt-4">
+          <p className="mt-2 text-base text-neutral-500 font-medium">
+            Each result must <b>NOT</b> contain any one of these keywords
+          </p>
+          <Input
+            className="mt-1 rounded border-slate-300"
+            placeholder="Enter keywords that you think are giving irrelevant, eg. job, course..."
+            onChange={(e) =>
+              setMust_not_contains_keywords_value(e.target.value)
+            }
+            onKeyDown={(e) => must_not_contains_keywords_addItem(e)}
+            value={must_not_contains_keywords_value}
+          />
+          {/* {/ CHIPS /} */}
+          <div className="flex flex-wrap mt-1.5">
+            {must_not_contains_keywords_list?.map((val, index) => {
+              return (
+                <>
+                  <div className="ml-1 mt-1" key={index}>
+                    <Chip
+                      value={val}
+                      _delete={must_not_contains_keywords_deleteItem}
+                    />
+                  </div>
+                </>
+              );
+            })}
+          </div>
+        </label>
+
+        {/* {/ EXCLUDE DOMAINS /} */}
+        <label className="block md:col-span-2 mt-4">
+          <p className="mt-2 text-base text-neutral-500 font-medium">
+            <b>EXCLUDE</b> results from these domains
+          </p>
+
+          <ExcludeResultInputField
+            getSelectedvalve={exclude_domains_list_addItem}
+          />
+          {/* {/ CHIPS /} */}
+          <div className="flex flex-wrap mt-1.5">
+            {exclude_domains_list?.map((val, index) => {
+              return (
+                <>
+                  <div className="ml-1 mt-1" key={index}>
+                    <Chip
+                      value={val}
+                      _delete={exclude_domains_list_deleteItem}
+                    />
+                  </div>
+                </>
+              );
+            })}
+          </div>
+        </label>
+
+        {/* {/ LIMIT DOMAINS /} */}
+        <label className="block md:col-span-2 mt-4">
+          <p className="mt-2 text-base text-neutral-500 font-medium">
+            <b>LIMIT</b> results to these domais only
+          </p>
+
+          <LimitResultInputField
+            getSelectedvalve={limit_domains_results_list_addItem}
+          />
+          {/* {/ CHIPS /} */}
+          <div className="flex flex-wrap mt-1.5">
+            {limit_domains_results_list?.map((val, index) => {
+              return (
+                <>
+                  <div className="ml-1 mt-1" key={index}>
+                    <Chip
+                      value={val}
+                      _delete={limit_domains_results_list_deleteItem}
+                    />
+                  </div>
+                </>
+              );
+            })}
+          </div>
+        </label>
+
+        <label className="block md:col-span-2 mt-5">
+          <Label className="font-bold text-lg">Set Default Filters</Label>
+        </label>
+        {/* XXXXXXXXXXXXXXXXXXXXXXX  */}
+        {/* Set Default Filters */}
+        {/* ============== Date Range DropDown ================= */}
+        <div className="grid grid-cols-12 md:col-span-2 gap-2">
+          <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
+            <DateRangeDropDown
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+            />
+          </label>
+
+          {/* ============== Language SelectBox ================= */}
+          <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
+            <span className="mt-1 bg-gray-100">
+              <CustomTopicLanguageSelect
+                setlanguage={setlanguage}
+                lists={LanguagesList}
+              />
+            </span>
+          </label>
+
+          {/* ============== Sorting SelectBox ================= */}
+          <label className="col-span-6 sm:col-span-4 md:col-span-3">
+            <CustomTopicSortSelect
+              setEngagement={setEngagement}
+              lists={sortingList}
+            />
+          </label>
         </div>
-      ) : (
-        "loading"
-      )}
-    </>
+        {/* XXXXXXXXXXXXXXXXXXXXXXX  */}
+
+        <label className="block md:col-span-2 mt-5">
+          <Label className="font-bold text-lg">Matching Criteria</Label>
+          <div className="mt-3">
+            <input
+              type="radio"
+              id="titles"
+              // value={bodyORtitle}
+              checked={bodyORtitle == "titles"}
+              onClick={() => setBodyORtitle("titles")}
+              className="w-3.5 h-3.5"
+            />
+            <label className="text-sm ml-4 font-normal" htmlFor="titles">
+              Match query in titles only
+            </label>
+          </div>
+          <div className="mt-2">
+            <input
+              type="radio"
+              id="body"
+              // value={bodyORtitle}
+              checked={bodyORtitle == "body"}
+              onClick={() => setBodyORtitle("body")}
+              className="w-3.5 h-3.5"
+            />
+            <label className="text-sm ml-4 font-normal" htmlFor="body">
+              Match query in titles and body content
+            </label>
+          </div>
+        </label>
+
+        <ButtonPrimary
+          onClick={(e) => {
+            e.preventDefault();
+            updateTopic(custom_topic);
+          }}
+          className="md:col-span-2"
+        >
+          Update
+        </ButtonPrimary>
+      </div>
+
+      {/* {/ CONTENT FEED CONTAINER /} */}
+
+      <div className="basis-1/3	">
+        {customState ? <WidgetPosts customTopic={customState} /> : null}
+      </div>
+    </div>
+  ) : (
+    "loading"
+  )}    </>
   );
 };
 
