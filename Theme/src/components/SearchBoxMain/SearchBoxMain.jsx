@@ -4,7 +4,6 @@ import {
   SearchComponent,
   SearchBase,
 } from "@appbaseio/react-searchbox";
-
 import "./SearchBoxMain.css";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -55,6 +54,7 @@ const SearchBoxMain = ({ pageType , category}) => {
             },
             {
               label: "Musicians",
+              value: "Musicians",
             },
           ]}
           enablePopularSuggestions={true}

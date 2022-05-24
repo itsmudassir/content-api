@@ -15,23 +15,194 @@ import {
   useUpdateCustomTopicMutation,
   useGetAllCustomTopicsQuery,
 } from "../../app/Api/contentApi";
+import CustomTopicLanguageSelect from "../../components/CustomTopicLanguageSelect/CustomTopicLanguageSelect";
+import CustomTopicSortSelect from "../../components/CustomTopicSortSelect/CustomTopicSortSelect";
+import DateRangeDropDown from "../../components/CustomTopicDateRange/DateRangeDropDown";
+import { gql, useQuery } from "@apollo/client";
+import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
+import cogoToast from "cogo-toast";
 
 const widgetPostsDemo = DEMO_POSTS.filter((_, i) => i > 2 && i < 7);
+const query = gql`
+  query resultSet(
+    $query: String
+    $filters: [SKFiltersSet]
+    $page: SKPageInput
+    $sortBy: String
+  ) {
+    results(query: $query, filters: $filters) {
+      summary {
+        total
+        appliedFilters {
+          id
+          identifier
+          display
+          label
+          ... on DateRangeSelectedFilter {
+            dateMin
+            dateMax
+            __typename
+          }
 
+          ... on ValueSelectedFilter {
+            value
+            __typename
+          }
+          __typename
+        }
+        sortOptions {
+          id
+          label
+          __typename
+        }
+        query
+        __typename
+      }
+      hits(page: $page, sortBy: $sortBy) {
+        page {
+          total
+          totalPages
+          pageNumber
+          from
+          size
+          __typename
+        }
+        sortedBy
 
-const EditCustomTopicForm = (values) => {
+        items {
+          ... on ResultHit {
+            id
+            fields {
+              article_length
+              category
+              authors
+              date_download
+              language
+              facebook_shares
+              sentiment
+              url
+              readtime
+              image_url
+              twitter_shares
+              maintext
+              source_domain
+              title
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      facets {
+        identifier
+        type
+        label
+        display
+        entries {
+          label
+          count
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+  }
+`;
 
+const LanguagesList = [
+  {
+    label: "English",
+    count: 25190,
+  },
+  {
+    label: "Greek",
+    count: 515,
+  },
+  {
+    label: "Spanish",
+    count: 492,
+  },
+  {
+    label: "German",
+    count: 229,
+  },
+  {
+    label: "Italian",
+    count: 168,
+  },
+  {
+    label: "French",
+    count: 138,
+  },
+  {
+    label: "Dutch",
+    count: 129,
+  },
+  {
+    label: "Russian",
+    count: 60,
+  },
+  {
+    label: "Romanian",
+    count: 32,
+  },
+  {
+    label: "Arabic",
+    count: 30,
+  },
+  {
+    label: "Japanese",
+    count: 27,
+  },
+  {
+    label: "Telugu",
+    count: 13,
+  },
+  {
+    label: "Portuguese",
+    count: 8,
+  },
+  {
+    label: "Turkish",
+    count: 7,
+  },
+];
+
+const sortingList = [
+  {
+    id: "relevance",
+    label: "Relevance",
+  },
+  {
+    id: "facebook_shares",
+    label: "Facebook Shares",
+  },
+  {
+    id: "twitter_shares",
+    label: "Twitter Shares",
+  },
+  {
+    id: "date_download",
+    label: "Date Download",
+  },
+  {
+    id: "total_engagement",
+    label: "Total Engagement",
+  },
+];
+
+const EditCustomTopicForm = (props) => {
   const history = useHistory();
-  const [updateCustomTopic, { isError, isLoading }] =
-    useUpdateCustomTopicMutation();
-
+  console.log(props.topicData);
   // states
 
-  const [loadedFlag, setLoadedFlag] = useState(false);
+  const [timer, setTimer] = useState(false);
   const [topicName, setTopicName] = useState(""); // topic name
 
   // selection
-  const [domainORtopic, setDomainORtopic] = useState("topics"); // match_type
 
   const [any_keywords_list, setAny_keywords_list] = useState([]); // any_keywords_list
   const [any_keywords_value, setAny_keywords_value] = useState(""); // any_keywords_value
@@ -52,35 +223,136 @@ const EditCustomTopicForm = (values) => {
   ); // limit_domains_results
 
   // filters
-  const [bodyORtitle, setBodyORtitle] = useState("titles");
+  const [bodyORtitle, setBodyORtitle] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [language, setlanguage] = useState(null);
   const [engagement, setEngagement] = useState(null);
+  const [customState, setCustomState] = useState(null);
 
-  // if (values) {
+  // if (props) {
   //   setLoadedFlag(true);
-  //   console.log("In if", values);
+  //   console.log("In if", props);
   // }
 
+  // RTK-Query
+  const [updateCustomTopic, updateCustomTopic_Obj] =
+    useUpdateCustomTopicMutation();
+
+  // SEARCH-KIT
+  // const api = useSearchkit();
+  // const variables = useSearchkitVariables();
+  // if (variables?.page.size) {
+  //   variables.page.size = 20;
+  // }
+  // var { data, error, loading } = useQuery(query, { variables });
+
+  // if (error) {
+  //   cogoToast.error("This is a error message", {
+  //     position: "top-left",
+  //   });
+  // }
+
+  // USE-EFFECTS
   useEffect(() => {
-    setAny_keywords_list(values?.topicData?.selection?.any_keywords);
-    setMust_also_keywords_list(
-      values?.topicData?.selection?.must_also_keywords
-    );
+    setAny_keywords_list(props?.topicData?.selection?.any_keywords);
+    setMust_also_keywords_list(props?.topicData?.selection?.must_also_keywords);
     setMust_not_contains_keywords_list(
-      values?.topicData?.selection?.must_not_contains_keywords
+      props?.topicData?.selection?.must_not_contains_keywords
     );
-    setExclude_domains_list(values?.topicData?.selection?.exclude_domains);
+    setExclude_domains_list(props?.topicData?.selection?.exclude_domains);
     setLimit_domains_results_list(
-      values?.topicData?.selection?.limit_domains_results
+      props?.topicData?.selection?.limit_domains_results
     );
-    setStartDate(values?.topicData?.filters?.startdate);
-    setEndDate(values?.topicData?.filters?.enddate);
-    setTopicName(values?.topicData?.name);
-    setlanguage(values?.topicData?.filters?.language);
-    setEngagement(values?.topicData?.filters?.engagement);
-  }, []);
+    setStartDate(props?.topicData?.filters?.startdate);
+    setEndDate(props?.topicData?.filters?.enddate);
+    setTopicName(props?.topicData?.name);
+    setlanguage(props?.topicData?.filters?.language);
+    setEngagement(props?.topicData?.filters?.engagement);
+    setBodyORtitle(props?.topicData?.filters?.type);
+  }, [props.topicData]);
+
+  useEffect(() => {
+    let filterObj = [{ bodyORtitle: bodyORtitle }];
+    // let filterObj = [{ bodyORtitle: "title" }];
+    if (any_keywords_list.length !== 0) {
+      filterObj.push({
+        any_keywords_list: any_keywords_list,
+      });
+    }
+    if (must_also_keywords_list.length !== 0) {
+      filterObj.push({
+        must_also_keywords_list: must_also_keywords_list,
+      });
+    }
+    if (must_not_contains_keywords_list.length !== 0) {
+      filterObj.push({
+        must_not_contains_keywords_list: must_not_contains_keywords_list,
+      });
+    }
+    if (exclude_domains_list.length !== 0) {
+      filterObj.push({
+        exclude_domains_list: exclude_domains_list,
+      });
+    }
+    if (limit_domains_results_list.length !== 0) {
+      filterObj.push({
+        limit_domains_results_list: limit_domains_results_list,
+      });
+    }
+    if (startDate !== null) {
+      filterObj.push({
+        startDate: startDate,
+      });
+    }
+    if (endDate !== null) {
+      filterObj.push({
+        endDate: endDate,
+      });
+    }
+    if (language !== null) {
+      filterObj.push({
+        language: language,
+      });
+    }
+    if (engagement !== null) {
+      filterObj.push({
+        engagement: engagement,
+      });
+    }
+
+    console.log("EDIT CUSTOM TOPIC ", filterObj);
+    let jsonob = JSON.stringify(filterObj);
+    const customState1 = {
+      query: "",
+      sortBy: engagement,
+
+      filters: [
+        {
+          identifier: "CustomFilter",
+          value: jsonob,
+        },
+      ],
+      page: {
+        size: 8,
+        from: 0,
+      },
+    };
+    setCustomState(jsonob);
+    // api.setSearchState(customState1);
+    // api.search();
+  }, [
+    engagement,
+    language,
+    endDate,
+    startDate,
+    bodyORtitle,
+    exclude_domains_list,
+    any_keywords_list,
+    must_also_keywords_list,
+    must_not_contains_keywords_list,
+    limit_domains_results_list,
+  ]);
 
   // event handlers
   // any_keywords
@@ -155,20 +427,51 @@ const EditCustomTopicForm = (values) => {
       limit_domains_results_list.filter((i) => i !== item)
     );
   };
-  console.log(any_keywords_list);
+
+  const custom_topic = {
+    name: topicName,
+    any_keywords: any_keywords_list,
+    must_also_keywords: must_also_keywords_list,
+    must_not_contains_keywords: must_not_contains_keywords_list,
+    exclude_domains: exclude_domains_list,
+    limit_domains_results: limit_domains_results_list,
+    type: bodyORtitle,
+    enddate: endDate,
+    startdate: startDate,
+    language: language,
+    engagement: engagement,
+  };
+  const updateTopic = async (customTopic) => {
+    console.log(customTopic);
+    try {
+      const res = await updateCustomTopic({
+        customTopic,
+        id: props.topicData._id,
+      });
+      if (res.data) cogoToast.success(res.data.successMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg);
+    } catch (err) {
+      console.log("ERROR OCCOURED WHILE CREATING CUSTOM TOPIC IN DB", err);
+      console.log(
+        "ERROR OCCOURED WHILE CREATING CUSTOM TOPIC IN DB",
+        updateCustomTopic_Obj.error
+      );
+    }
+  };
+
   return (
     <>
-      {values ? (
+      {props ? (
         <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
-          {/* {/ form container /} */}
-          <form className="basis-2/3  grid md:grid-cols-2 gap-6">
+          {/* {/ div container /} */}
+          <div className="basis-2/3  grid md:grid-cols-2 gap-6">
             <label className="block md:col-span-2">
               <Label className="font-bold text-lg">Topic Name</Label>
               <Input
                 type="text"
                 className="mt-1 rounded border-slate-300"
                 placeholder="give a name to your such as, 'Digital Marketing'"
-                // defaultValue={values?.topicData?.name}
+                // defaultValue={props?.topicData?.name}
                 value={topicName}
                 onChange={(e) => setTopicName(e.target.value)}
               />
@@ -178,7 +481,7 @@ const EditCustomTopicForm = (values) => {
               <Label className="font-bold text-lg">Build Your Query</Label>
               <p className="mt-1 text-sm text-neutral-500 ">let's start by</p>
 
-              <div className="mt-2">
+              {/* <div className="mt-2">
                 <input
                   type="radio"
                   id="topics"
@@ -205,7 +508,7 @@ const EditCustomTopicForm = (values) => {
                 <label className="text-sm ml-4 font-normal" htmlFor="domians">
                   Adding domins as sources
                 </label>
-              </div>
+              </div> */}
 
               <p className="mt-5 text-base text-neutral-500 font-medium">
                 Each result must contain at least <b>ONE</b> one of these
@@ -221,7 +524,7 @@ const EditCustomTopicForm = (values) => {
 
               {/* {/ CHIPS /} */}
               <div className="flex flex-wrap mt-1.5">
-                {any_keywords_list.map((item, index) => {
+                {any_keywords_list?.map((item, index) => {
                   return (
                     <>
                       <div className="ml-1 mt-1" key={index}>
@@ -251,7 +554,7 @@ const EditCustomTopicForm = (values) => {
               {/* {/ CHIPS /} */}
 
               <div className="flex flex-wrap mt-1.5">
-                {must_also_keywords_list.map((val, index) => {
+                {must_also_keywords_list?.map((val, index) => {
                   return (
                     <>
                       <div className="ml-1 mt-1" key={index}>
@@ -281,7 +584,7 @@ const EditCustomTopicForm = (values) => {
               />
               {/* {/ CHIPS /} */}
               <div className="flex flex-wrap mt-1.5">
-                {must_not_contains_keywords_list.map((val, index) => {
+                {must_not_contains_keywords_list?.map((val, index) => {
                   return (
                     <>
                       <div className="ml-1 mt-1" key={index}>
@@ -351,63 +654,36 @@ const EditCustomTopicForm = (values) => {
             <label className="block md:col-span-2 mt-5">
               <Label className="font-bold text-lg">Set Default Filters</Label>
             </label>
-
+            {/* XXXXXXXXXXXXXXXXXXXXXXX  */}
+            {/* Set Default Filters */}
+            {/* ============== Date Range DropDown ================= */}
             <div className="grid grid-cols-12 md:col-span-2 gap-2">
-              <label className="col-span-6 sm:col-span-4 md:col-span-3">
-                {/* {/ <Label>Set start date</Label> /} */}
-
-                <Select
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="mt-1 rounded bg-gray-100 border-slate-300"
-                >
-                  <option value={null}>Start Date</option>
-                  <option value="2021-11-02">2021-11-02</option>
-                  <option value="2021-11-02">2021-11-03</option>
-                  <option value="2021-11-02">2021-11-04</option>
-                </Select>
+              <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
+                <DateRangeDropDown
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                />
               </label>
 
-              <label className="col-span-6 sm:col-span-4 md:col-span-3">
-                {/* {/ <Label>Set end date</Label> /} */}
-
-                <Select
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="mt-1 rounded bg-gray-100 border-slate-300"
-                >
-                  <option value={null}>End Date</option>
-                  <option value="2021-11-03">2021-11-08</option>
-                  <option value="2021-11-03">2021-11-09</option>
-                  <option value="2021-11-03">2021-11-10</option>
-                  <option value="2021-11-03">2021-11-11</option>
-                </Select>
+              {/* ============== Language SelectBox ================= */}
+              <label className="mt-1 col-span-6 sm:col-span-4 md:col-span-3">
+                <span className="mt-1 bg-gray-100">
+                  <CustomTopicLanguageSelect
+                    setlanguage={setlanguage}
+                    lists={LanguagesList}
+                  />
+                </span>
               </label>
 
+              {/* ============== Sorting SelectBox ================= */}
               <label className="col-span-6 sm:col-span-4 md:col-span-3">
-                <Select
-                  onChange={(e) => setlanguage(e.target.value)}
-                  className="mt-1 rounded bg-gray-100 border-slate-300"
-                >
-                  <option value="-1">Select language</option>
-                  <option value="English">English</option>
-                  <option value="German">German</option>
-                  <option value="French">French</option>
-                </Select>
-              </label>
-
-              <label className="col-span-6 sm:col-span-4 md:col-span-3">
-                {/* {/ <Label>Select Engagement</Label> /} */}
-
-                <Select
-                  onChange={(e) => setEngagement(e.target.value)}
-                  className="mt-1 rounded bg-gray-100 border-slate-300"
-                >
-                  <option value="-1">Select engagement</option>
-                  <option value="Facebook">Facebook</option>
-                  <option value="Facebook">Facebook</option>
-                  <option value="Facebook">Facebook</option>
-                </Select>
+                <CustomTopicSortSelect
+                  setEngagement={setEngagement}
+                  lists={sortingList}
+                />
               </label>
             </div>
+            {/* XXXXXXXXXXXXXXXXXXXXXXX  */}
 
             <label className="block md:col-span-2 mt-5">
               <Label className="font-bold text-lg">Matching Criteria</Label>
@@ -415,7 +691,7 @@ const EditCustomTopicForm = (values) => {
                 <input
                   type="radio"
                   id="titles"
-                  value={bodyORtitle}
+                  // value={bodyORtitle}
                   checked={bodyORtitle == "titles"}
                   onClick={() => setBodyORtitle("titles")}
                   className="w-3.5 h-3.5"
@@ -428,7 +704,7 @@ const EditCustomTopicForm = (values) => {
                 <input
                   type="radio"
                   id="body"
-                  value={bodyORtitle}
+                  // value={bodyORtitle}
                   checked={bodyORtitle == "body"}
                   onClick={() => setBodyORtitle("body")}
                   className="w-3.5 h-3.5"
@@ -442,35 +718,19 @@ const EditCustomTopicForm = (values) => {
             <ButtonPrimary
               onClick={(e) => {
                 e.preventDefault();
-                const custom_topic = {
-                  _id: values?.topicData?._id,
-                  userId: "123abc...",
-                  name: topicName,
-                  any_keywords: any_keywords_list,
-                  match_type: domainORtopic,
-                  must_also_keywords: must_also_keywords_list,
-                  must_not_contains_keywords: must_not_contains_keywords_list,
-                  exclude_domains: exclude_domains_list,
-                  limit_domains_results: limit_domains_results_list,
-                  enddate: endDate,
-                  startdate: startDate,
-                  language: language,
-                };
-                updateCustomTopic(custom_topic);
-                // history.push("/topics");
-                console.log("in update btn", custom_topic);
+                updateTopic(custom_topic);
               }}
               className="md:col-span-2"
             >
               Update
             </ButtonPrimary>
-          </form>
+          </div>
 
           {/* {/ CONTENT FEED CONTAINER /} */}
 
-          {/* <div className="basis-1/3	">
-        <WidgetPosts posts={widgetPostsDemo} />
-      </div> */}
+          <div className="basis-1/3	">
+            {customState ? <WidgetPosts customTopic={customState} /> : null}
+          </div>
         </div>
       ) : (
         "loading"

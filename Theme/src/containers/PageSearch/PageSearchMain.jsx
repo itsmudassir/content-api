@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
+import SBox from "../../components/SBox/SBox"
 import { Tab } from "@headlessui/react";
 import PageSearch from "./PageSearch";
 import { gql, useQuery } from "@apollo/client";
@@ -182,6 +183,7 @@ const PageSearchMain = ({ className = "" }) => {
           <title>Nc || Search Page Template</title>
         </Helmet>
         <SearchBoxMain pageType="searchpage" category={customCateogry} />
+        <SBox pageType="searchpage" category={customCateogry} />
       </div>
 
       {/* XXXXXXXXXXXXXXXXX>> TABS <<XXXXXXXXXXXXXXXXXXXX*/}

@@ -6,17 +6,19 @@ import followedTopicsModel from "../../models/followedTopicsModel/followedTopics
 const createFollowedTopic = async (req, res) => {
     try {
         const { topicName } = req.body;
+        // const userId = "62399ee49884a61281edd8e3";
+        const userId = req.user.id;
+
         if (topicName == undefined) {
             return res.status(400).json({ errorMsg: `Bad Request` })
         }
 
         // checking if topic name already exist in DB
-        if (await followedTopicsModel.findOne({ topic: topicName })) {
+        if (await followedTopicsModel.findOne({ topic: topicName, userId: userId })) {
             return res.status(400).json({ errorMsg: `Already following ${topicName}` }) // 400 for bad request
         }
 
-        // const userId = "62399ee49884a61281edd8e3";
-        const userId = req.user.id;
+
 
         // creating topic document
         const topic = new followedTopicsModel({
@@ -41,6 +43,8 @@ const readAllFollowedTopic = async (req, res) => {
         // const userId = "62399ee49884a61281edd8e3";
         const userId = req.user.id;
         const topics = await followedTopicsModel.find({ userId: userId });
+        console.log(userId);
+        console.log(topics);
         return res.status(200).send(topics);
 
     } catch (err) {

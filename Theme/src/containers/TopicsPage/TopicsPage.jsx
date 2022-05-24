@@ -1,5 +1,5 @@
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -13,6 +13,7 @@ import {
   useDeleteCustomTopicMutation,
   useDeleteFolderMutation,
   useUpdateFolderMutation,
+  useGetSingleCustomTopicQuery,
 } from "../../app/Api/contentApi";
 import ButtonCircle from "../../components/Button/ButtonCircle";
 import Input from "../../components/Input/Input";
@@ -22,22 +23,26 @@ import cogoToast from "cogo-toast";
 import Card12 from "../../components/Card11/Card12";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import ReactLoading from "react-loading";
+import CustomTopicPosts from "./CustomTopicPosts";
 
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
   const [folderID, setFolderID] = useState();
-  const [Id, setId] = useState();
+  const [customTopicId, setCustomTopicId] = useState();
   const [showModal, setshowModal] = useState(false);
+  const [allFolders, setAllFolders] = useState(false);
 
   let { path, url } = useRouteMatch();
 
+  // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
-  console.log(getAllFolders);
-  const cardData = useGetAllFavouritePostsQuery(folderID);
+  const favouritePosts = useGetAllFavouritePostsQuery(folderID);
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
-  const customData = useGetAllCustomTopicsQuery(Id);
-  // const getAllCustomPosts = useGetAllCustomTopicsQuery(Id);
+  const customData = useGetAllCustomTopicsQuery(customTopicId);
+  const singleCustomTopic = useGetSingleCustomTopicQuery(customTopicId);
+  console.log(singleCustomTopic);
+  // const getAllCustomPosts = useGetAllCustomTopicsQuery(customTopicId);
 
   var [deletePost, { isLoading, isError }] = useDeleteCustomTopicMutation();
 
@@ -113,19 +118,30 @@ const TopicsPage = ({ className = "" }) => {
               </li>
               {!getAllCustomTopics.data ? (
                 <li className="flex sm:justify-start lg:justify-center items-center">
-                  <ReactLoading type="bubbles" color="#9c4be7" className="w-32" />
+                  <ReactLoading
+                    type="bubbles"
+                    color="#9c4be7"
+                    className="w-32"
+                  />
+                </li>
+              ) : getAllCustomTopics.data?.InformationMsg ? (
+                <li className="flex justify-start items-center">
+                  <p className="text-sm ml-6 text-slate-400">
+                    {getAllCustomTopics.data.InformationMsg}
+                  </p>
                 </li>
               ) : (
-                getAllCustomTopics.data?.map(({ name, _id }, index) => {
+                getAllCustomTopics?.data?.map(({ name, _id }, index) => {
                   return (
                     <li key={index}>
                       <div>
                         <NavLink
                           className="flex px-6 py-2.5 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
-                          to={`${url}/custom_topics/${_id}`}
+                          to={`${url}/custom-topic-posts/${_id}`}
+                          // to={`/saad`}
                           onClick={() => {
-                            setId(_id);
+                            setCustomTopicId(_id);
                           }}
                           onMouseEnter={(e) => {
                             setToggleTopicButtonsHide(true);
@@ -142,8 +158,11 @@ const TopicsPage = ({ className = "" }) => {
                             toggleTopicButtonsHideId === _id ? (
                               <>
                                 <button
-                                  onClick={() => {
-                                    setId(_id);
+                                  title="Edit Topic"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setCustomTopicId(_id);
+                                    history.push(`${url}/custom_topics/${_id}`);
                                   }}
                                 >
                                   <FontAwesomeIcon
@@ -153,7 +172,8 @@ const TopicsPage = ({ className = "" }) => {
                                 </button>
 
                                 <button
-                                  style={{ paddingLeft: "12px" }}
+                                  title="Delete Topic"
+                                  className="ml-4"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     deletePost({ id: _id });
@@ -189,12 +209,22 @@ const TopicsPage = ({ className = "" }) => {
                 </button>
               </li>
 
-              {!getAllCustomTopics.data ? (
+              {!getAllFolders?.data ? (
                 <li className="flex sm:justify-start lg:justify-center items-center">
-                <ReactLoading type="bubbles" color="#9c4be7" className="w-32" />
-              </li>
+                  <ReactLoading
+                    type="bubbles"
+                    color="#9c4be7"
+                    className="w-32"
+                  />
+                </li>
+              ) : getAllFolders.data?.InformationMsg ? (
+                <li className="flex justify-start items-center">
+                  <p className="text-sm ml-6 text-slate-400">
+                    {getAllFolders.data.InformationMsg}
+                  </p>
+                </li>
               ) : (
-                getAllFolders.data?.map(({ folderName, _id }, index) => {
+                getAllFolders?.data?.map(({ folderName, _id }, index) => {
                   return (
                     <>
                       {toggleFolderNameHide &&
@@ -305,14 +335,39 @@ const TopicsPage = ({ className = "" }) => {
 
             <Switch>
               <Route
+                path={`${path}/custom-topic-posts/:id`}
+                render={() => {
+                  return (
+                    <>
+                      {singleCustomTopic.isFetching == false &&
+                      singleCustomTopic.isError == false &&
+                      singleCustomTopic.isLoading == false ? (
+                        <CustomTopicPosts topicData={singleCustomTopic?.data} />
+                      ) : null}
+                    </>
+                  );
+                }}
+              />
+              <Route
                 path={`${path}/custom_topics/:id`}
                 render={() => {
                   return (
                     <>
-                      {customData?.isFetching == false &&
+                      {singleCustomTopic.isFetching == false &&
+                      singleCustomTopic.isError == false &&
+                      singleCustomTopic.isLoading == false ? (
+                        <EditCustomTopicForm
+                          topicData={singleCustomTopic?.data}
+                        />
+                      ) : (
+                        <div className="flex justify-center mt-20 text-2xl text-slate-500 ">
+                          Select a topic
+                        </div>
+                      )}
+                      {/* {customData?.isFetching == false &&
                         customData?.data?.map((values, index) => {
                           if (
-                            values._id == Id &&
+                            values._id == customTopicId &&
                             customData?.isSuccess == true
                           ) {
                             return (
@@ -323,7 +378,7 @@ const TopicsPage = ({ className = "" }) => {
                               </>
                             );
                           }
-                        })}
+                        })} */}
                     </>
                   );
                 }}
@@ -333,7 +388,7 @@ const TopicsPage = ({ className = "" }) => {
                 render={() => {
                   return (
                     <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
-                      {cardData?.data?.map((value, index) => {
+                      {favouritePosts?.data?.map((value, index) => {
                         return (
                           <>
                             <Card12 key={index} cardItems={value} />
