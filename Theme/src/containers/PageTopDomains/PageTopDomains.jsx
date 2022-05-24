@@ -72,8 +72,8 @@ console.log(data)
 
   return (
     <>
-      <div className="w-screen">
-        <div className="p-3 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
+      <div className="w-full">
+        <div className="p-3 mx-1 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
           <div className="border border-slate-300 rounded-xl overflow-x-scroll">
             <table {...getTableProps()} className="w-full">
               <thead className="border-b border-slate-300">

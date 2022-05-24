@@ -230,11 +230,6 @@ const EditCustomTopicForm = (props) => {
   const [engagement, setEngagement] = useState(null);
   const [customState, setCustomState] = useState(null);
 
-  // if (props) {
-  //   setLoadedFlag(true);
-  //   console.log("In if", props);
-  // }
-
   // RTK-Query
   const [updateCustomTopic, updateCustomTopic_Obj] =
     useUpdateCustomTopicMutation();
@@ -273,6 +268,7 @@ const EditCustomTopicForm = (props) => {
   }, [props.topicData]);
 
   useEffect(() => {
+    setCustomState(null);
     let filterObj = [{ bodyORtitle: bodyORtitle }];
     // let filterObj = [{ bodyORtitle: "title" }];
     if (any_keywords_list.length !== 0) {
@@ -459,6 +455,9 @@ const EditCustomTopicForm = (props) => {
     }
   };
 
+  if (!customState) {
+    return <div>loading</div>;
+  }
   return (
     <>
       {props ? (
@@ -729,7 +728,7 @@ const EditCustomTopicForm = (props) => {
           {/* {/ CONTENT FEED CONTAINER /} */}
 
           <div className="basis-1/3	">
-            {customState ? <WidgetPosts customTopic={customState} /> : null}
+            <WidgetPosts customTopic={customState} />
           </div>
         </div>
       ) : (

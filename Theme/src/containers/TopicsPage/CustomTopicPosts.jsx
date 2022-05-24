@@ -24,7 +24,7 @@ const CustomTopicPosts = ({ className = "",topicData }) => {
 
       {/* XXXXXXXXXXXXXXXXX>> TABS <<XXXXXXXXXXXXXXXXXXXX*/}
 
-      <div className=" w-full px-2 py-5 sm:px-0">
+      <div className=" w-full py-5 sm:px-0">
         <Tab.Group>
           <Tab.List className="flex justify-center items-center p-1 space-x-1  rounded-xl">
             <Tab
@@ -56,7 +56,6 @@ const CustomTopicPosts = ({ className = "",topicData }) => {
             </Tab>
           </Tab.List>
 
-          <div className="flex justify-center">
             <Tab.Panels className="mt-2">
               <Tab.Panel>
                 <CustomTopicsSearch topicData={topicData}/>
@@ -66,7 +65,6 @@ const CustomTopicPosts = ({ className = "",topicData }) => {
                   <CustomTopicInsights/>
               </Tab.Panel>
             </Tab.Panels>
-          </div>
         </Tab.Group>
       </div>
 

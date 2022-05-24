@@ -14,7 +14,11 @@ function MembersRightSide({ facet, setStartDate, setEndDate }) {
       <CalenderFilter calenderOnClick={calenderOnClick} />
       {calenderClick && (
         <div className="Datepicker">
-          <DatePicker setStartDate={setStartDate} setEndDate={setEndDate} />
+          <DatePicker
+            toggleDisplay={setcalenderClick}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+          />
         </div>
       )}
     </div>

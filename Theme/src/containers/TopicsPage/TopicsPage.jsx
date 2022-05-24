@@ -364,21 +364,6 @@ const TopicsPage = ({ className = "" }) => {
                           Select a topic
                         </div>
                       )}
-                      {/* {customData?.isFetching == false &&
-                        customData?.data?.map((values, index) => {
-                          if (
-                            values._id == customTopicId &&
-                            customData?.isSuccess == true
-                          ) {
-                            return (
-                              <>
-                                {values && (
-                                  <EditCustomTopicForm topicData={values} />
-                                )}
-                              </>
-                            );
-                          }
-                        })} */}
                     </>
                   );
                 }}

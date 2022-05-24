@@ -39,7 +39,7 @@ const PageInsights = ({ searchKitData }) => {
 
       <div className="">
         <Tab.Group>
-          <Tab.List className="w-screen flex justify-center md:justify-start items-center px-10">
+          <Tab.List className="flex justify-center md:justify-start items-center px-10">
             <Tab
               className={({ selected }) =>
                 classNames(
@@ -83,7 +83,7 @@ const PageInsights = ({ searchKitData }) => {
             </Tab>
           </Tab.List>
 
-          <div className="flex justify-center items-center">
+          <div className="flex-1">
             <Tab.Panels>
               <Tab.Panel>
                 <PageGraphs data={insights} searchKitData={searchKitData} />

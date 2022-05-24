@@ -109,7 +109,7 @@ const WidgetPosts = ({
   }
 
   var { data, error, loading } = useQuery(query, { variables });
-
+console.log(customTopic);
   const customState1 = {
     query: "",
     sortBy: "relevance",
