@@ -214,7 +214,7 @@ const TopicSubmitPost = () => {
   ); // limit_domains_results
 
   // filters
-  const [bodyORtitle, setBodyORtitle] = useState("titles");
+  const [bodyORtitle, setBodyORtitle] = useState("title");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [language, setlanguage] = useState(null);
@@ -452,36 +452,6 @@ const TopicSubmitPost = () => {
         <label className="block md:col-span-2">
           <Label className="font-bold text-lg">Build Your Query</Label>
 
-          {/* <p className="mt-1 text-sm text-neutral-500 ">let's start by</p> */}
-
-          {/* <div className="mt-2">
-            <input
-              type="radio"
-              id="topics"
-              // value="topics"
-              value={domainORtopic}
-              checked={domainORtopic == "topics"}
-              onClick={() => setDomainORtopic("topics")}
-              className="w-3.5 h-3.5"
-            />
-            <label className="text-sm ml-4 font-normal" htmlFor="topics">
-              Adding topics and keywords
-            </label>
-          </div> 
-          <div className="mt-2">
-            <input
-              type="radio"
-              id="domians"
-              // value="domians"
-              value={domainORtopic}
-              checked={domainORtopic == "domians"}
-              onClick={() => setDomainORtopic("domians")}
-              className="w-3.5 h-3.5"
-            />
-            <label className="text-sm ml-4 font-normal" htmlFor="domians">
-              Adding domins as sources
-            </label>
-          </div> */}
 
           <p className="mt-5 text-base text-neutral-500 font-medium">
             Each result must contain at least <b>ONE</b> one of these keywords

@@ -26,9 +26,10 @@ import ReactLoading from "react-loading";
 import CustomTopicPosts from "./CustomTopicPosts";
 
 const TopicsPage = ({ className = "" }) => {
+  console.log("rerender")
   const history = useHistory();
   const [folderID, setFolderID] = useState();
-  const [customTopicId, setCustomTopicId] = useState();
+  const [customTopicId, setCustomTopicId] = useState(null);
   const [showModal, setshowModal] = useState(false);
   const [allFolders, setAllFolders] = useState(false);
 
@@ -39,9 +40,9 @@ const TopicsPage = ({ className = "" }) => {
   const favouritePosts = useGetAllFavouritePostsQuery(folderID);
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
-  const customData = useGetAllCustomTopicsQuery(customTopicId);
-  const singleCustomTopic = useGetSingleCustomTopicQuery(customTopicId);
-  console.log(singleCustomTopic);
+  // const customData = useGetAllCustomTopicsQuery(customTopicId);
+  // const singleCustomTopic = useGetSingleCustomTopicQuery(customTopicId);
+  // console.log(singleCustomTopic);
   // const getAllCustomPosts = useGetAllCustomTopicsQuery(customTopicId);
 
   var [deletePost, { isLoading, isError }] = useDeleteCustomTopicMutation();
@@ -339,11 +340,9 @@ const TopicsPage = ({ className = "" }) => {
                 render={() => {
                   return (
                     <>
-                      {singleCustomTopic.isFetching == false &&
-                      singleCustomTopic.isError == false &&
-                      singleCustomTopic.isLoading == false ? (
-                        <CustomTopicPosts topicData={singleCustomTopic?.data} />
-                      ) : null}
+           
+                 <CustomTopicPosts />
+                  
                     </>
                   );
                 }}
@@ -353,17 +352,25 @@ const TopicsPage = ({ className = "" }) => {
                 render={() => {
                   return (
                     <>
-                      {singleCustomTopic.isFetching == false &&
-                      singleCustomTopic.isError == false &&
-                      singleCustomTopic.isLoading == false ? (
+         
                         <EditCustomTopicForm
-                          topicData={singleCustomTopic?.data}
                         />
-                      ) : (
-                        <div className="flex justify-center mt-20 text-2xl text-slate-500 ">
-                          Select a topic
-                        </div>
-                      )}
+                    
+                      {/* {customData?.isFetching == false &&
+                        customData?.data?.map((values, index) => {
+                          if (
+                            values._id == customTopicId &&
+                            customData?.isSuccess == true
+                          ) {
+                            return (
+                              <>
+                                {values && (
+                                  <EditCustomTopicForm topicData={values} />
+                                )}
+                              </>
+                            );
+                          }
+                        })} */}
                     </>
                   );
                 }}

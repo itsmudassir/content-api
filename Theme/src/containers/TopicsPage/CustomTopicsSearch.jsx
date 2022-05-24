@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
-import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
-import LanguagesFilterBox from "../../components/LanguagesFilterBox/LanguagesFilterBox";
+import LanguagesFilterBox1 from "../../components/LanguagesFilterBox/LanguagesFilterBox";
+import LanguagesFilterBox from "../../components/CustomTopicLanguageSelect/CustomTopicLanguageSelect";
 import { Helmet } from "react-helmet";
 import Card11 from "../../components/Card11/Card11";
-import { useLocation } from "react-router-dom";
-import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
-import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
+import DateRangeDropDown1 from "../../components/DateRangeCalender/DateRangeDropDown";
+import DateRangeDropDown from "../../components/CustomTopicDateRange/DateRangeDropDown";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
-import RelevanceListBox from "../../components/RelevanceListBox/RelevanceListBox";
-import {
-  useGetAllFavouritePostsbyUserQuery,
-  useIsFollowingTopicMutation,
-  useCreateFollowedTopicMutation,
-  useDeleteFollowedTopicMutation,
-} from "../../app/Api/contentApi";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import queryString from "query-string";
+import RelevanceListBox1 from "../../components/RelevanceListBox/RelevanceListBox";
+import RelevanceListBox from "../../components/CustomTopicSortSelect/CustomTopicSortSelect";
+import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
 import cogoToast from "cogo-toast";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import { gql, useQuery } from "@apollo/client";
-
 
 const gqlQuery = gql`
   query resultSet(
@@ -112,111 +103,30 @@ const gqlQuery = gql`
   }
 `;
 
-
-
-const CustomTopicsSearch = ({ className = "", topicData }) => {
-  console.log(topicData);
+const CustomTopicsSearch = ({
+  className = "",
+  customTopic,
+  setlanguage,
+  setEngagement,
+  setStartDate,
+  setEndDate
+}) => {
   // states
+  let newData;
 
   // RTK-Query
   const RtkData = useGetAllFavouritePostsbyUserQuery();
-
-  // Global variable
-  let newData;
-
-  // search params || URL params
-  const { search } = useLocation();
-  var { customCateogry, customQuery } = queryString.parse(search);
 
   //   SearchKit data
   const api = useSearchkit();
   const variables = useSearchkitVariables();
   const { data, loading, error } = useQuery(gqlQuery, { variables });
+  console.log(data);
 
-//    // USE-EFFECTS
-//    useEffect(() => {
-//     let filterObj = [{ bodyORtitle: bodyORtitle }];
-//     if (any_keywords_list.length !== 0) {
-//       filterObj.push({
-//         any_keywords_list: any_keywords_list,
-//       });
-//     }
-//     if (must_also_keywords_list.length !== 0) {
-//       filterObj.push({
-//         must_also_keywords_list: must_also_keywords_list,
-//       });
-//     }
-//     if (must_not_contains_keywords_list.length !== 0) {
-//       filterObj.push({
-//         must_not_contains_keywords_list: must_not_contains_keywords_list,
-//       });
-//     }
-//     if (exclude_domains_list.length !== 0) {
-//       filterObj.push({
-//         exclude_domains_list: exclude_domains_list,
-//       });
-//     }
-//     if (limit_domains_results_list.length !== 0) {
-//       filterObj.push({
-//         limit_domains_results_list: limit_domains_results_list,
-//       });
-//     }
-//     if (startDate !== null) {
-//       filterObj.push({
-//         startDate: startDate,
-//       });
-//     }
-//     if (endDate !== null) {
-//       filterObj.push({
-//         endDate: endDate,
-//       });
-//     }
-//     if (language !== null) {
-//       filterObj.push({
-//         language: language,
-//       });
-//     }
-//     if (engagement !== null) {
-//       filterObj.push({
-//         engagement: engagement,
-//       });
-//     }
-
-//     console.log("CUSTOM TOPIC ", filterObj);
-//     let jsonob = JSON.stringify(filterObj);
-
-//     const customState = {
-//       query: "",
-//       sortBy: engagement,
-
-//       filters: [
-//         {
-//           identifier: "CustomFilter",
-//           value: jsonob 
-  
-//         },
-//       ],
-//       page: {
-//         size: 8,
-//         from: 0,
-//       },
-//     };
-
-//     api.setSearchState(customState);
-//     api.search();
-//   }, [
-//     engagement,
-//     language,
-//     endDate,
-//     startDate,
-//     bodyORtitle,
-//     exclude_domains_list,
-//     any_keywords_list,
-//     must_also_keywords_list,
-//     must_not_contains_keywords_list,
-//     limit_domains_results_list,
-//   ]);
-  
+  useEffect(() => {
+    api.setSearchState(customTopic);
+    api.search();
+  }, [customTopic]);
 
   if (data) {
     var sortOptions = data?.results.summary.sortOptions;
@@ -225,7 +135,6 @@ const CustomTopicsSearch = ({ className = "", topicData }) => {
       (item) => item.identifier == "language"
     )[0].entries;
   }
-
 
   if (data) {
     console.log(data);
@@ -253,16 +162,6 @@ const CustomTopicsSearch = ({ className = "", topicData }) => {
     // console.log(newData);
   }
 
-  if (error) {
-    console.log("An error Occured" + error);
-  }
-
-  // if (loading) {
-  //   return <div className="flex justify-center items-center mt-4">
-  //     <LoadingVideo />
-  //   </div>;
-  // }
-
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
@@ -279,18 +178,27 @@ const CustomTopicsSearch = ({ className = "", topicData }) => {
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex justify-start items-center space-x-2.5">
               {/* ============ Language filter dropdown Button =============== */}
-              {!loading ? <LanguagesFilterBox lists={langaugeList} /> : null}
+              {/* {!loading ? <LanguagesFilterBox1 lists={langaugeList} /> : null} */}
+              {!loading ? (
+                <LanguagesFilterBox
+                  setlanguage={setlanguage}
+                  lists={langaugeList}
+                />
+              ) : null}
 
               {/* ============ Date Range =============== */}
-              <DateRangeDropDown facet={data?.results?.facets} />
-            </div>
-
-            <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
-            <div className="flex justify-between items-center">
-              {/* ========== follow button div ============  */}
+              {/* <DateRangeDropDown1 facet={data?.results?.facets} /> */}
+              <DateRangeDropDown
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+              />
 
               {/*======= relevence dropdown button ============*/}
-              <RelevanceListBox lists={sortOptions} />
+              {/* <RelevanceListBox1 lists={sortOptions} /> */}
+              <RelevanceListBox
+                setEngagement={setEngagement}
+                lists={sortOptions}
+              />
             </div>
           </div>
 

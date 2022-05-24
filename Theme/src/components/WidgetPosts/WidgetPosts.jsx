@@ -1,152 +1,131 @@
+
 import Card3Small from "../Card3Small/Card3Small";
 import WidgetHeading1 from "../WidgetHeading1/WidgetHeading1";
 import { PostDataType } from "../../data/types";
-import React, { FC, useEffect } from "react";
-import { gql, useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
+import cogoToast from "cogo-toast";
+import { gql, useQuery } from "@apollo/client";
 
 
-
-
-const WidgetPosts = ({
-  className = "bg-neutral-100 dark:bg-neutral-800",
-  posts,
-  customTopic,
-}) => {
-  const query = gql`
-    query resultSet(
-      $query: String
-      $filters: [SKFiltersSet]
-      $page: SKPageInput
-      $sortBy: String
-    ) {
-      results(query: $query, filters: $filters) {
-        summary {
-          total
-          appliedFilters {
-            id
-            identifier
-            display
-            label
-            ... on DateRangeSelectedFilter {
-              dateMin
-              dateMax
-              __typename
-            }
-
-            ... on ValueSelectedFilter {
-              value
-              __typename
-            }
-            __typename
-          }
-          sortOptions {
-            id
-            label
-            __typename
-          }
-          query
-          __typename
-        }
-        hits(page: $page, sortBy: $sortBy) {
-          page {
-            total
-            totalPages
-            pageNumber
-            from
-            size
-            __typename
-          }
-          sortedBy
-
-          items {
-            ... on ResultHit {
-              id
-              fields {
-                article_length
-                category
-                authors
-                date_download
-                language
-                facebook_shares
-                sentiment
-                url
-                readtime
-                image_url
-                twitter_shares
-                maintext
-                source_domain
-                title
-                __typename
-              }
-              __typename
-            }
-            __typename
-          }
-          __typename
-        }
-        facets {
+const query = gql`
+  query resultSet(
+    $query: String
+    $filters: [SKFiltersSet]
+    $page: SKPageInput
+    $sortBy: String
+  ) {
+    results(query: $query, filters: $filters) {
+      summary {
+        total
+        appliedFilters {
+          id
           identifier
-          type
-          label
           display
-          entries {
-            label
-            count
+          label
+          ... on DateRangeSelectedFilter {
+            dateMin
+            dateMax
+            __typename
+          }
+
+          ... on ValueSelectedFilter {
+            value
+            __typename
+          }
+          __typename
+        }
+        sortOptions {
+          id
+          label
+          __typename
+        }
+        query
+        __typename
+      }
+      hits(page: $page, sortBy: $sortBy) {
+        page {
+          total
+          totalPages
+          pageNumber
+          from
+          size
+          __typename
+        }
+        sortedBy
+
+        items {
+          ... on ResultHit {
+            id
+            fields {
+              article_length
+              category
+              authors
+              date_download
+              language
+              facebook_shares
+              sentiment
+              url
+              readtime
+              image_url
+              twitter_shares
+              maintext
+              source_domain
+              title
+              __typename
+            }
             __typename
           }
           __typename
         }
         __typename
       }
+      facets {
+        identifier
+        type
+        label
+        display
+        entries {
+          label
+          count
+          __typename
+        }
+        __typename
+      }
+      __typename
     }
-  `;
-  // SEARCH-KIT
-  const api = useSearchkit();
-  const variables = useSearchkitVariables();
-  if (variables?.page.size) {
-    variables.page.size = 20;
   }
+`;
 
-  var { data, error, loading } = useQuery(query, { variables });
-console.log(customTopic);
-  const customState1 = {
-    query: "",
-    sortBy: "relevance",
+const WidgetPosts= ({
+  className = "bg-neutral-100 dark:bg-neutral-800",
+  posts=null,
+  customTopic
 
-    filters: [
-      {
-        identifier: "CustomFilter",
-        value: customTopic,
-      },
-    ],
-    page: {
-      size: 8,
-      from: 0,
-    },
-  };
-  useEffect(() => {
-    api.setSearchState(customState1);
+}) => {
+
+   // SEARCH-KIT
+   const api = useSearchkit();
+   const variables = useSearchkitVariables();
+
+   var { data, error, loading } = useQuery(query, { variables });
+ 
+   if (error) {
+     cogoToast.error("This is a error message", {
+       position: "top-left",
+     });
+   }
+ 
+   useEffect(() => {
+    api.setSearchState(customTopic);
     api.search();
-  }, []);
-  
-  //console.log(posts.results?.hits.items[0].fields, "in widgetposts")
-  
-  if (!customTopic){
-    return <div>Loading...</div>
-  }
-  
-  if (!data){
-    return <div>Loading...</div>
-  }
-  
-  if(loading){
-    return <div>Loading...</div>
-  }
 
+  }, [customTopic]);
 
-
+  console.log(customTopic, "in widgetposts")
   return (
+    <>
+{customTopic ?(
     <div
       className={`nc-WidgetPosts rounded-3xl overflow-hidden ${className}`}
       data-nc-id="WidgetPosts"
@@ -156,19 +135,40 @@ console.log(customTopic);
         // viewAll={{ label: "View all", href: "/#" }}
       />
       <div className="flex flex-col divide-y divide-neutral-200 dark:divide-neutral-700">
-        {data
-          ? data.results?.hits.items?.slice(0, 7).map((post) => {
-              return (
-                <Card3Small
-                  className="p-4 xl:px-5 xl:py-6 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-                  key={post.id}
-                  post={post.fields}
-                />
-              );
-            })
-          : <div>Error loading data.</div>}
+        {data? (data.results?.hits.items?.slice(0, 7).map((post) => {
+          return(
+            <Card3Small
+            className="p-4 xl:px-5 xl:py-6 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+            key={post.id}
+            post={post.fields}
+          />
+          )
+        })) : "There occured an error"}
       </div>
-    </div>
+    </div>):(null)}
+
+{posts ?(
+    <div
+      className={`nc-WidgetPosts rounded-3xl overflow-hidden ${className}`}
+      data-nc-id="WidgetPosts"
+    >
+      <WidgetHeading1
+        title="🎯 Popular Posts"
+        // viewAll={{ label: "View all", href: "/#" }}
+      />
+      <div className="flex flex-col divide-y divide-neutral-200 dark:divide-neutral-700">
+        {posts? (posts.results?.hits.items?.slice(0, 7).map((post) => {
+          return(
+            <Card3Small
+            className="p-4 xl:px-5 xl:py-6 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+            key={post.id}
+            post={post.fields}
+          />
+          )
+        })) : "There occured an error"}
+      </div>
+    </div>):(null)}
+    </>
   );
 };
 

@@ -3,7 +3,7 @@ import CalenderFilter from "./Calender-filter";
 import DatePicker from "./Datepicker";
 import "./DateRangeCalender.css";
 
-function MembersRightSide({ facet, setStartDate, setEndDate }) {
+function MembersRightSide({ setStartDate, setEndDate }) {
   const [calenderClick, setcalenderClick] = useState(false);
   function calenderOnClick(e) {
     setcalenderClick(!calenderClick);
