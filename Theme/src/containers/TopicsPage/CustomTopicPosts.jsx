@@ -165,13 +165,10 @@ const CustomTopicPosts = ({ className = "" }) => {
 
     setCustomState(customState1);
     console.log("------------customState", customState);
-    // api.setSearchState(customState1);
-    // api.search();
   }, [singleCustomTopic.data]);
 
   useEffect(() => {
     if (customState) {
-      console.log("Runs");
       let filterObj = [];
       if (bodyORtitle !== null) {
         filterObj.push({
@@ -313,7 +310,11 @@ const CustomTopicPosts = ({ className = "" }) => {
             </Tab.Panel>
 
             <Tab.Panel>
-              <CustomTopicInsights />
+              {!singleCustomTopic.isFetching &&
+              !singleCustomTopic.isLoading &&
+              singleCustomTopic.isSuccess ? (
+                <CustomTopicInsights customTopic={singleCustomTopic} />
+              ) : null}
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>

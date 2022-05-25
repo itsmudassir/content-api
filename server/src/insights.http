@@ -2,12 +2,20 @@ POST http://localhost:7777/api/insights/getCustomTopicInsights
 Content-Type: application/json
 
 {
-    "startDate" :"2022-03-01",
-    "endDate":"2022-03-10",
-    "exclude_domains_list":["businessinsider.com"],
-    # "any_keywords_list":["war"],
-    "must_also_keywords_list": ["war"],
-    "must_not_contains_keywords_list":["apple"],
-    "limit_domains_results_list":["bbc.com"]
+     "startDate" :"2022-03-01",
+     "endDate":"2022-03-30",
+    "exclude_domains_list":[],
+    "any_keywords_list":[],
+    "must_also_keywords_list": [],
+    "must_not_contains_keywords_list":[],
+    "limit_domains_results_list":[]
 
+
+    #  "startDate" :"2022-03-01",
+    #  "endDate":"2022-03-30"
+    # "exclude_domains_list":["businessinsider.com"],
+    # "any_keywords_list":["war"],
+    # "must_also_keywords_list": ["war"],
+    # "must_not_contains_keywords_list":["apple"],
+    # "limit_domains_results_list":["bbc.com"]
 }

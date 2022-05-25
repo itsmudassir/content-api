@@ -26,7 +26,7 @@ import ReactLoading from "react-loading";
 import CustomTopicPosts from "./CustomTopicPosts";
 
 const TopicsPage = ({ className = "" }) => {
-  console.log("rerender")
+  console.log("rerender");
   const history = useHistory();
   const [folderID, setFolderID] = useState();
   const [customTopicId, setCustomTopicId] = useState(null);
@@ -327,6 +327,9 @@ const TopicsPage = ({ className = "" }) => {
             </ul>
           </div>
 
+
+            {/* ============ PAGES CONTAINERS =================  */}
+
           <div className="border border-neutral-100 dark:border-neutral-800 md:hidden"></div>
           <div className="flex-grow">
             <CreateFolderModal
@@ -340,9 +343,7 @@ const TopicsPage = ({ className = "" }) => {
                 render={() => {
                   return (
                     <>
-           
-                 <CustomTopicPosts />
-                  
+                      <CustomTopicPosts />
                     </>
                   );
                 }}
@@ -352,25 +353,7 @@ const TopicsPage = ({ className = "" }) => {
                 render={() => {
                   return (
                     <>
-         
-                        <EditCustomTopicForm
-                        />
-                    
-                      {/* {customData?.isFetching == false &&
-                        customData?.data?.map((values, index) => {
-                          if (
-                            values._id == customTopicId &&
-                            customData?.isSuccess == true
-                          ) {
-                            return (
-                              <>
-                                {values && (
-                                  <EditCustomTopicForm topicData={values} />
-                                )}
-                              </>
-                            );
-                          }
-                        })} */}
+                      <EditCustomTopicForm />
                     </>
                   );
                 }}
