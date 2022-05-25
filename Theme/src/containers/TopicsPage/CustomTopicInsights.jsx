@@ -32,7 +32,7 @@ const CustomTopicInsights = ({ searchKitData }) => {
 
   return (
     <>
-      <hr className="mx-4 sm:mx-8 my-10 py-4" />
+      <hr className="mx-1 sm:mx-8 my-10 py-4" />
 
 
       <div className="">
@@ -81,7 +81,7 @@ const CustomTopicInsights = ({ searchKitData }) => {
             </Tab>
           </Tab.List>
 
-          <div className="flex justify-center items-center">
+          <div className="flex-1">
             <Tab.Panels>
               <Tab.Panel>
                 <PageGraphs data={insights} searchKitData={searchKitData} />

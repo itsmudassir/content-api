@@ -220,7 +220,7 @@ const PageSearchMain = ({ className = "" }) => {
             </Tab>
           </Tab.List>
 
-          <div className="flex justify-center ">
+          <div className="">
             <Tab.Panels className="mt-2">
               <Tab.Panel>
                 <PageSearch data={data} loading={loading} error={error} />

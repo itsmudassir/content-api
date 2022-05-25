@@ -5,11 +5,7 @@ import CustomTopicsSearch from "./CustomTopicsSearch";
 import { gql, useQuery } from "@apollo/client";
 import CustomTopicInsights from "./CustomTopicInsights";
 import { useParams, useHistory } from "react-router-dom";
-import {
-  useGetSingleCustomTopicQuery,
-} from "../../app/Api/contentApi";
-
-
+import { useGetSingleCustomTopicQuery } from "../../app/Api/contentApi";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -17,24 +13,21 @@ function classNames(...classes) {
 
 const CustomTopicPosts = ({ className = "" }) => {
   var topicId = useParams();
-  topicId=topicId.id
-  console.log("//////////////////////////////////",topicId);
+  topicId = topicId.id;
+  console.log("//////////////////////////////////", topicId);
   const singleCustomTopic = useGetSingleCustomTopicQuery(topicId);
   console.log(singleCustomTopic);
 
-  if (singleCustomTopic.data){
-    console.log(" customTopic  ",singleCustomTopic)
+  if (singleCustomTopic.data) {
+    console.log(" customTopic  ", singleCustomTopic);
   }
-  if (singleCustomTopic.isFetching){
-    console.log("fetching")
+  if (singleCustomTopic.isFetching) {
+    console.log("fetching");
   }
-  if (singleCustomTopic.isError){
-    console.log("error")
+  if (singleCustomTopic.isError) {
+    console.log("error");
   }
 
-
-
-   
   const [go, setGo] = useState(false);
   const [topicName, setTopicName] = useState(""); // topic name
 
@@ -66,16 +59,17 @@ const CustomTopicPosts = ({ className = "" }) => {
   const [engagement, setEngagement] = useState(null);
   const [customState, setCustomState] = useState(null);
 
-
-
-
-
   useEffect(() => {
     setAny_keywords_list(singleCustomTopic?.data?.selection?.any_keywords);
-    setMust_also_keywords_list(singleCustomTopic?.data?.selection?.must_also_keywords);
-    setMust_not_contains_keywords_list(singleCustomTopic?.data?.selection?.must_not_contains_keywords
+    setMust_also_keywords_list(
+      singleCustomTopic?.data?.selection?.must_also_keywords
     );
-    setExclude_domains_list(singleCustomTopic?.data?.selection?.exclude_domains);
+    setMust_not_contains_keywords_list(
+      singleCustomTopic?.data?.selection?.must_not_contains_keywords
+    );
+    setExclude_domains_list(
+      singleCustomTopic?.data?.selection?.exclude_domains
+    );
     setLimit_domains_results_list(
       singleCustomTopic?.data?.selection?.limit_domains_results
     );
@@ -85,41 +79,49 @@ const CustomTopicPosts = ({ className = "" }) => {
     setlanguage(singleCustomTopic?.data?.filters?.language);
     setEngagement(singleCustomTopic?.data?.filters?.engagement);
     setBodyORtitle(singleCustomTopic?.data?.filters?.type);
-    setGo(true)
+    setGo(true);
   }, [singleCustomTopic.data]);
 
   useEffect(() => {
-    let filterObj = []
+    let filterObj = [];
     if (singleCustomTopic?.data?.filters?.type !== null) {
       filterObj.push({
-        bodyORtitle: singleCustomTopic?.data?.filters?.type
-            });
+        bodyORtitle: singleCustomTopic?.data?.filters?.type,
+      });
     }
 
     if (singleCustomTopic?.data?.selection?.any_keywords?.length !== 0) {
       filterObj.push({
-        any_keywords_list: singleCustomTopic?.data?.selection?.any_keywords
+        any_keywords_list: singleCustomTopic?.data?.selection?.any_keywords,
       });
     }
     if (singleCustomTopic?.data?.selection?.must_also_keywords?.length !== 0) {
       filterObj.push({
-        must_also_keywords_list: singleCustomTopic?.data?.selection?.must_also_keywords
+        must_also_keywords_list:
+          singleCustomTopic?.data?.selection?.must_also_keywords,
       });
     }
-    if (singleCustomTopic?.data?.selection?.must_not_contains_keywords?.length !== 0) {
+    if (
+      singleCustomTopic?.data?.selection?.must_not_contains_keywords?.length !==
+      0
+    ) {
       filterObj.push({
-        must_not_contains_keywords_list: singleCustomTopic?.data?.selection?.must_not_contains_keywords
+        must_not_contains_keywords_list:
+          singleCustomTopic?.data?.selection?.must_not_contains_keywords,
       });
     }
     if (singleCustomTopic?.data?.selection?.exclude_domains?.length !== 0) {
       filterObj.push({
-        exclude_domains_list: singleCustomTopic?.data?.selection?.exclude_domains,
+        exclude_domains_list:
+          singleCustomTopic?.data?.selection?.exclude_domains,
       });
     }
-    if (singleCustomTopic?.data?.selection?.limit_domains_results?.length !== 0) {
+    if (
+      singleCustomTopic?.data?.selection?.limit_domains_results?.length !== 0
+    ) {
       filterObj.push({
-        limit_domains_results_list:singleCustomTopic?.data?.selection?.limit_domains_results
-
+        limit_domains_results_list:
+          singleCustomTopic?.data?.selection?.limit_domains_results,
       });
     }
     if (singleCustomTopic?.data?.filters?.startdate !== null) {
@@ -162,92 +164,87 @@ const CustomTopicPosts = ({ className = "" }) => {
     };
 
     setCustomState(customState1);
-    console.log("------------customState",customState)
+    console.log("------------customState", customState);
     // api.setSearchState(customState1);
     // api.search();
-  
   }, [singleCustomTopic.data]);
 
-  
-
   useEffect(() => {
-    if(customState){
-      console.log("Runs")
-    let filterObj = []
-    if (bodyORtitle !== null) {
-      filterObj.push({
-        bodyORtitle: bodyORtitle 
-      });
-    }
-    if (any_keywords_list?.length !== 0) {
-      filterObj.push({
-        any_keywords_list: any_keywords_list,
-      });
-    }
-    if (must_also_keywords_list?.length !== 0) {
-      filterObj.push({
-        must_also_keywords_list: must_also_keywords_list,
-      });
-    }
-    if (must_not_contains_keywords_list?.length !== 0) {
-      filterObj.push({
-        must_not_contains_keywords_list: must_not_contains_keywords_list,
-      });
-    }
-    if (exclude_domains_list?.length !== 0) {
-      filterObj.push({
-        exclude_domains_list: exclude_domains_list,
-      });
-    }
-    if (limit_domains_results_list?.length !== 0) {
-      filterObj.push({
-        limit_domains_results_list: limit_domains_results_list,
-      });
-    }
-    if (startDate !== null) {
-      filterObj.push({
-        startDate: startDate,
-      });
-    }
-    if (endDate !== null) {
-      filterObj.push({
-        endDate: endDate,
-      });
-    }
-    if (language !== null) {
-      filterObj.push({
-        language: language,
-      });
-    }
-    if (engagement !== null) {
-      filterObj.push({
-        engagement: engagement,
-      });
-    }
+    if (customState) {
+      console.log("Runs");
+      let filterObj = [];
+      if (bodyORtitle !== null) {
+        filterObj.push({
+          bodyORtitle: bodyORtitle,
+        });
+      }
+      if (any_keywords_list?.length !== 0) {
+        filterObj.push({
+          any_keywords_list: any_keywords_list,
+        });
+      }
+      if (must_also_keywords_list?.length !== 0) {
+        filterObj.push({
+          must_also_keywords_list: must_also_keywords_list,
+        });
+      }
+      if (must_not_contains_keywords_list?.length !== 0) {
+        filterObj.push({
+          must_not_contains_keywords_list: must_not_contains_keywords_list,
+        });
+      }
+      if (exclude_domains_list?.length !== 0) {
+        filterObj.push({
+          exclude_domains_list: exclude_domains_list,
+        });
+      }
+      if (limit_domains_results_list?.length !== 0) {
+        filterObj.push({
+          limit_domains_results_list: limit_domains_results_list,
+        });
+      }
+      if (startDate !== null) {
+        filterObj.push({
+          startDate: startDate,
+        });
+      }
+      if (endDate !== null) {
+        filterObj.push({
+          endDate: endDate,
+        });
+      }
+      if (language !== null) {
+        filterObj.push({
+          language: language,
+        });
+      }
+      if (engagement !== null) {
+        filterObj.push({
+          engagement: engagement,
+        });
+      }
 
-    console.log("CUSTOM TOPIC ", filterObj);
-    let jsonob = JSON.stringify(filterObj);
-    const customState1 = {
-      query: "",
-      sortBy: engagement,
+      console.log("CUSTOM TOPIC ", filterObj);
+      let jsonob = JSON.stringify(filterObj);
+      const customState1 = {
+        query: "",
+        sortBy: engagement,
 
-      filters: [
-        {
-          identifier: "CustomFilter",
-          value: jsonob,
+        filters: [
+          {
+            identifier: "CustomFilter",
+            value: jsonob,
+          },
+        ],
+        page: {
+          size: 8,
+          from: 0,
         },
-      ],
-      page: {
-        size: 8,
-        from: 0,
-      },
-    };
+      };
 
-    setCustomState(customState1);
-    console.log("------------customState",customState)
-  }
-    // api.setSearchState(customState);
-    // api.search();
+      setCustomState(customState1);
+      console.log("------------customState", customState);
+    }
   }, [
     engagement,
     language,
@@ -261,15 +258,8 @@ const CustomTopicPosts = ({ className = "" }) => {
     limit_domains_results_list,
   ]);
 
-
-
-
-
-
-
   return (
     <>
-    hello
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
           <title>Nc || Search Page Template</title>
@@ -278,7 +268,7 @@ const CustomTopicPosts = ({ className = "" }) => {
 
       {/* XXXXXXXXXXXXXXXXX>> TABS <<XXXXXXXXXXXXXXXXXXXX*/}
 
-      <div className=" w-full px-2 py-5 sm:px-0">
+      <div className="w-full px-2 py-5 sm:px-0">
         <Tab.Group>
           <Tab.List className="flex justify-center items-center p-1 space-x-1  rounded-xl">
             <Tab
@@ -309,18 +299,23 @@ const CustomTopicPosts = ({ className = "" }) => {
               Insights
             </Tab>
           </Tab.List>
+          <Tab.Panels className="mt-2">
+            <Tab.Panel>
+              {customState ? (
+                <CustomTopicsSearch
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  setEngagement={setEngagement}
+                  setlanguage={setlanguage}
+                  customTopic={customState}
+                />
+              ) : null}
+            </Tab.Panel>
 
-          <div className="flex justify-center">
-            <Tab.Panels className="mt-2">
-              <Tab.Panel>
-                {customState ? <CustomTopicsSearch customTopic={customState} /> : null}
-              </Tab.Panel>
-
-              <Tab.Panel>
-                  <CustomTopicInsights/>
-              </Tab.Panel>
-            </Tab.Panels>
-          </div>
+            <Tab.Panel>
+              <CustomTopicInsights />
+            </Tab.Panel>
+          </Tab.Panels>
         </Tab.Group>
       </div>
 

@@ -64,9 +64,9 @@ const PageGraphs = ({ data, searchKitData }) => {
 
   return (
     <>
-      <div className="w-screen">
+      <div className="w-full">
         {/* card container */}
-        <div className="py-5 px-3 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl bg-slate-100 rounded-xl">
+        <div className="py-5 px-3 mx-1 sm:mx-8 my-4 sm:my-5 shadow-xl bg-slate-100 rounded-xl">
           <div className="flex justify-start mb-4">
             <p className=" font-semibold">Summary</p>
           </div>
@@ -84,12 +84,12 @@ const PageGraphs = ({ data, searchKitData }) => {
         </div>
 
         {/* ArticlePerDateChart  */}
-        <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
+        <div className="py-5 mx-1 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
           <ArticlePerDateChart data={article_per_date} />
         </div>
 
         {/* EngagementByNetwork Charts Grid */}
-        <div className="grid grid-cols-1 gap-x-2.5 lg:gap-x-5 md:grid-cols-2 mx-4 sm:mx-8">
+        <div className="grid grid-cols-1 gap-x-2.5 lg:gap-x-5 md:grid-cols-2 mx-1 sm:mx-8">
           <div className="px-0 sm:px-2 py-5 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
             <AvgEngagementByNetwork data={avgEngagementByNetwork} />
           </div>
@@ -99,7 +99,7 @@ const PageGraphs = ({ data, searchKitData }) => {
         </div>
 
         {/* Popular-word-count and top-Keywords Charts Grid */}
-        <div className="grid grid-cols-1 gap-x-2.5 lg:gap-x-5 lg:grid-cols-2 mx-4 sm:mx-8">
+        <div className="grid grid-cols-1 gap-x-2.5 lg:gap-x-5 lg:grid-cols-2 mx-1 sm:mx-8">
           <div className="px-0 sm:px-4 py-5 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
             {/* Top Key Words chart */}
             <TopKeyWords data={top_keywords} />
@@ -112,18 +112,18 @@ const PageGraphs = ({ data, searchKitData }) => {
 
 
         {/* Popular Reading Levels chart */}
-        <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
+        <div className="py-5 mx-1 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
           <PopularReadingLevels data={popularReadingLevels} />
         </div>
 
         {/* Popular Days chart */}
-        <div className="py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
+        <div className="py-5 mx-1 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
           <PopularDays data={popularDays} />
         </div>
 
         {/* Donut Graph  */}
         {top_domians ? (
-          <div className="pr-2 py-5 mx-4 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
+          <div className="pr-2 py-5 mx-1 sm:mx-8 my-4 sm:my-5 shadow-xl rounded-xl bg-slate-100">
             <TopDomainsDonut  data={top_domians}/>
           </div>
         ) : (

@@ -3,7 +3,7 @@ import CalenderFilter from "./Calender-filter";
 import DatePicker from "./Datepicker";
 import "./DateRangeCalender.css";
 
-function MembersRightSide({ facet, setStartDate, setEndDate }) {
+function MembersRightSide({ setStartDate, setEndDate }) {
   const [calenderClick, setcalenderClick] = useState(false);
   function calenderOnClick(e) {
     setcalenderClick(!calenderClick);
@@ -14,7 +14,11 @@ function MembersRightSide({ facet, setStartDate, setEndDate }) {
       <CalenderFilter calenderOnClick={calenderOnClick} />
       {calenderClick && (
         <div className="Datepicker">
-          <DatePicker setStartDate={setStartDate} setEndDate={setEndDate} />
+          <DatePicker
+            toggleDisplay={setcalenderClick}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+          />
         </div>
       )}
     </div>

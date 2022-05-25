@@ -8,8 +8,10 @@ import {
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import "./DateRangeCalender.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
-function DatePicker({ setStartDate, setEndDate }) {
+function DatePicker({ setStartDate, setEndDate, toggleDisplay }) {
   const [startDate1, setStartDate1] = useState(null);
   const [endDate1, setEndDate1] = useState(null);
 
@@ -48,18 +50,25 @@ function DatePicker({ setStartDate, setEndDate }) {
   function handleSelect(range) {
     setStartDate1(range.selection.startDate);
     setEndDate1(range.selection.endDate);
+    toggleDisplay(false);
   }
 
   useEffect(() => {
-    if(startDate1 && endDate1){
-      setStartDate(()=>moment(startDate1).format("YYYY-MM-DD"));
-      setEndDate(()=>moment(endDate1).format("YYYY-MM-DD"));
+    if (startDate1 && endDate1) {
+      setStartDate(() => moment(startDate1).format("YYYY-MM-DD"));
+      setEndDate(() => moment(endDate1).format("YYYY-MM-DD"));
     }
   }, [startDate1, endDate1]);
 
   return (
     <>
       <div className="flex flex-col sm:flex-row">
+        <FontAwesomeIcon
+          onClick={() => toggleDisplay(false)}
+          icon={faCircleXmark}
+          className="cancelButton"
+        />
+        <br />
         <DateRange
           startDatePlaceholder="Start Date"
           endDatePlaceholder="End Date"
