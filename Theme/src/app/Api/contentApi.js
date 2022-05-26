@@ -184,7 +184,6 @@ const contentApi = createApi({
                 method: "POST",
                 body: obj
             }),
-            keepUnusedDataFor: 0,   // makes caching time 0 (zero) seconds || no caching
 
         }),
         

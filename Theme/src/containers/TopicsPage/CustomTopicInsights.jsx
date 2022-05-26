@@ -33,14 +33,6 @@ const CustomTopicInsights = ({ searchKitData, customTopic }) => {
         limit_domains_results_list:
           customTopic?.data?.selection?.limit_domains_results,
 
-
-        // startDate: "2022-03-01",
-        // endDate: "2022-03-30",
-        // exclude_domains_list: ["businessinsider.com"],
-        // any_keywords_list: ["war"],
-        // must_also_keywords_list: ["war"],
-        // must_not_contains_keywords_list: ["apple"],
-        // limit_domains_results_list: ["bbc.com"],
       });
       setInsights(res?.data?.aggregations.range.buckets[0]);
 

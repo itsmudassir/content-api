@@ -283,7 +283,6 @@ const TopicsPage = ({ className = "" }) => {
                                   <button
                                     onClick={(e) => {
                                       e.preventDefault();
-
                                       setFolderNameState(folderName);
                                       setToggleFolderNameHide(true);
                                       setToggleFolderNameHideId(_id);
