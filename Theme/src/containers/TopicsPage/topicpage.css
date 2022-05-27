@@ -1,0 +1,45 @@
+.topicsSpan {
+  display: none;
+}
+
+.customTopicsNavLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: small;
+  color: #8c8c8c;
+}
+.customTopicsNavLink:hover {
+  color: rgb(23 23 23);
+  background-color: rgb(245 245 245);
+}
+.customTopicsNavLink:hover span {
+  display: inline-block;
+}
+
+
+.folderSpan{
+    display: none;
+}
+.favouriteSFolderNavLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: small;
+  color: #8c8c8c;
+}
+.favouriteSFolderNavLink:hover {
+    color: rgb(23 23 23);
+    background-color: rgb(245 245 245);
+}
+.favouriteSFolderNavLink:hover span{
+    display: inline-block;
+}

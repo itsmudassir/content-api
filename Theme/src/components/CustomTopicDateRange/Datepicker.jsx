@@ -50,7 +50,7 @@ function DatePicker({ setStartDate, setEndDate, toggleDisplay }) {
   function handleSelect(range) {
     setStartDate1(range.selection.startDate);
     setEndDate1(range.selection.endDate);
-    toggleDisplay(false);
+    // toggleDisplay(false);
   }
 
   useEffect(() => {

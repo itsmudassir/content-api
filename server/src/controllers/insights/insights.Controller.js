@@ -556,24 +556,24 @@ const getCustomTopicInsights = async (req, res) => {
 
 
   
-        if (returnedObjJson.any_keywords_list) {
+        if (returnedObjJson.any_keywords_list && returnedObjJson.any_keywords_list.length >0) {
           any_keywords_list = returnedObjJson.any_keywords_list;
         }
 
-        if (returnedObjJson.must_also_keywords_list) {
+        if (returnedObjJson.must_also_keywords_list && returnedObjJson.must_also_keywords_list.length >0) {
             must_also_keywords_list = returnedObjJson.must_also_keywords_list;
           }
   
 
-          if (returnedObjJson.must_not_contains_keywords_list) {
+          if (returnedObjJson.must_not_contains_keywords_list && returnedObjJson.must_not_contains_keywords_list.length >0) {
             must_not_contains_keywords_list = returnedObjJson.must_not_contains_keywords_list;
           }
   
-          if (returnedObjJson.exclude_domains_list) {
+          if (returnedObjJson.exclude_domains_list && returnedObjJson.exclude_domains_list.length >0) {
             exclude_domains_list = returnedObjJson.exclude_domains_list;
           }
   
-          if (returnedObjJson.limit_domains_results_list) {
+          if (returnedObjJson.limit_domains_results_list && returnedObjJson.limit_domains_results_list.length > 0) {
             limit_domains_results_list = returnedObjJson.limit_domains_results_list;
           }
   

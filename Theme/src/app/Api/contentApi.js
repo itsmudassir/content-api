@@ -174,7 +174,17 @@ const contentApi = createApi({
                 url: `/api/insights/getInsights`,
                 method: "POST",
                 body: params
-            })
+            }),
+        }),
+
+        //get custom topic insights.
+        getCustomTopicInsights : builder.mutation({
+            query: (obj)=>({
+                url: "/api/insights/getCustomTopicInsights",
+                method: "POST",
+                body: obj
+            }),
+
         }),
         
         
@@ -242,6 +252,7 @@ export const {
     useCreateTopicMutation,
     useDeletePostByElasticIdMutation,
     useGetInsightsMutation,
+    useGetCustomTopicInsightsMutation,
     useGetAllFollowedTopicsQuery,
     useCreateFollowedTopicMutation,
     useDeleteFollowedTopicMutation,

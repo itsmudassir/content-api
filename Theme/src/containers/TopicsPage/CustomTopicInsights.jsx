@@ -3,23 +3,36 @@ import { Tab } from "@headlessui/react";
 import PageGraphs from "../PageGraphs/PageGraphs";
 import PageTopDomains from "../PageTopDomains/PageTopDomains";
 import PageTopAuthors from "../pageTopAuthors/pageTopAuthors";
-import { useGetInsightsMutation } from "../../app/Api/contentApi";
+import { useGetCustomTopicInsightsMutation } from "../../app/Api/contentApi";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const CustomTopicInsights = ({ searchKitData }) => {
+const CustomTopicInsights = ({ searchKitData, customTopic }) => {
   const [insights, setInsights] = useState();
-
+  console.log(customTopic.data);
   // RTK Query
-  const [getInsights, getInsightsObj] = useGetInsightsMutation();
+  const [getInsights, getInsightsObj] = useGetCustomTopicInsightsMutation();
 
   useEffect(async () => {
     try {
       const res = await getInsights({
-        startDate: "2022-03-01",
-        endDate: "2022-03-11",
+        startDate: customTopic?.data?.filters?.startdate
+          ? customTopic?.data?.filters?.startdate.split("T")[0]
+          : "2022-03-01",
+        endDate: customTopic?.data?.filters?.startdate
+          ? customTopic?.data?.filters?.enddate.split("T")[0]
+          : "2022-03-30",
+        exclude_domains_list: customTopic?.data?.selection?.exclude_domains,
+        any_keywords_list: customTopic?.data?.selection?.any_keywords,
+        must_also_keywords_list:
+          customTopic?.data?.selection?.must_also_keywords,
+        must_not_contains_keywords_list:
+          customTopic?.data?.selection?.must_not_contains_keywords,
+        limit_domains_results_list:
+          customTopic?.data?.selection?.limit_domains_results,
+
       });
       setInsights(res?.data?.aggregations.range.buckets[0]);
 
@@ -33,7 +46,6 @@ const CustomTopicInsights = ({ searchKitData }) => {
   return (
     <>
       <hr className="mx-1 sm:mx-8 my-10 py-4" />
-
 
       <div className="">
         <Tab.Group>
@@ -86,7 +98,7 @@ const CustomTopicInsights = ({ searchKitData }) => {
               <Tab.Panel>
                 <PageGraphs data={insights} searchKitData={searchKitData} />
               </Tab.Panel>
-              
+
               <Tab.Panel>
                 {insights ? <PageTopDomains insights={insights} /> : null}
               </Tab.Panel>
