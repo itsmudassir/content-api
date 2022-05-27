@@ -1,5 +1,5 @@
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef} from "react";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -24,6 +24,7 @@ import Card12 from "../../components/Card11/Card12";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import ReactLoading from "react-loading";
 import CustomTopicPosts from "./CustomTopicPosts";
+import "./topicpage.css";
 
 const TopicsPage = ({ className = "" }) => {
   console.log("rerender");
@@ -33,7 +34,11 @@ const TopicsPage = ({ className = "" }) => {
   const [showModal, setshowModal] = useState(false);
   const [allFolders, setAllFolders] = useState(false);
 
+  // Routing 
   let { path, url } = useRouteMatch();
+
+  // refrences 
+  const cutomTopicBtns =  useRef();
 
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
@@ -87,7 +92,7 @@ const TopicsPage = ({ className = "" }) => {
     setToggleFolderNameHide(false);
     setToggleFolderNameHideId("");
   };
-
+let arr = [];
   return (
     <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
       <Helmet>
@@ -105,9 +110,9 @@ const TopicsPage = ({ className = "" }) => {
           <div className="flex-shrink-0 max-w-xl xl:w-70 xl:pr-8">
             {/* {/ CUSTOM TOPICS /} */}
 
-            <ul className="text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex flex-row justify-start items-center">
-                <p className="flex px-6 py-2.5 font-medium rounded-lg text-[#666666]">
+            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+              <li className="flex justify-between items-center">
+                <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
                   CUSTOM TOPICS
                 </p>
                 <button
@@ -133,31 +138,33 @@ const TopicsPage = ({ className = "" }) => {
                 </li>
               ) : (
                 getAllCustomTopics?.data?.map(({ name, _id }, index) => {
+                  arr.push(_id);
                   return (
-                    <li key={index}>
-                      <div>
+                    <li key={index} className="w-full">
+                      <div >
                         <NavLink
-                          className="flex px-6 py-2.5 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+                          className="customTopicsNavLink"
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
                           to={`${url}/custom-topic-posts/${_id}`}
-                          // to={`/saad`}
                           onClick={() => {
                             setCustomTopicId(_id);
                           }}
-                          onMouseEnter={(e) => {
-                            setToggleTopicButtonsHide(true);
-                            setToggleTopicButtonsHideId(_id);
+                          onMouseOver={(e) => {
+                            // setToggleTopicButtonsHide(true);
+                            // setToggleTopicButtonsHideId(_id);
+                          
+                            // cutomTopicBtns.current.style.display = "block";
                           }}
                           onMouseLeave={(e) => {
-                            setToggleTopicButtonsHide(false);
-                            setToggleTopicButtonsHideId("");
+                            // setToggleTopicButtonsHide(false);
+                            // setToggleTopicButtonsHideId("");
+                            // cutomTopicBtns.current.style.display = "none";
+
                           }}
                         >
                           {name}
-                          <span style={{ marginLeft: "20px" }}>
-                            {toggleTopicButtonsHide &&
-                            toggleTopicButtonsHideId === _id ? (
-                              <>
+                          <span  ref={cutomTopicBtns}  className="topicsSpan">
+                              <div>
                                 <button
                                   title="Edit Topic"
                                   onClick={(e) => {
@@ -174,7 +181,7 @@ const TopicsPage = ({ className = "" }) => {
 
                                 <button
                                   title="Delete Topic"
-                                  className="ml-4"
+                                  className="ml-5"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     deletePost({ id: _id });
@@ -185,8 +192,8 @@ const TopicsPage = ({ className = "" }) => {
                                     style={{ color: "gray", fontSize: "12px" }}
                                   />
                                 </button>
-                              </>
-                            ) : null}
+                              </div>
+                           
                           </span>
                         </NavLink>
                       </div>
