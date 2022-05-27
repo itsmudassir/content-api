@@ -92,7 +92,6 @@ const TopicsPage = ({ className = "" }) => {
     setToggleFolderNameHide(false);
     setToggleFolderNameHideId("");
   };
-let arr = [];
   return (
     <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
       <Helmet>
@@ -105,8 +104,8 @@ let arr = [];
         heading="Dash board"
       >
         <div className="flex flex-col space-y-8 xl:space-y-0 xl:flex-row">
+          
           {/* {/ SIDEBAR  /} */}
-
           <div className="flex-shrink-0 max-w-xl xl:w-70 xl:pr-8">
             {/* {/ CUSTOM TOPICS /} */}
 
@@ -138,7 +137,6 @@ let arr = [];
                 </li>
               ) : (
                 getAllCustomTopics?.data?.map(({ name, _id }, index) => {
-                  arr.push(_id);
                   return (
                     <li key={index} className="w-full">
                       <div >
@@ -163,7 +161,7 @@ let arr = [];
                           }}
                         >
                           {name}
-                          <span  ref={cutomTopicBtns}  className="topicsSpan">
+                          <span className="topicsSpan">
                               <div>
                                 <button
                                   title="Edit Topic"
@@ -204,9 +202,9 @@ let arr = [];
             </ul>
 
             {/* FAVOURITES FOLDER */}
-            <ul className="text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex flex-row justify-start items-center">
-                <p className="flex px-6 py-2.5 font-medium rounded-lg text-[#666666]">
+            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+            <li className="flex justify-between items-center">
+                <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
                   FAVOURITES
                 </p>
                 <button
@@ -263,9 +261,9 @@ let arr = [];
                           </ButtonCircle>
                         </form>
                       ) : (
-                        <li key={_id}>
-                          <NavLink
-                            className="flex px-6 py-2.5 m-0 font-medium text-[#8c8c8c] hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+                        <li key={index} className="w-full">
+                        <NavLink
+                            className="favouriteSFolderNavLink"
                             activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
                             // to={`/topics/${_id}`}
                             to={`${url}/favourite-posts/${_id}`}
@@ -273,21 +271,20 @@ let arr = [];
                               setFolderID(_id);
                             }}
                             onMouseEnter={(e) => {
-                              setToggleButtonsHide(true);
-                              setToggleButtonsHideId(_id);
+                              // setToggleButtonsHide(true);
+                              // setToggleButtonsHideId(_id);
                             }}
                             onMouseLeave={(e) => {
-                              setToggleButtonsHide(false);
-                              setToggleButtonsHideId("");
+                              // setToggleButtonsHide(false);
+                              // setToggleButtonsHideId("");
                             }}
                           >
                             {folderName}
 
-                            <span style={{ marginLeft: "20px" }}>
-                              {toggleButtonsHide &&
-                              toggleButtonsHideId === _id ? (
-                                <>
+                            <span className="folderSpan">
+                              
                                   <button
+                                  title="Change folder name"
                                     onClick={(e) => {
                                       e.preventDefault();
                                       setFolderNameState(folderName);
@@ -305,8 +302,9 @@ let arr = [];
                                   </button>
 
                                   <button
-                                    style={{ paddingLeft: "12px" }}
-                                    onClick={(e) => {
+                                  title="Delete folder"
+                                  className="ml-5"
+                                  onClick={(e) => {
                                       e.preventDefault();
                                       deleteFolder({ id: _id });
                                     }}
@@ -319,8 +317,7 @@ let arr = [];
                                       }}
                                     />
                                   </button>
-                                </>
-                              ) : null}
+                               
                             </span>
                           </NavLink>
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
