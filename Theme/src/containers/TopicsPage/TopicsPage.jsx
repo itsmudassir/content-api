@@ -105,6 +105,7 @@ const TopicsPage = ({ className = "" }) => {
       >
         <div className="flex flex-col space-y-8 xl:space-y-0 xl:flex-row">
           
+          
           {/* {/ SIDEBAR  /} */}
           <div className="flex-shrink-0 max-w-xl xl:w-70 xl:pr-8">
             {/* {/ CUSTOM TOPICS /} */}
