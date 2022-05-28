@@ -105,7 +105,7 @@ const SBox = ({ pageType, category }) => {
               };
 
               history.push({
-                pathname: "/discover/discover_content",
+                pathname: "/discover/discover_search",
                 // state: { query: value },
                 search: queryString.stringify(newQueryParams),
               });
@@ -120,7 +120,7 @@ const SBox = ({ pageType, category }) => {
               };
 
               history.push({
-                pathname: "/discover/discover_content",
+                pathname: "/discover/discover_search",
                 // state: { query: value },
                 search: queryString.stringify(newQueryParams),
               });

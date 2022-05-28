@@ -103,87 +103,25 @@ const gqlQuery = gql`
   }
 `;
 
-const PageSearchMain = ({ className = "" }) => {
-  const api = useSearchkit();
-  const variables = useSearchkitVariables();
+const PageSearchMain = ({ className = "", searchKitData }) => {
+  // const api = useSearchkit();
+  // const variables = useSearchkitVariables();
   // if (variables?.page.size) {
   //   variables.page.size = 20;
   // }
+  
+  const { data, loading, error } = searchKitData;
   const { search, location } = useLocation();
   var { customCateogry, customQuery } = queryString.parse(search);
-  const { data, loading, error } = useQuery(gqlQuery, { variables });
-
-  useEffect(() => {
-    if (customQuery && !customCateogry) {
-      console.log("ONLY QUERY", customQuery);
-
-      const customState = {
-        query: customQuery,
-        sortBy: "",
-        filters: [
-          {
-            identifier: "date_download",
-            dateMin: "2022-01-16",
-            dateMax: "2022-09-18",
-          },
-        ],
-        page: {
-          size: 20,
-          from: 0,
-        },
-      };
-
-      api.setSearchState(customState);
-      api.search();
-    }
-
-    if (customCateogry && !customQuery) {
-      console.log("ONLY CATEGORY");
-      api.toggleFilter({
-        identifier: "category",
-        value: customCateogry,
-      });
-      api.toggleFilter({
-        identifier: "date_download",
-        dateMin: "2022-01-16",
-        dateMax: "2022-09-18",
-      });
-
-      api.setPage({ size: 20, from: 0 });
-      api.search();
-    }
-  }, [customCateogry, customQuery]);
-
-  useEffect(() => {
-    if (!customCateogry && !customQuery) {
-      const customState = {
-        query: "",
-        sortBy: "",
-        filters: [
-          {
-            identifier: "date_download",
-            dateMin: "2022-01-16",
-            dateMax: "2022-09-18",
-          },
-        ],
-        page: {
-          size: 20,
-          from: 0,
-        },
-      };
-
-      api.setSearchState(customState);
-      api.search();
-    }
-  }, []);
+  
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
           <title>Nc || Search Page Template</title>
         </Helmet>
-        <SearchBoxMain pageType="searchpage" category={customCateogry} />
-        <SBox pageType="searchpage" category={customCateogry} />
+        {/* <SearchBoxMain pageType="searchpage" category={customCateogry} /> */}
+        {/* <SBox pageType="searchpage" category={customCateogry} /> */}
       </div>
 
       {/* XXXXXXXXXXXXXXXXX>> TABS <<XXXXXXXXXXXXXXXXXXXX*/}

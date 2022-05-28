@@ -4,31 +4,46 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/solid";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
+import queryString from "query-string";
+import { useHistory } from "react-router-dom";
+
 
 const LanguagesFilterBox = ({ className = "", lists }) => {
+  const history = useHistory();
   const api = useSearchkit();
   var lan = api.getFiltersByIdentifier("language");
   var lanName = lan.map((val) => val.value);
-  const [selectedGlobal, setSelectedGlobal] = useState(lanName || null);
+  const [selected, setSelected] = useState(null);
+  const currentQueryParams = queryString.parse(window.location.search);
 
   const handelOnChange = (e) => {
-    var selected = e;
+    // var selected = e;
 
-    if (selectedGlobal == selected?.label) {
-      setSelectedGlobal(null);
-    } else {
-      setSelectedGlobal(selected?.label);
+    // if (selectedGlobal == selected?.label) {
+    //   setSelectedGlobal(null);
+    // } else {
+    //   setSelectedGlobal(selected?.label);
+    // }
+
+    // if (selected) {
+    //   api.toggleFilter({
+    //     identifier: "language",
+    //     value: selected?.label,
+    //   });
+
+    //   api.setPage({ size: 20, from: 0 });
+    //   api.search();
+    // }
+    setSelected(e);
+    const newQueryParams = {
+      ...currentQueryParams,
+      language : e.label
     }
-
-    if (selected) {
-      api.toggleFilter({
-        identifier: "language",
-        value: selected?.label,
-      });
-
-      api.setPage({ size: 20, from: 0 });
-      api.search();
-    }
+    history.push({
+      pathname: "/discover/discover_search",
+      search: queryString.stringify(newQueryParams),
+    });
+    
   };
   return (
     <>
@@ -41,8 +56,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
             <Listbox.Button as={"div"}>
               {/* <ButtonDropdown>{selected?.label}</ButtonDropdown> */}
               <ButtonDropdown>
-                {selectedGlobal && selectedGlobal.length > 0
-                  ? "Language : " + selectedGlobal
+                {selected? "Language : " + selected.label
                   : "Choose language"}
               </ButtonDropdown>
             </Listbox.Button>
