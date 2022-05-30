@@ -68,63 +68,73 @@ const SBox = ({ pageType, category }) => {
           }}
           onValueSelected={function (value, cause, source) {
             console.log("current value: ", value);
-
-            if (pageType == "searchpage") {
-              // setQuery(value)
-              const customState = {
-                query: value,
-                sortBy: "",
-                filters: [
-                  {
-                    //make dateMin, dateMax with moment js of last 3 months.
-                    identifier: "date_download",
-                    dateMin: "2022-01-16",
-                    dateMax: "2022-09-18",
-                  },
-                  // { identifier: "category", value: category },
-                ],
-
-                page: {
-                  size: 20,
-                  from: 0,
-                },
-              };
-              if (category) {
-                customState.filters.push({
-                  identifier: "category",
-                  value: category,
-                });
-              }
-              api.setSearchState(customState);
-              api.search();
-
-              const queryParams = queryString.parse(window.location.search);
-              const newQueryParams = {
-                ...queryParams,
-                customQuery: value,
-              };
-
-              history.push({
-                pathname: "/discover/discover_search",
-                // state: { query: value },
-                search: queryString.stringify(newQueryParams),
-              });
+            
+            const currentQueryParams = queryString.parse(window.location.search);
+            const newQueryParams = {
+              ...currentQueryParams,
+              customQuery: value
             }
+            history.push({
+              pathname: "/discover/discover_search",
+              search: queryString.stringify(newQueryParams),
+            });
 
-            if (pageType == "categorypage") {
-              const queryParams = queryString.parse(window.location.search);
-              console.log("XXXXXXXXXX", queryParams);
-              const newQueryParams = {
-                ...queryParams,
-                customQuery: value,
-              };
+            // if (pageType == "searchpage") {
+            //   // setQuery(value)
+            //   const customState = {
+            //     query: value,
+            //     sortBy: "",
+            //     filters: [
+            //       {
+            //         //make dateMin, dateMax with moment js of last 3 months.
+            //         identifier: "date_download",
+            //         dateMin: "2022-01-16",
+            //         dateMax: "2022-09-18",
+            //       },
+            //       // { identifier: "category", value: category },
+            //     ],
 
-              history.push({
-                pathname: "/discover/discover_search",
-                // state: { query: value },
-                search: queryString.stringify(newQueryParams),
-              });
-            }
+            //     page: {
+            //       size: 20,
+            //       from: 0,
+            //     },
+            //   };
+            //   if (category) {
+            //     customState.filters.push({
+            //       identifier: "category",
+            //       value: category,
+            //     });
+            //   }
+            //   api.setSearchState(customState);
+            //   api.search();
+
+            //   const queryParams = queryString.parse(window.location.search);
+            //   const newQueryParams = {
+            //     ...queryParams,
+            //     customQuery: value,
+            //   };
+
+            //   history.push({
+            //     pathname: "/discover/discover_search",
+            //     // state: { query: value },
+            //     search: queryString.stringify(newQueryParams),
+            //   });
+            // }
+
+            // if (pageType == "categorypage") {
+            //   const queryParams = queryString.parse(window.location.search);
+            //   console.log("XXXXXXXXXX", queryParams);
+            //   const newQueryParams = {
+            //     ...queryParams,
+            //     customQuery: value,
+            //   };
+
+            //   history.push({
+            //     pathname: "/discover/discover_search",
+            //     // state: { query: value },
+            //     search: queryString.stringify(newQueryParams),
+            //   });
+            // }
 
             // history.push(`/discover/discover_content?query=${value}`);
           }}

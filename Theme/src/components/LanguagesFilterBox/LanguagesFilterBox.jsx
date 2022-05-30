@@ -10,9 +10,9 @@ import { useHistory } from "react-router-dom";
 
 const LanguagesFilterBox = ({ className = "", lists }) => {
   const history = useHistory();
-  const api = useSearchkit();
-  var lan = api.getFiltersByIdentifier("language");
-  var lanName = lan.map((val) => val.value);
+  // const api = useSearchkit();
+  // var lan = api.getFiltersByIdentifier("language");
+  // var lanName = lan.map((val) => val.value);
   const [selected, setSelected] = useState(null);
   const currentQueryParams = queryString.parse(window.location.search);
 
@@ -56,7 +56,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
             <Listbox.Button as={"div"}>
               {/* <ButtonDropdown>{selected?.label}</ButtonDropdown> */}
               <ButtonDropdown>
-                {selected? "Language : " + selected.label
+                {selected? "Language: " + selected.label
                   : "Choose language"}
               </ButtonDropdown>
             </Listbox.Button>

@@ -38,7 +38,6 @@ const RelevanceListBox = ({ className = "", lists }) => {
   //  }, [query]);
 
   const handelOnChange = (e) => {
-    console.log(e)
     setSelected(e);
     const newQueryParams = {
       ...currentQueryParams,
@@ -98,7 +97,7 @@ const RelevanceListBox = ({ className = "", lists }) => {
         <div className="relative ">
           <Listbox.Button as={"div"}>
             <ButtonDropdown className="border border-slate-300">
-              {selected ? selected.label : "Sort By"}
+              {selected ?"Sorted by: "+ selected.label : "Sort By"}
             </ButtonDropdown>
           </Listbox.Button>
           <Transition

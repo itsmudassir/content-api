@@ -25,7 +25,6 @@ function DatePicker({toggleDisplay}) {
   const sort = queryParams.get("sort");
   // const { search, location } = useLocation();
   // var { sort } = queryString.parse(search);
-  console.log(sort);
   const api = useSearchkit();
   const [currentSort, setCurrentSort] = useState(sort || "relevance");
 
