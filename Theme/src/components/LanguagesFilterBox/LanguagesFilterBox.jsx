@@ -1,49 +1,41 @@
 import React, { FC } from "react";
 import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/solid";
+import { CheckIcon, XIcon } from "@heroicons/react/solid";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 import { useSearchkit } from "@searchkit/client";
 import queryString from "query-string";
 import { useHistory } from "react-router-dom";
 
-
 const LanguagesFilterBox = ({ className = "", lists }) => {
   const history = useHistory();
-  // const api = useSearchkit();
-  // var lan = api.getFiltersByIdentifier("language");
-  // var lanName = lan.map((val) => val.value);
   const [selected, setSelected] = useState(null);
   const currentQueryParams = queryString.parse(window.location.search);
+  const { language } = currentQueryParams;
+  console.log(lists);
 
   const handelOnChange = (e) => {
-    // var selected = e;
-
-    // if (selectedGlobal == selected?.label) {
-    //   setSelectedGlobal(null);
-    // } else {
-    //   setSelectedGlobal(selected?.label);
-    // }
-
-    // if (selected) {
-    //   api.toggleFilter({
-    //     identifier: "language",
-    //     value: selected?.label,
-    //   });
-
-    //   api.setPage({ size: 20, from: 0 });
-    //   api.search();
-    // }
     setSelected(e);
-    const newQueryParams = {
-      ...currentQueryParams,
-      language : e.label
+    if (lists.length == 1 && language) {
+      delete currentQueryParams.language;
+      const newQueryParams = {
+        ...currentQueryParams
+      };
+      history.push({
+        pathname: "/discover/discover_search",
+        search: queryString.stringify(newQueryParams),
+      });
+
+    } else {
+      const newQueryParams = {
+        ...currentQueryParams,
+        language: e.label,
+      };
+      history.push({
+        pathname: "/discover/discover_search",
+        search: queryString.stringify(newQueryParams),
+      });
     }
-    history.push({
-      pathname: "/discover/discover_search",
-      search: queryString.stringify(newQueryParams),
-    });
-    
   };
   return (
     <>
@@ -51,13 +43,11 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
         className={`nc-ArchiveFilterListBox ${className}`}
         data-nc-id="ArchiveFilterListBox"
       >
-        <Listbox value={"All Languages"} onChange={(e) => handelOnChange(e)}>
-          <div className="relative md:min-w-[200px]">
+        <Listbox value={selected} onChange={(e) => handelOnChange(e)}>
+          <div className="relative ">
             <Listbox.Button as={"div"}>
-              {/* <ButtonDropdown>{selected?.label}</ButtonDropdown> */}
-              <ButtonDropdown>
-                {selected? "Language: " + selected.label
-                  : "Choose language"}
+              <ButtonDropdown className="border border-slate-300">
+                {language ? "language: " + language : "Choose language"}
               </ButtonDropdown>
             </Listbox.Button>
             <Transition
@@ -81,18 +71,34 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
                   >
                     {({ selected }) => (
                       <>
-                        <span
-                          className={`${
-                            selected ? "font-medium" : "font-normal"
-                          } block truncate`}
-                        >
-                          {item.label}
-                        </span>
-                        {selected ? (
-                          <span className="text-primary-700 absolute inset-y-0 left-0 flex items-center pl-3 dark:text-neutral-200">
-                            <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
+                        {lists.length == 1 && language? (
+                          <div
+                            onClick={() => console.log("saad")}
+                            className="flex justify-between items-center z-50"
+                          >
+                            <p>Remove {item.label}</p>
+                            <XIcon className="w-5 h-5" />
+                          </div>
+                        ) : (
+                          <>
+                            <span
+                              className={`${
+                                selected ? "font-medium" : "font-normal"
+                              } block truncate`}
+                            >
+                              {item.label}
+                            </span>
+
+                            {selected ? (
+                              <span className="text-primary-700 absolute inset-y-0 left-0 flex items-center pl-3 dark:text-neutral-200">
+                                <CheckIcon
+                                  className="w-5 h-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
                       </>
                     )}
                   </Listbox.Option>

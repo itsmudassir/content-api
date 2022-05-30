@@ -8,6 +8,7 @@ import { gql, useQuery } from "@apollo/client";
 import PageSearchMain from "../../containers/PageSearch/PageSearchMain";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
+import dates from "../../data/globalVariables/globalDates";
 
 const query = gql`
   query resultSet(
@@ -103,7 +104,7 @@ const PageHome1 = () => {
   const api = useSearchkit();
   const variables = useSearchkitVariables();
   const { search, location } = useLocation();
-  var { customCategory, customQuery, language, sortBy } =
+  var { customCategory, customQuery, language, sortBy, startDate, endDate } =
     queryString.parse(search);
   const searchkitOutput = useQuery(query, { variables });
 
@@ -127,8 +128,8 @@ const PageHome1 = () => {
       filters: [
         {
           identifier: "date_download",
-          dateMin: "2022-01-16",
-          dateMax: "2022-09-18",
+          dateMin:startDate? startDate: dates.startDate,
+          dateMax: endDate? endDate: dates.endDate,
         },
       ],
       page: {
@@ -143,26 +144,29 @@ const PageHome1 = () => {
         value: customCategory,
       });
     }
-    if(sortBy){
+    if (sortBy) {
       customState.sortBy = sortBy;
     }
-    if(customQuery){
+    if (customQuery) {
       customState.query = customQuery;
     }
-    if(language){
+    if (language) {
       customState.filters.push({
         identifier: "language",
-        value: language
-      })
+        value: language,
+      });
     }
-
+    // if (startDate && endDate) {
+    //   customState.filters.push({
+    //     identifier: "date_download",
+    //     dateMin: startDate,
+    //     dateMax: endDate,
+    //   });
+    // }
 
     api.setSearchState(customState);
     api.search();
-  },[customCategory, customQuery, language, sortBy]);
-
-
-
+  }, [customCategory, customQuery, language, sortBy, startDate, endDate]);
 
   // useEffect(() => {
   //   if (customQuery && !customCategory) {

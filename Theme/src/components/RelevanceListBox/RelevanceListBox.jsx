@@ -8,34 +8,11 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { useHistory } from "react-router-dom";
 
-function useQuery() {
-  const { search } = useLocation();
 
-  return React.useMemo(() => new URLSearchParams(search), [search]);
-}
 const RelevanceListBox = ({ className = "", lists }) => {
   let history = useHistory();
   const [selected, setSelected] = useState(null);
   const currentQueryParams = queryString.parse(window.location.search);
-
-  //   const location = useLocation();
-
-  //   // const {path, url} = useRouteMatch();
-  //   // const history = useHistory();
-
-  //   const api = useSearchkit();
-
-  //   let query = useQuery();
-
-  //   var sortStateGlobal=query.get("sort")
-
-  //   const [selected, setSelected] = useState(sortStateGlobal||"relevance");
-
-  //   useEffect(() => {
-
-  //  setSelected(sortStateGlobal)
-
-  //  }, [query]);
 
   const handelOnChange = (e) => {
     setSelected(e);
@@ -47,45 +24,6 @@ const RelevanceListBox = ({ className = "", lists }) => {
       pathname: "/discover/discover_search",
       search: queryString.stringify(newQueryParams),
     });
-
-    // var selected=e
-
-    // if (selected==selected?.label){
-    //   setSelected("relevance")
-
-    // }
-    // else{
-    //   setSelected(selected?.label)
-
-    // }
-
-    // if(selected){
-    //   let searchParams = new URLSearchParams(window.location.search);
-
-    //   const params = new URLSearchParams({'sort': selected?.id });
-    //   history.replace({ pathname: location.pathname, search: searchParams.toString()+"&"+params.toString() });
-
-    // //   const queryParams = new URLSearchParams(window.location.search)
-    // //   const category = queryParams.get("customCateogry")
-    // //   const customQuery = queryParams.get("customQuery")
-    // //   var oldParams=""
-    // //   if(category){
-    // //     oldParams=oldParams+'customCateogry='+category
-    // //   }
-    // //   if(customQuery){
-    // //     oldParams=oldParams+'customQuery='+customQuery
-    // //   }
-
-    // //   history.push({
-    // //     pathname: '/discover/discover_content',
-    // //     search: '?'+'sort='+selected?.id,
-    // // });
-
-    // api.setSortBy(selected?.id);
-    // api.setPage({ size: 20, from: 0 });
-    // api.search();
-
-    // }
   };
 
   return (

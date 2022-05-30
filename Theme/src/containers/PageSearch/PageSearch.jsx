@@ -37,12 +37,12 @@ const PageSearch = ({ className = "", data, loading, error }) => {
 
   // search params || URL params
   const { search } = useLocation();
-  var { customCateogry, customQuery } = queryString.parse(search);
+  var { customCategory, customQuery } = queryString.parse(search);
 
   // handlers
   const followTopicHandler = async () => {
     try {
-      const res = await createFollowedTopic({ topicName: customCateogry });
+      const res = await createFollowedTopic({ topicName: customCategory });
       if (res.data) {
         cogoToast.success(res.data?.successMsg);
         setIsFollowing(true);
@@ -63,7 +63,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
 
   const unFollowTopicHandler = async () => {
     try {
-      const res = await deleteFollowedTopic({ topicName: customCateogry });
+      const res = await deleteFollowedTopic({ topicName: customCategory });
       setIsFollowing(false);
       if (res.data) {
         cogoToast.success(res.data?.successMsg);
@@ -94,7 +94,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   // useEffects
   useEffect(async () => {
     try {
-      const res = await isFollingTopic({ topicName: customCateogry });
+      const res = await isFollingTopic({ topicName: customCategory });
       setIsFollowing(res.data);
       console.log(res.data);
     } catch (err) {
