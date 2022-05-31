@@ -81,7 +81,6 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     }
   };
 
-  
   if (data) {
     var sortOptions = data?.results.summary.sortOptions;
     // const langaugeList = data?.results.facets[5].entries;
@@ -90,7 +89,6 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     )[0].entries;
   }
 
-  
   // useEffects
   useEffect(async () => {
     try {
@@ -116,17 +114,12 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     newData = data?.results?.hits?.items?.map((item) => {
       try {
         if (allFavoriteFolder[item.id] === undefined) {
-          // return allFavoriteFolder[""];
           return { ...item, isLiked: false };
         } else {
-          // console.log(item.id)
           return { ...item, isLiked: true };
         }
-      } catch (error) {
-        // return allFavoriteFolder[""];
-      }
+      } catch (error) {}
     });
-    // console.log(newData);
   }
 
   if (error) {
@@ -213,14 +206,15 @@ const PageSearch = ({ className = "", data, loading, error }) => {
             </div>
           </div>
 
+          {/*======= Article Cards ============*/}
           {!loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-8 mt-8 lg:mt-10">
-              {newData ? (
+              {newData?.length !== 0 ? (
                 newData?.map((value, index) => {
                   return <Card11 key={index} cardvalue={value} />;
                 })
               ) : (
-                <h1>No Content Found</h1>
+                <h1>Sorry, No articles available for this search.</h1>
               )}
             </div>
           ) : (

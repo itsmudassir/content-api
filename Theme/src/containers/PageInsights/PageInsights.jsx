@@ -5,6 +5,9 @@ import PageGraphs from "../../containers/PageGraphs/PageGraphs";
 import PageTopDomains from "../../containers/PageTopDomains/PageTopDomains";
 import PageTopAuthors from "../../containers/pageTopAuthors/pageTopAuthors";
 import { useGetInsightsMutation } from "../../app/Api/contentApi";
+import queryString from "query-string";
+import dates from "../../data/globalVariables/globalDates"
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -16,11 +19,18 @@ const PageInsights = ({ searchKitData }) => {
   // RTK Query
   const [getInsights, getInsightsObj] = useGetInsightsMutation();
 
+  // URL search params
+  const { startDate, endDate, customCategory, customQuery } = queryString.parse(
+    window.location.search
+  );
+
   useEffect(async () => {
     try {
       const res = await getInsights({
-        startDate: "2022-03-01",
-        endDate: "2022-03-11",
+        startDate: startDate? startDate: dates.startDate,
+        endDate: endDate? endDate: dates.endDate,
+        customQuery: customQuery,
+        category: customCategory,
       });
       setInsights(res?.data?.aggregations.range.buckets[0]);
 
@@ -29,7 +39,7 @@ const PageInsights = ({ searchKitData }) => {
       console.log("ERROR OCCOURED WHILE FETCHING INSIGHTS", err);
       console.log(getInsightsObj?.error);
     }
-  }, []);
+  }, [startDate, endDate, customCategory, customQuery]);
 
   return (
     <>
@@ -88,7 +98,7 @@ const PageInsights = ({ searchKitData }) => {
               <Tab.Panel>
                 <PageGraphs data={insights} searchKitData={searchKitData} />
               </Tab.Panel>
-              
+
               <Tab.Panel>
                 {insights ? <PageTopDomains insights={insights} /> : null}
               </Tab.Panel>

@@ -25,7 +25,7 @@ const PostMeta2 = ({
     maintext,
     category,
     readtime,
-  } = meta.fields;
+  } = meta.fields || meta;
   console.log(authors[0]);
   return (
     <div 

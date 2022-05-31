@@ -13,7 +13,6 @@ import {
   useDeleteCustomTopicMutation,
   useDeleteFolderMutation,
   useUpdateFolderMutation,
-  useGetSingleCustomTopicQuery,
   useGetAllFollowedTopicsQuery,
   useDeleteFollowedTopicMutation,
 } from "../../app/Api/contentApi";
@@ -23,6 +22,7 @@ import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cogoToast from "cogo-toast";
 import Card12 from "../../components/Card11/Card12";
+import Card11 from "../../components/Card11/Card11";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import ReactLoading from "react-loading";
 import CustomTopicPosts from "./CustomTopicPosts";
@@ -130,6 +130,7 @@ const TopicsPage = ({ className = "" }) => {
       >
         <div className="flex flex-col space-y-8 xl:space-y-0 xl:flex-row">
           {/* {/ SIDEBAR  /} */}
+
           <div className="flex-shrink-0 max-w-xl xl:w-70 xl:pr-8">
             {/* ============ FOLLOWED TOPICS ================== */}
             <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
@@ -149,7 +150,7 @@ const TopicsPage = ({ className = "" }) => {
               ) : getAllFollowedTopics.data?.InformationMsg ? (
                 <li className="flex justify-start items-center">
                   <p className="text-sm ml-6 text-slate-400">
-                    {getAllFollowedTopics?.data?.InformationMsg}
+                    {getAllFollowedTopics.data.InformationMsg}
                   </p>
                 </li>
               ) : (
@@ -457,13 +458,19 @@ const TopicsPage = ({ className = "" }) => {
                 render={() => {
                   return (
                     <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
-                      {favouritePosts?.data?.map((value, index) => {
-                        return (
-                          <>
-                            <Card12 key={index} cardItems={value} />
-                          </>
-                        );
-                      })}
+                      {favouritePosts?.data?.length !== 0 ? (
+                        favouritePosts?.data?.map((value, index) => {
+                          return (
+                            <>
+                              <Card12 key={index} cardItems={value} />
+                            </>
+                          );
+                        })
+                      ) : (
+                        <p className="text-right text-slate-600">
+                          No articles available in this folder.
+                        </p>
+                      )}
                     </div>
                   );
                 }}

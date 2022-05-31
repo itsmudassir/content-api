@@ -22,7 +22,7 @@ const SingleHeader = ({
   className = "",
   metaActionStyle = "style1",
 }) => {
-  const { authors, image_url, title, maintext, category } = pageData.fields;
+  const { authors, image_url, title, maintext, category } = pageData.fields || pageData;
   //const cvalue =  useSelector(state => state.cvalue)
   //  const title = "computer"
   //  const desc ="Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore beatae, voluptates et officia tenetur accusantium eaque dolor impedit enim, nostrum iste placeat amet in possimus repellendus commodi obcaecati! Tenetur, cumque?"
@@ -41,7 +41,7 @@ const SingleHeader = ({
             </span> */}
 
           <div className="w-full border-b border-neutral-100 dark:border-neutral-800"></div>
-          <div   className="flex flex-col sm:flex-row justify-between sm:items-end space-y-5 sm:space-y-0 sm:space-x-5">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-end space-y-5 sm:space-y-0 sm:space-x-5">
             <PostMeta2
               size="large"
               className="leading-none flex-shrink-0"

@@ -13,8 +13,8 @@ function classNames(...classes) {
 }
 
 export default function ShareBtnDropDown({ cardData }) {
-  const url = cardData?.fields?.url;
-  const title = cardData?.fields?.title;
+  const url = cardData?.fields?.url || cardData?.url;
+  const title = cardData?.fields?.title || cardData?.title;
   console.log(cardData?.fields?.title);
 
   return (

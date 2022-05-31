@@ -27,6 +27,7 @@ import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3"
 import EditUserProfile from "../../containers/PageEditUserProfile/PageEditUserProfile" 
 
+
 function App() {
   const { pathname } = useLocation();
   const [user, setUser] = useState({});
@@ -69,7 +70,7 @@ function App() {
 
           <PrivateRoute
             exact
-            path={"/discover/discover_content/mainpostpage/:id"}
+            path={"/mainpostpage/:id"}
             component={PageSingleTemplate3}
           />
 
