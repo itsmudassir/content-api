@@ -12,7 +12,11 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { useSearchkit } from "@searchkit/client";
 import "./DateRangeCalender.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { addDays } from "date-fns";
+import dates from "../../data/globalVariables/globalDates";
+import queryString from "query-string";
+import { useHistory } from "react-router-dom";
 
 // import {  useEffect } from "react";
 
@@ -20,18 +24,17 @@ import {faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 // import queryString from "query-string";
 
-function DatePicker({toggleDisplay}) {
+function DatePicker({ toggleDisplay }) {
   const queryParams = new URLSearchParams(window.location.search);
   const sort = queryParams.get("sort");
   // const { search, location } = useLocation();
   // var { sort } = queryString.parse(search);
-  console.log(sort);
   const api = useSearchkit();
+  const history = useHistory();
   const [currentSort, setCurrentSort] = useState(sort || "relevance");
-
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-
+  const currentQueryParams = queryString.parse(window.location.search);
   // useEffect(() => {
 
   //   alert(currentSort)
@@ -77,50 +80,17 @@ function DatePicker({toggleDisplay}) {
     setEndDate(range.selection.endDate);
     var startDatec = moment(range.selection.startDate).format("YYYY-MM-DD");
     var endDatec = moment(range.selection.endDate).format("YYYY-MM-DD");
-    // console.log(startDate, endDate,"---------------->");
     console.log(startDatec, endDatec, "---------------->");
-    if (api.getFiltersByIdentifier("date_download")) {
-      console.log("if date is set %%%%%%%%%%%%%%%");
-      const customState = {
-        query: api.getQuery() || "",
-        sortBy: currentSort || "",
-        filters: [
-          {
-            identifier: "date_download",
-            dateMin: startDatec,
-            dateMax: endDatec,
-          },
-        ],
-        page: {
-          size: 20,
-          from: 0,
-        },
-      };
-      var allfilter = api.getFilters();
-      for (let i = 0; i < allfilter.length; i++) {
-        var filter = allfilter[i];
-
-        if (filter.identifier !== "date_download") {
-          customState.filters.push(filter);
-        }
-      }
-      api.setSearchState(customState);
-      api.search();
-    } else {
-      api.toggleFilter({
-        identifier: "date_download",
-        dateMin: startDatec,
-        dateMax: endDatec,
-      });
-      api.setPage({ size: 20, from: 0 });
-      api.search();
-    }
-
-    //  api.toggleFilter({ identifier: "date_download",   dateMin:startDatec  , dateMax:endDatec })
-    //   api.setPage({ size: 20, from: 0 })
-    //   api.search()
-    //
-    // }
+    
+    const newQueryParams = {
+      ...currentQueryParams,
+      startDate: startDatec,
+      endDate: endDatec,
+    };
+    history.push({
+      pathname: "/discover/discover_search",
+      search: queryString.stringify(newQueryParams),
+    });
 
     toggleDisplay(false);
   }
@@ -145,9 +115,15 @@ function DatePicker({toggleDisplay}) {
             staticRanges={staticRanges}
             inputRanges={[]}
           />
-          <FontAwesomeIcon onClick={()=> toggleDisplay(false)} icon={faCircleXmark} className="cancelButton"/>
+          <FontAwesomeIcon
+            onClick={() => toggleDisplay(false)}
+            icon={faCircleXmark}
+            className="cancelButton"
+          />
         </div>
         <DateRange
+          minDate={addDays(new Date(dates.minDate), 0)} // mindate: "2022-03-01"
+          maxDate={addDays(new Date(dates.minDate), +30)}
           startDatePlaceholder="Start Date"
           endDatePlaceholder="End Date"
           ranges={[selectionRange]}

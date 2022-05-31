@@ -18,18 +18,15 @@ const Card11 = ({
   hiddenAuthor = false,
   ratio = "aspect-w-4 aspect-h-3",
 }) => {
+  console.log(cardvalue);
   const dispatch = useDispatch();
 
-  var { path } = useRouteMatch();
+  var { path , url} = useRouteMatch();
 
   const { id } = cardvalue;
   const history = useHistory();
 
-  const { title, date_download, url } = cardvalue.fields;
-
-  const externalUrl = () => {
-    history.push((window.location.href = url));
-  };
+  const cardvalues = cardvalue.fields;
 
   const href = `/discover/discover_content/mainpostpage/${id}`;
 
@@ -38,10 +35,9 @@ const Card11 = ({
   //useState hook from the theme
   const [isHover, setIsHover] = useState(false);
 
-  const pushData = () => {
-    history.push(`${path}/mainpostpage/${id}`, cardvalue);
 
-    console.log("data tranfered");
+  const pushData = () => {
+    history.push(`/mainpostpage/${id}`, cardvalue);
   };
 
   // handler
@@ -75,17 +71,16 @@ const Card11 = ({
         {!hiddenAuthor ? (
           <PostCardMeta meta={cardvalue.fields} />
         ) : (
-          <span className="text-xs text-neutral-500">{date_download}</span>
+          <span className="text-xs text-neutral-500">{cardvalues?.date_download}</span>
         )}
 
         <h2 className="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100 ">
           <span
-            onClick={() => externalUrl()}
             style={{ cursor: "pointer" }}
             className="line-clamp-2"
-            title={title}
+            title={cardvalues?.title}
           >
-            {title} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href={cardvalues?.url} target="_blank">{cardvalues?.title}</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
           </span>

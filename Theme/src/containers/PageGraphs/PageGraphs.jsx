@@ -60,7 +60,12 @@ const PageGraphs = ({ data, searchKitData }) => {
     }
   }, [data]);
 
-  if (!articlesAnalyzed) return <LoadingVideo />;
+  console.log(articlesAnalyzed)
+  if (articlesAnalyzed == 0){
+    return <p className="text-slate-600 text-start ml-10 mt-16">Sorry, No insights available for this search</p>
+  }
+  if (!articlesAnalyzed) return <div className="text-center mt-16"> <LoadingVideo /></div>;
+
 
   return (
     <>

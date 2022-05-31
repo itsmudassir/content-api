@@ -1,5 +1,5 @@
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
-import React, { useEffect, useState , useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -13,7 +13,8 @@ import {
   useDeleteCustomTopicMutation,
   useDeleteFolderMutation,
   useUpdateFolderMutation,
-  useGetSingleCustomTopicQuery,
+  useGetAllFollowedTopicsQuery,
+  useDeleteFollowedTopicMutation,
 } from "../../app/Api/contentApi";
 import ButtonCircle from "../../components/Button/ButtonCircle";
 import Input from "../../components/Input/Input";
@@ -21,6 +22,7 @@ import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cogoToast from "cogo-toast";
 import Card12 from "../../components/Card11/Card12";
+import Card11 from "../../components/Card11/Card11";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import ReactLoading from "react-loading";
 import CustomTopicPosts from "./CustomTopicPosts";
@@ -34,17 +36,20 @@ const TopicsPage = ({ className = "" }) => {
   const [showModal, setshowModal] = useState(false);
   const [allFolders, setAllFolders] = useState(false);
 
-  // Routing 
+  // Routing
   let { path, url } = useRouteMatch();
 
-  // refrences 
-  const cutomTopicBtns =  useRef();
+  // refrences
+  const cutomTopicBtns = useRef();
 
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
   const favouritePosts = useGetAllFavouritePostsQuery(folderID);
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
+  const getAllFollowedTopics = useGetAllFollowedTopicsQuery();
+  const [deleteFollowedTopic, deleteFollowedTopic_Obj] =
+    useDeleteFollowedTopicMutation();
   // const customData = useGetAllCustomTopicsQuery(customTopicId);
   // const singleCustomTopic = useGetSingleCustomTopicQuery(customTopicId);
   // console.log(singleCustomTopic);
@@ -92,6 +97,26 @@ const TopicsPage = ({ className = "" }) => {
     setToggleFolderNameHide(false);
     setToggleFolderNameHideId("");
   };
+  const unFollowTopicHandler = async (topic) => {
+    try {
+      if (window.confirm(`are you sure you want to unfollow ${topic}?`)) {
+        const res = await deleteFollowedTopic({ topicName: topic });
+        if (res.data) {
+          cogoToast.success(res.data?.successMsg);
+        }
+        if (res.error) {
+          cogoToast.error(res.error?.data?.errorMsg);
+        }
+      }
+    } catch (err) {
+      console.log("Error occoured while creating topic", err);
+      console.log(
+        "Error occoured while creating topic",
+        deleteFollowedTopic_Obj
+      );
+    }
+  };
+
   return (
     <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
       <Helmet>
@@ -104,11 +129,70 @@ const TopicsPage = ({ className = "" }) => {
         heading="Dash board"
       >
         <div className="flex flex-col space-y-8 xl:space-y-0 xl:flex-row">
-          
-          
           {/* {/ SIDEBAR  /} */}
+
           <div className="flex-shrink-0 max-w-xl xl:w-70 xl:pr-8">
-            {/* {/ CUSTOM TOPICS /} */}
+            {/* ============ FOLLOWED TOPICS ================== */}
+            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+              <li className="flex justify-between items-center">
+                <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
+                  Followed Topics
+                </p>
+              </li>
+              {!getAllFollowedTopics.data ? (
+                <li className="flex sm:justify-start lg:justify-center items-center">
+                  <ReactLoading
+                    type="bubbles"
+                    color="#9c4be7"
+                    className="w-32"
+                  />
+                </li>
+              ) : getAllFollowedTopics.data?.InformationMsg ? (
+                <li className="flex justify-start items-center">
+                  <p className="text-sm ml-6 text-slate-400">
+                    {getAllFollowedTopics.data.InformationMsg}
+                  </p>
+                </li>
+              ) : (
+                getAllFollowedTopics?.data?.map(({ topic, _id }, index) => {
+                  return (
+                    <li key={index} className="w-full">
+                      <div>
+                        <NavLink
+                          className="customTopicsNavLink"
+                          activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
+                          to={`${url}/followed-topics/${_id}`}
+                          onClick={() => {
+                            setCustomTopicId(_id);
+                          }}
+                        >
+                          {topic}
+                          <span className="topicsSpan">
+                            <div>
+                              <button
+                                title="Unfollow Topic"
+                                className="ml-5"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  unFollowTopicHandler(topic);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrashCan}
+                                  style={{ color: "gray", fontSize: "12px" }}
+                                />
+                              </button>
+                            </div>
+                          </span>
+                        </NavLink>
+                      </div>
+                    </li>
+                  );
+                })
+              )}
+            </ul>
+
+            {/* ============ CUSTOM TOPICS ================== */}
 
             <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
               <li className="flex justify-between items-center">
@@ -140,7 +224,7 @@ const TopicsPage = ({ className = "" }) => {
                 getAllCustomTopics?.data?.map(({ name, _id }, index) => {
                   return (
                     <li key={index} className="w-full">
-                      <div >
+                      <div>
                         <NavLink
                           className="customTopicsNavLink"
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
@@ -151,48 +235,45 @@ const TopicsPage = ({ className = "" }) => {
                           onMouseOver={(e) => {
                             // setToggleTopicButtonsHide(true);
                             // setToggleTopicButtonsHideId(_id);
-                          
                             // cutomTopicBtns.current.style.display = "block";
                           }}
                           onMouseLeave={(e) => {
                             // setToggleTopicButtonsHide(false);
                             // setToggleTopicButtonsHideId("");
                             // cutomTopicBtns.current.style.display = "none";
-
                           }}
                         >
                           {name}
                           <span className="topicsSpan">
-                              <div>
-                                <button
-                                  title="Edit Topic"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    setCustomTopicId(_id);
-                                    history.push(`${url}/custom_topics/${_id}`);
-                                  }}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faPen}
-                                    style={{ color: "gray", fontSize: "12px" }}
-                                  />
-                                </button>
+                            <div>
+                              <button
+                                title="Edit Topic"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setCustomTopicId(_id);
+                                  history.push(`${url}/custom_topics/${_id}`);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPen}
+                                  style={{ color: "gray", fontSize: "12px" }}
+                                />
+                              </button>
 
-                                <button
-                                  title="Delete Topic"
-                                  className="ml-5"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    deletePost({ id: _id });
-                                  }}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faTrashCan}
-                                    style={{ color: "gray", fontSize: "12px" }}
-                                  />
-                                </button>
-                              </div>
-                           
+                              <button
+                                title="Delete Topic"
+                                className="ml-5"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  deletePost({ id: _id });
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrashCan}
+                                  style={{ color: "gray", fontSize: "12px" }}
+                                />
+                              </button>
+                            </div>
                           </span>
                         </NavLink>
                       </div>
@@ -203,8 +284,9 @@ const TopicsPage = ({ className = "" }) => {
             </ul>
 
             {/* FAVOURITES FOLDER */}
+            {/* ============ FAVOURITES FOLDER ================== */}
             <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-            <li className="flex justify-between items-center">
+              <li className="flex justify-between items-center">
                 <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
                   FAVOURITES
                 </p>
@@ -263,7 +345,7 @@ const TopicsPage = ({ className = "" }) => {
                         </form>
                       ) : (
                         <li key={index} className="w-full">
-                        <NavLink
+                          <NavLink
                             className="favouriteSFolderNavLink"
                             activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
                             // to={`/topics/${_id}`}
@@ -283,42 +365,40 @@ const TopicsPage = ({ className = "" }) => {
                             {folderName}
 
                             <span className="folderSpan">
-                              
-                                  <button
-                                  title="Change folder name"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      setFolderNameState(folderName);
-                                      setToggleFolderNameHide(true);
-                                      setToggleFolderNameHideId(_id);
-                                    }}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faPen}
-                                      style={{
-                                        color: "gray",
-                                        fontSize: "12px",
-                                      }}
-                                    />
-                                  </button>
+                              <button
+                                title="Change folder name"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setFolderNameState(folderName);
+                                  setToggleFolderNameHide(true);
+                                  setToggleFolderNameHideId(_id);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPen}
+                                  style={{
+                                    color: "gray",
+                                    fontSize: "12px",
+                                  }}
+                                />
+                              </button>
 
-                                  <button
-                                  title="Delete folder"
-                                  className="ml-5"
-                                  onClick={(e) => {
-                                      e.preventDefault();
-                                      deleteFolder({ id: _id });
-                                    }}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faTrashCan}
-                                      style={{
-                                        color: "gray",
-                                        fontSize: "12px",
-                                      }}
-                                    />
-                                  </button>
-                               
+                              <button
+                                title="Delete folder"
+                                className="ml-5"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  deleteFolder({ id: _id });
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrashCan}
+                                  style={{
+                                    color: "gray",
+                                    fontSize: "12px",
+                                  }}
+                                />
+                              </button>
                             </span>
                           </NavLink>
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -331,8 +411,7 @@ const TopicsPage = ({ className = "" }) => {
             </ul>
           </div>
 
-
-            {/* ============ PAGES CONTAINERS =================  */}
+          {/* ============ PAGES CONTAINERS =================  */}
 
           <div className="border border-neutral-100 dark:border-neutral-800 md:hidden"></div>
           <div className="flex-grow">
@@ -342,6 +421,7 @@ const TopicsPage = ({ className = "" }) => {
             />
 
             <Switch>
+              {/* Custom topic posts Route  */}
               <Route
                 path={`${path}/custom-topic-posts/:id`}
                 render={() => {
@@ -352,6 +432,8 @@ const TopicsPage = ({ className = "" }) => {
                   );
                 }}
               />
+
+              {/* Edit Custom topic Route  */}
               <Route
                 path={`${path}/custom_topics/:id`}
                 render={() => {
@@ -362,28 +444,38 @@ const TopicsPage = ({ className = "" }) => {
                   );
                 }}
               />
-              <Route
-                path={`${path}/favourite-posts/:id`}
-                render={() => {
-                  return (
-                    <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
-                      {favouritePosts?.data?.map((value, index) => {
-                        return (
-                          <>
-                            <Card12 key={index} cardItems={value} />
-                          </>
-                        );
-                      })}
-                    </div>
-                  );
-                }}
-              />
 
+              {/* Create Custom Topic Route  */}
               <Route
                 exact
                 path={`${path}/submit-post`}
                 component={TopicSubmitPost}
               />
+
+              {/* Favourites Folder Posts Route  */}
+              <Route
+                path={`${path}/favourite-posts/:id`}
+                render={() => {
+                  return (
+                    <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
+                      {favouritePosts?.data?.length !== 0 ? (
+                        favouritePosts?.data?.map((value, index) => {
+                          return (
+                            <>
+                              <Card12 key={index} cardItems={value} />
+                            </>
+                          );
+                        })
+                      ) : (
+                        <p className="text-right text-slate-600">
+                          No articles available in this folder.
+                        </p>
+                      )}
+                    </div>
+                  );
+                }}
+              />
+
               <Redirect to={"/topics"} />
             </Switch>
           </div>

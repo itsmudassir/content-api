@@ -43,8 +43,7 @@ const readAllFollowedTopic = async (req, res) => {
         // const userId = "62399ee49884a61281edd8e3";
         const userId = req.user.id;
         const topics = await followedTopicsModel.find({ userId: userId });
-        console.log(userId);
-        console.log(topics);
+       
         return res.status(200).send(topics);
 
     } catch (err) {

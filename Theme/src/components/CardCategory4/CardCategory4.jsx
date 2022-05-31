@@ -31,7 +31,7 @@ const CardCategory4 = ({
   const queryParams = queryString.parse(search);
   const newQueryParams = {
     ...queryParams,
-    customCateogry: label,
+    customCategory: label,
   };
   const categories = "Follow";
   const getColorClass = () => {
@@ -115,8 +115,9 @@ const CardCategory4 = ({
 
         <Link
           to={{
-            pathname: "/discover/discover_content",
+            // pathname: "/discover/discover_content",
             // state: { topic: label },
+            pathname: "/discover/discover_search",
             search: queryString.stringify(newQueryParams),
           }}
           // to={`/discover/discover_content?category=${label}`}

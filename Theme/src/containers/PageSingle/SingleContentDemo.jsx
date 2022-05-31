@@ -5,7 +5,7 @@ const SingleContentDemo = ({
   data
 }) => {
 
-  const {maintext} = data.fields
+  const {maintext} = data.fields || data;
   return (
     <>
       {/* THIS IS THE DEMP CONTENT */}
