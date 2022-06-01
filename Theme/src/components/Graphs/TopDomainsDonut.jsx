@@ -1,26 +1,7 @@
-import React,{useState, useEffect} from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 
 const TopDomainsDonut = ({data}) => {
-  // states
-  // const [key, setKey] = useState();
-  // const [doc_count, setDoc_count] = useState();
-  // const [avg_engagment, setAvg_engagment] =
-  //   useState();
-
-  // useEffect(() => {
-  //   setKey(data?.buckets.map((item) => item.key));
-  //  setDoc_count(data?.buckets.map((item) => item.doc_count));
-  //    setAvg_engagment(
-  //     data?.buckets.map((item) =>
-  //       parseFloat(
-  //         parseFloat(item["avg engagment"].value).toFixed(1)
-  //       )
-  //     )
-  //   ); 
-  // }, [data]);
-
-
   
   return (
     <div className="donut">

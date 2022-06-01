@@ -1,7 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Heading from "../Heading/Heading";
-import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
-import { withSearchkit, withSearchkitRouting } from "@searchkit/client";
 import CardCategory4 from "../CardCategory4/CardCategory4";
 import { CategoryImage } from "../../data/CategoryImages";
 import "./SectionSliderNewCategories.css";
@@ -50,11 +48,6 @@ const categoriesFilter = [
 const SectionSliderNewCategories = ({
   heading,
   subHeading,
-  className = "",
-  itemClassName = "",
-  categories,
-  itemPerRow = 5,
-  categoryCardType = "card3",
   searchkitOutput,
 }) => {
   // states
@@ -82,9 +75,6 @@ const SectionSliderNewCategories = ({
   if (searchkitOutput.error) {
     console.log("ERROR FETCHING CATEGORIES:" + searchkitOutput.error);
   }
-  // if (searchkitOutput.loading) {
-  //   <LoadingVideo />;
-  // }
 
   return (
     <>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
-import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
 import PageGraphs from "../../containers/PageGraphs/PageGraphs";
 import PageTopDomains from "../../containers/PageTopDomains/PageTopDomains";
 import PageTopAuthors from "../../containers/pageTopAuthors/pageTopAuthors";
@@ -96,7 +95,7 @@ const PageInsights = ({ searchKitData }) => {
           <div className="flex-1">
             <Tab.Panels>
               <Tab.Panel>
-                <PageGraphs data={insights} searchKitData={searchKitData} />
+                <PageGraphs data={insights} />
               </Tab.Panel>
 
               <Tab.Panel>

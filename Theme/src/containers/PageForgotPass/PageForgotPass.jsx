@@ -9,9 +9,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { accountService } from "../../authentication/_services/account.Service";
 import cogoToast from "cogo-toast"
-// export interface PageForgotPassProps {
-//   className?: string;
-// } 
 
 const emailValidation = yup.object().shape({
   email: yup.string().email("Must be an Email").required("Email is required")
@@ -37,13 +34,9 @@ const PageForgotPass = ({ className = "" }) => {
       )
       .catch((error) =>cogoToast.error(error)
       )
-      // .finally(() => setSubmitting(false));
   }
 
-  // function onSubmit({email}){
-  //   console.log(email)
-  // }
-
+  
 
   return (
     <div

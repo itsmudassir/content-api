@@ -1,4 +1,3 @@
-import react, { useState } from "react";
 const PageContentFeed = () => {
   return (
     <center>

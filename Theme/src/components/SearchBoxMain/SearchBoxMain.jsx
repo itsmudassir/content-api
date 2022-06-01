@@ -118,61 +118,24 @@ const SearchBoxMain = ({ pageType , category}) => {
           ]}
           onChange={handleNameInput}
           value={name}
-          // value={query}
-          // value={this.state.text}
-          // onChange={(value, searchComponent, e) => {
-          //   // Perform actions after updating the value
-          //   this.setState(
-          //     {
-          //       text: value,
-          //     },
-          //     () => {
-          //       // to fetch the suggestions
-          //       // searchComponent.triggerDefaultQuery();
-          //       // To update results
-          //       // searchComponent.triggerCustomQuery();
-          //     }
-          //   );
-          // }}
           style={{
             paddingTop: "10px",
             paddingBottom: "10px",
             width: "45%",
             marginLeft: "28%",
           }}
-          // beforeValueChange={
-          //     function(value) {
-          //     // called before the value is set
-          //     // returns a promise
-          //     return new Promise((resolve, reject) => {
-          //         // update state or component props
-          //         resolve()
-          //         // or reject()
-          //     })
-          //     }
-          // }
-          // onValueChange={
-          //     function(value) {
-          //     console.log("current value: ", value)
-          //     // set the state
-          //     // use the value with other js code
-          //     }
-          // }
           onValueSelected={function (value, cause, source) {
 
             if (pageType == "searchpage") {
-              // setQuery(value)
               const customState = {
                 query: value,
                 sortBy: "",
                 filters: [
                   {
-                    //make dateMin, dateMax with moment js of last 3 months. 
                     identifier: "date_download",
                     dateMin: "2022-01-16",
                     dateMax: "2022-09-18",
                   },
-                  // { identifier: "category", value: category },
                 ],
 
                 page: {
@@ -194,14 +157,12 @@ const SearchBoxMain = ({ pageType , category}) => {
 
               history.push({
                 pathname: "/discover/discover_content",
-                // state: { query: value },
                 search: queryString.stringify(newQueryParams),
               });
             }
 
             if (pageType == "categorypage") {
               const queryParams = queryString.parse(window.location.search);
-              console.log("XXXXXXXXXX", queryParams);
               const newQueryParams = {
                 ...queryParams,
                 customQuery: value,
@@ -209,22 +170,12 @@ const SearchBoxMain = ({ pageType , category}) => {
 
               history.push({
                 pathname: "/discover/discover_content",
-                // state: { query: value },
                 search: queryString.stringify(newQueryParams),
               });
             }
 
-            // history.push(`/discover/discover_content?query=${value}`);
-
-            // console.log("current value: ", value);
           }}
-          // onQueryChange={
-          //     function(prevQuery, nextQuery) {
-          //     // use the query with other js code
-          //     console.log('prevQuery', prevQuery);
-          //     console.log('nextQuery', nextQuery);
-          //     }
-          // }
+
         />
         <SearchComponent
           id="result-component"
@@ -236,7 +187,6 @@ const SearchBoxMain = ({ pageType , category}) => {
           }}
         >
           {({ results, loading, size, setValue, setFrom }) => {
-            // console.log(this.state.text)
             return (
               <div className="result-list-container">
                 {loading ? (

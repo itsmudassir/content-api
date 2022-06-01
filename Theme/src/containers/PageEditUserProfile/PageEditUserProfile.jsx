@@ -58,7 +58,7 @@ const EditUserProfile = ({ history }) => {
         history.push(".");
       })
       .catch((error) => {
-        cogoToast.success(error);
+        cogoToast.error(error);
       });
 
   };

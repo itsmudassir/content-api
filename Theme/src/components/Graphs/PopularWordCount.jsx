@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 import millify from "millify";
 
 const PopularWordCount = ({ data }) => {
-  // const key = data?.buckets.map((item) => item.key);
-  // const doc_count = data?.buckets.map((item) => item.doc_count);
-  // // const avg_engagment_per_word_count = data?.buckets.map(item=>parseFloat(parseFloat(item["avg engagment per word count"].value).toFixed(1)));
-  // const avg_engagment_per_word_count = data?.buckets.map(
-  //   (item) => item["avg engagment per word count"].value
-  // );
-
+  
   return (
     <div>
       <>

@@ -1,118 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../components/Input/Input";
 import ButtonPrimary from "../../components/Button/ButtonPrimary";
-import Select from "../../components/Select/Select";
-import Textarea from "../../components/Textarea/Textarea";
 import Label from "../../components/Label/Label";
 import WidgetPosts from "../../components/WidgetPosts/WidgetPosts";
-import { DEMO_POSTS } from "../../data/posts";
 import Chip from "../../components/chip/chip";
-import { set } from "date-fns";
 import ExcludeResultInputField from "../../components/ExcludeResultInputField/ExcludeResultInputField";
 import LimitResultInputField from "../../components/LimitResultInputField/LimitResultInputField";
 import { useParams, useHistory } from "react-router-dom";
 import {
   useUpdateCustomTopicMutation,
-  useGetAllCustomTopicsQuery,
 } from "../../app/Api/contentApi";
 import CustomTopicLanguageSelect from "../../components/CustomTopicLanguageSelect/CustomTopicLanguageSelect";
 import CustomTopicSortSelect from "../../components/CustomTopicSortSelect/CustomTopicSortSelect";
 import DateRangeDropDown from "../../components/CustomTopicDateRange/DateRangeDropDown";
-import { gql, useQuery } from "@apollo/client";
-import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import cogoToast from "cogo-toast";
 import {
   useGetSingleCustomTopicQuery,
 } from "../../app/Api/contentApi";
-const widgetPostsDemo = DEMO_POSTS.filter((_, i) => i > 2 && i < 7);
-const query = gql`
-  query resultSet(
-    $query: String
-    $filters: [SKFiltersSet]
-    $page: SKPageInput
-    $sortBy: String
-  ) {
-    results(query: $query, filters: $filters) {
-      summary {
-        total
-        appliedFilters {
-          id
-          identifier
-          display
-          label
-          ... on DateRangeSelectedFilter {
-            dateMin
-            dateMax
-            __typename
-          }
 
-          ... on ValueSelectedFilter {
-            value
-            __typename
-          }
-          __typename
-        }
-        sortOptions {
-          id
-          label
-          __typename
-        }
-        query
-        __typename
-      }
-      hits(page: $page, sortBy: $sortBy) {
-        page {
-          total
-          totalPages
-          pageNumber
-          from
-          size
-          __typename
-        }
-        sortedBy
-
-        items {
-          ... on ResultHit {
-            id
-            fields {
-              article_length
-              category
-              authors
-              date_download
-              language
-              facebook_shares
-              sentiment
-              url
-              readtime
-              image_url
-              twitter_shares
-              maintext
-              source_domain
-              title
-              __typename
-            }
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      facets {
-        identifier
-        type
-        label
-        display
-        entries {
-          label
-          count
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }
-  }
-`;
 
 const LanguagesList = [
   {
@@ -213,7 +118,6 @@ const EditCustomTopicForm = () => {
     console.log("error")
   }
   
-  const [go, setGo] = useState(false);
   const [topicName, setTopicName] = useState(""); // topic name
 
   // selection
@@ -265,7 +169,6 @@ const EditCustomTopicForm = () => {
     setlanguage(singleCustomTopic?.data?.filters?.language);
     setEngagement(singleCustomTopic?.data?.filters?.engagement);
     setBodyORtitle(singleCustomTopic?.data?.filters?.type);
-    setGo(true)
   }, [singleCustomTopic.data]);
 
   useEffect(() => {
@@ -340,12 +243,7 @@ const EditCustomTopicForm = () => {
         from: 0,
       },
     };
-
     setCustomState(customState1);
-    console.log("------------customState",customState)
-    // api.setSearchState(customState1);
-    // api.search();
-  
   }, [singleCustomTopic.data]);
 
   
@@ -424,10 +322,8 @@ const EditCustomTopicForm = () => {
     };
 
     setCustomState(customState1);
-    console.log("------------customState",customState)
   }
-    // api.setSearchState(customState);
-    // api.search();
+ 
   }, [
     engagement,
     language,
@@ -713,7 +609,7 @@ const EditCustomTopicForm = () => {
         <label className="block md:col-span-2 mt-5">
           <Label className="font-bold text-lg">Set Default Filters</Label>
         </label>
-        {/* XXXXXXXXXXXXXXXXXXXXXXX  */}
+
         {/* Set Default Filters */}
         {/* ============== Date Range DropDown ================= */}
         <div className="grid grid-cols-12 md:col-span-2 gap-2">
@@ -742,7 +638,6 @@ const EditCustomTopicForm = () => {
             />
           </label>
         </div>
-        {/* XXXXXXXXXXXXXXXXXXXXXXX  */}
 
         <label className="block md:col-span-2 mt-5">
           <Label className="font-bold text-lg">Matching Criteria</Label>

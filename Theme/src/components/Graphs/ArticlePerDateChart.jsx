@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 import millify from "millify";
 
 const ArticlePerDateChart = ({ data }) => {
- 
   return (
     <div>
       <>
@@ -23,7 +22,9 @@ const ArticlePerDateChart = ({ data }) => {
             {
               name: "Total engagement per day",
               type: "line",
-              data: data?.buckets.map((item) => item.total_engagement_per_day.value),
+              data: data?.buckets.map(
+                (item) => item.total_engagement_per_day.value
+              ),
             },
           ]}
           options={{
@@ -44,13 +45,15 @@ const ArticlePerDateChart = ({ data }) => {
               },
             },
             xaxis: {
-              categories: data?.buckets.map((item) => item.key_as_string.split("T")[0]),
+              categories: data?.buckets.map(
+                (item) => item.key_as_string.split("T")[0]
+              ),
             },
             yaxis: [
               {
                 labels: {
                   formatter: function (value) {
-                    return millify(value, {precision:2});
+                    return millify(value, { precision: 2 });
                   },
                 },
                 seriesName: "Column A",
@@ -64,11 +67,11 @@ const ArticlePerDateChart = ({ data }) => {
                   text: "Average Number Of Engagements",
                 },
               },
-              
+
               {
                 labels: {
                   formatter: function (value) {
-                    return millify(value, {precision:2});
+                    return millify(value, { precision: 2 });
                   },
                 },
                 opposite: true,

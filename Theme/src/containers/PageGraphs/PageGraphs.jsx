@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
 import InsightsCard from "../../components/InsightsCard/InsightsCard";
 import AvgEngagementByNetwork from "../../components/Graphs/AvgEngagementByNetwork";
 import TotalEngagementByNetwork from "../../components/Graphs/TotalEngagementByNetwork";
@@ -13,7 +11,7 @@ import TopKeyWords from "../../components/Graphs/TopKeyWords";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 
 
-const PageGraphs = ({ data, searchKitData }) => {
+const PageGraphs = ({ data }) => {
   // states
   const [articlesAnalyzed, setArticlesAnalyzed] = useState();
   const [totalEngagements, setTotalEngagements] = useState();
@@ -29,8 +27,6 @@ const PageGraphs = ({ data, searchKitData }) => {
   const [top_keywords, setTop_keywords] = useState();
 
   // Search params parsing
-  const { search, location } = useLocation();
-  const { customCateogry, customQuery } = queryString.parse(search);
 
   useEffect(async () => {
     try {

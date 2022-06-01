@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useHistory, withRouter } from "react-router-dom";
 import NcModal from "../NcModal/NcModal";
-import Textarea from "../Textarea/Textarea";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import ButtonSecondary from "../Button/ButtonSecondary";
 import {
