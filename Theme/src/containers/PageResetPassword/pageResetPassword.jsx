@@ -13,29 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
 import { accountService } from "../../authentication/_services/account.Service";
-import cogoToast from "cogo-toast"
-
-// export interface PageLoginProps {
-//   className?: string;
-// }
-
-const loginSocials = [
-  {
-    name: "Continue with Facebook",
-    href: "#",
-    icon: facebookSvg,
-  },
-  {
-    name: "Continue with Twitter",
-    href: "#",
-    icon: twitterSvg,
-  },
-  {
-    name: "Continue with Google",
-    href: "#",
-    icon: googleSvg,
-  },
-];
+import cogoToast from "cogo-toast";
+import ReactLoading from "react-loading";
 
 const passwordValidation = yup.object().shape({
   password: yup.string().required("Password is required").min(6).max(20),
@@ -46,12 +25,12 @@ const passwordValidation = yup.object().shape({
 });
 
 const PageResetPassword = ({ history, location, className = "" }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const TokenStatus = {
     Validating: "Validating",
     Valid: "Valid",
     Invalid: "Invalid",
   };
-
 
   const [token, setToken] = useState(null);
   const [tokenStatus, setTokenStatus] = useState(TokenStatus.Validating);
@@ -82,15 +61,18 @@ const PageResetPassword = ({ history, location, className = "" }) => {
 
   function getForm() {
     function onSubmit({ password, confirmPassword }) {
+      setIsLoading(true);
       accountService
         .resetPassword({ token, password, confirmPassword })
         .then(() => {
-            cogoToast.success("Password reset successful, you can now login");
+          cogoToast.success("Password reset successful, you can now login");
           history.push("login");
+          setIsLoading(false);
         })
         .catch((error) => {
           // setSubmitting(false);
-          cogoToast.error(error)
+          cogoToast.error(error);
+          setIsLoading(false);
         });
     }
 
@@ -140,7 +122,19 @@ const PageResetPassword = ({ history, location, className = "" }) => {
                 </p>
               </label>
               <ButtonPrimary onClick={handleSubmit(onSubmit)}>
-                Reset Password
+                {isLoading ? (
+                  <div className="flex justify-center items-center">
+                    <p>Loading...</p>&nbsp;&nbsp;
+                    <ReactLoading
+                      type="spin"
+                      color={"white"}
+                      height={24}
+                      width={24}
+                    />
+                  </div>
+                ) : (
+                  "Reset Password"
+                )}
               </ButtonPrimary>
             </form>
 

@@ -1,8 +1,5 @@
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
-import React from "react";
-import facebookSvg from "../../images/Facebook.svg";
-import twitterSvg from "../../images/Twitter.svg";
-import googleSvg from "../../images/Google.svg";
+import React, { useState } from "react";
 import Input from "../../components/Input/Input";
 import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import NcLink from "../../components/NcLink/NcLink";
@@ -12,8 +9,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { accountService } from "../../authentication/_services/account.Service";
 import { alertService } from "../../authentication/_services/alert.service";
-import cogoToast from 'cogo-toast';
-
+import cogoToast from "cogo-toast";
+import ReactLoading from "react-loading";
 
 const LoginValidationSchema = yup.object().shape({
   email: yup.string().email("Must be an Email").required("Email is required"),
@@ -21,7 +18,7 @@ const LoginValidationSchema = yup.object().shape({
 });
 
 const PageLogin = ({ history, location, className = "" }) => {
-  
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -31,17 +28,19 @@ const PageLogin = ({ history, location, className = "" }) => {
   });
 
   function onSubmit({ email, password }) {
+    setIsLoading(true);
     alertService.clear();
     accountService
       .login(email, password)
       .then(() => {
         const { from } = location.state || { from: { pathname: "/" } };
-        // history.push(from);
         history.push("/");
-        cogoToast.success("loggedin successfully")
+        setIsLoading(false);
+        cogoToast.success("loggedin successfully");
       })
       .catch((error) => {
-        cogoToast.error(error)
+        cogoToast.error(error);
+        setIsLoading(false);
       });
   }
 
@@ -57,7 +56,6 @@ const PageLogin = ({ history, location, className = "" }) => {
       >
         <div className="max-w-md mx-auto space-y-6">
           <div className="grid gap-3 flex justify-center mb-12">
-
             <h1 className="text-2xl">Sign In</h1>
           </div>
 
@@ -94,7 +92,19 @@ const PageLogin = ({ history, location, className = "" }) => {
               </p>
             </label>
             <ButtonPrimary onClick={handleSubmit(onSubmit)}>
-              Login
+              {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <p>Loading...</p>&nbsp;&nbsp;
+                  <ReactLoading
+                    type="spin"
+                    color={"white"}
+                    height={24}
+                    width={24}
+                  />
+                </div>
+              ) : (
+                "Login"
+              )}
             </ButtonPrimary>
           </form>
 

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { useState } from "react";
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
 import Input from "../../components/Input/Input";
 import ButtonPrimary from "../../components/Button/ButtonPrimary";
@@ -8,14 +8,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { accountService } from "../../authentication/_services/account.Service";
-import cogoToast from "cogo-toast"
+import cogoToast from "cogo-toast";
+import ReactLoading from "react-loading";
 
 const emailValidation = yup.object().shape({
-  email: yup.string().email("Must be an Email").required("Email is required")
+  email: yup.string().email("Must be an Email").required("Email is required"),
 });
 
-
 const PageForgotPass = ({ className = "" }) => {
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -26,17 +27,18 @@ const PageForgotPass = ({ className = "" }) => {
   });
 
   function onSubmit({ email }) {
+    setIsLoading(true);
     accountService
       .forgotPassword(email)
-      .then(() =>
-      cogoToast.success("loggedin successfully")
-
-      )
-      .catch((error) =>cogoToast.error(error)
-      )
+      .then(() => {
+        cogoToast.success("loggedin successfully");
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        cogoToast.error(error);
+        setIsLoading(false);
+      });
   }
-
-  
 
   return (
     <div
@@ -68,7 +70,21 @@ const PageForgotPass = ({ className = "" }) => {
                 {errors.email?.message}
               </p>
             </label>
-            <ButtonPrimary onClick={handleSubmit(onSubmit)}>Continue</ButtonPrimary>
+            <ButtonPrimary onClick={handleSubmit(onSubmit)}>
+            {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <p>Loading...</p>&nbsp;&nbsp;
+                  <ReactLoading
+                    type="spin"
+                    color={"white"}
+                    height={24}
+                    width={24}
+                  />
+                </div>
+              ) : (
+                "Continue"
+              )}
+            </ButtonPrimary>
           </form>
 
           {/* ==== */}
