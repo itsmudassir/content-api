@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import SectionSliderNewCategories from "../../components/SectionSliderNewCategories/SectionSliderNewCategories";
-import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
 import SBox from "../../components/SBox/SBox";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import { gql, useQuery } from "@apollo/client";
@@ -103,7 +102,7 @@ const PageHome1 = () => {
   //listen for URL query-paramater
   const api = useSearchkit();
   const variables = useSearchkitVariables();
-  const { search, location } = useLocation();
+  const { search } = useLocation();
   var { customCategory, customQuery, language, sortBy, startDate, endDate } =
     queryString.parse(search);
   const searchkitOutput = useQuery(query, { variables });
@@ -113,15 +112,10 @@ const PageHome1 = () => {
       api.setQuery("");
       api.search();
     }
-    // isLoading={loading}
-    // onClick={() => {
-    // }}
-    // api.removeFiltersByIdentifier("category");
-    // api.setQuery(null);
-    // api.search();
   }, []);
 
   useEffect(() => {
+
     const customState = {
       query: "",
       sortBy: "",
@@ -156,91 +150,17 @@ const PageHome1 = () => {
         value: language,
       });
     }
-    // if (startDate && endDate) {
-    //   customState.filters.push({
-    //     identifier: "date_download",
-    //     dateMin: startDate,
-    //     dateMax: endDate,
-    //   });
-    // }
 
     api.setSearchState(customState);
     api.search();
   }, [customCategory, customQuery, language, sortBy, startDate, endDate]);
 
-  // useEffect(() => {
-  //   if (customQuery && !customCategory) {
-  //     console.log("ONLY QUERY", customQuery);
-
-  //     const customState = {
-  //       query: customQuery,
-  //       sortBy: "",
-  //       filters: [
-  //         {
-  //           identifier: "date_download",
-  //           dateMin: "2022-01-16",
-  //           dateMax: "2022-09-18",
-  //         },
-  //       ],
-  //       page: {
-  //         size: 20,
-  //         from: 0,
-  //       },
-  //     };
-
-  //     api.setSearchState(customState);
-  //     api.search();
-  //   }
-
-  //   if (customCategory && !customQuery) {
-  //     console.log("ONLY CATEGORY");
-  //     api.toggleFilter({
-  //       identifier: "category",
-  //       value: customCategory,
-  //     });
-  //     api.toggleFilter({
-  //       identifier: "date_download",
-  //       dateMin: "2022-01-16",
-  //       dateMax: "2022-09-18",
-  //     });
-
-  //     api.setPage({ size: 20, from: 0 });
-  //     api.search();
-  //   }
-  // }, [customCategory, customQuery]);
-
-  // useEffect(() => {
-  //   if (!customCategory && !customQuery) {
-  //     const customState = {
-  //       query: "",
-  //       sortBy: "",
-  //       filters: [
-  //         {
-  //           identifier: "date_download",
-  //           dateMin: "2022-01-16",
-  //           dateMax: "2022-09-18",
-  //         },
-  //       ],
-  //       page: {
-  //         size: 20,
-  //         from: 0,
-  //       },
-  //     };
-
-  //     api.setSearchState(customState);
-  //     api.search();
-  //   }
-  // }, [customCategory, customQuery]);
-
-  // const { data, error, loading } = useGetAllFavouritePostsbyUserQuery();
-  // console.log(data);
   return (
     <div className="nc-PageHome relative ">
       <Helmet>
         <title>Home || Blog Magazine React Template</title>
       </Helmet>
       {/* {/ Call the  Auto Complete Search Box /} */}
-      <SearchBoxMain pageType="categorypage" />
       <SBox pageType="searchpage" category={customCategory} />
       {customCategory == null &&
       customCategory == undefined &&

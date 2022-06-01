@@ -1,29 +1,16 @@
-import React, { FC, ReactNode, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   changeCurrentMediaRunning,
   changeStateMediaRunning,
-  MediaRunningState,
   addNewListPostAudio,
   selectCurrentMediaRunning,
 } from "../../app/mediaRunning/mediaRunning";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import iconPlaying from "../../images/icon-playing.gif";
 import PostTypeFeaturedIcon from "../../components/PostTypeFeaturedIcon/PostTypeFeaturedIcon";
-// import { PostDataType } from "data/types";
 import isSafariBrowser from "../../utils/isSafariBrowser";
 
-// export interface ButtonPlayMusicRunningContainerProps {
-//   className?: string;
-//   post: PostDataType;
-//   renderChildren?: (
-//     isCurrentRunning: boolean,
-//     state: MediaRunningState["state"]
-//   ) => ReactNode;
-//   renderDefaultBtn?: () => ReactNode;
-//   renderLoadingBtn?: () => ReactNode;
-//   renderPlayingBtn?: () => ReactNode;
-// }
 
 const ButtonPlayMusicRunningContainer =
   ({

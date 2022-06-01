@@ -1,10 +1,8 @@
-import React, { FC } from "react";
+import React from "react";
 import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/solid";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
-import { useSearchkit } from "@searchkit/client";
-import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { useHistory } from "react-router-dom";
 

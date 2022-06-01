@@ -1,7 +1,7 @@
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router";
-import { NavLink, useHistory, useParams } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import TopicSubmitPost from "./TopicSubmitPost";
 import EditCustomTopicForm from "./EditCustomTopicForm";
@@ -22,8 +22,6 @@ import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cogoToast from "cogo-toast";
 import Card12 from "../../components/Card11/Card12";
-import Card11 from "../../components/Card11/Card11";
-import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 import ReactLoading from "react-loading";
 import CustomTopicPosts from "./CustomTopicPosts";
 import "./topicpage.css";
@@ -34,13 +32,11 @@ const TopicsPage = ({ className = "" }) => {
   const [folderID, setFolderID] = useState();
   const [customTopicId, setCustomTopicId] = useState(null);
   const [showModal, setshowModal] = useState(false);
-  const [allFolders, setAllFolders] = useState(false);
 
   // Routing
   let { path, url } = useRouteMatch();
 
   // refrences
-  const cutomTopicBtns = useRef();
 
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
@@ -50,28 +46,15 @@ const TopicsPage = ({ className = "" }) => {
   const getAllFollowedTopics = useGetAllFollowedTopicsQuery();
   const [deleteFollowedTopic, deleteFollowedTopic_Obj] =
     useDeleteFollowedTopicMutation();
-  // const customData = useGetAllCustomTopicsQuery(customTopicId);
-  // const singleCustomTopic = useGetSingleCustomTopicQuery(customTopicId);
-  // console.log(singleCustomTopic);
-  // const getAllCustomPosts = useGetAllCustomTopicsQuery(customTopicId);
 
-  var [deletePost, { isLoading, isError }] = useDeleteCustomTopicMutation();
+  var [deletePost] = useDeleteCustomTopicMutation();
 
   // handlers
   const closeModal = () => setshowModal(false);
   const showModalOnClick = () => setshowModal(true);
 
-  var [deleteFolder, { isLoading, isError }] = useDeleteFolderMutation();
-  var [updateFolder, { isLoading, isError }] = useUpdateFolderMutation();
-
-  const [toggleTopicButtonsHide, setToggleTopicButtonsHide] = useState(false);
-  const [toggleTopicButtonsHideId, setToggleTopicButtonsHideId] = useState("");
-
-  // const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
-  // const [toggleFolderNameHideId, setToggleFolderNameHideId] = useState("");
-
-  const [toggleButtonsHide, setToggleButtonsHide] = useState(false);
-  const [toggleButtonsHideId, setToggleButtonsHideId] = useState("");
+  var [deleteFolder] = useDeleteFolderMutation();
+  var [updateFolder] = useUpdateFolderMutation();
 
   const [folderNameState, setFolderNameState] = useState("");
   const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
@@ -232,16 +215,6 @@ const TopicsPage = ({ className = "" }) => {
                           onClick={() => {
                             setCustomTopicId(_id);
                           }}
-                          onMouseOver={(e) => {
-                            // setToggleTopicButtonsHide(true);
-                            // setToggleTopicButtonsHideId(_id);
-                            // cutomTopicBtns.current.style.display = "block";
-                          }}
-                          onMouseLeave={(e) => {
-                            // setToggleTopicButtonsHide(false);
-                            // setToggleTopicButtonsHideId("");
-                            // cutomTopicBtns.current.style.display = "none";
-                          }}
                         >
                           {name}
                           <span className="topicsSpan">
@@ -353,14 +326,6 @@ const TopicsPage = ({ className = "" }) => {
                             onClick={() => {
                               setFolderID(_id);
                             }}
-                            onMouseEnter={(e) => {
-                              // setToggleButtonsHide(true);
-                              // setToggleButtonsHideId(_id);
-                            }}
-                            onMouseLeave={(e) => {
-                              // setToggleButtonsHide(false);
-                              // setToggleButtonsHideId("");
-                            }}
                           >
                             {folderName}
 
@@ -465,7 +430,6 @@ const TopicsPage = ({ className = "" }) => {
                               <Card12 key={index} cardItems={value} />
                             </>
                           );
-                          
                         })
                       ) : (
                         <p className="text-right text-slate-600">

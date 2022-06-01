@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
-import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
 import LanguagesFilterBox from "../../components/LanguagesFilterBox/LanguagesFilterBox";
 import { Helmet } from "react-helmet";
 import Card11 from "../../components/Card11/Card11";
 import { useLocation } from "react-router-dom";
-import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
 import DateRangeDropDown from "../../components/DateRangeCalender/DateRangeDropDown";
-import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
 import RelevanceListBox from "../../components/RelevanceListBox/RelevanceListBox";
 import {
   useGetAllFavouritePostsbyUserQuery,
@@ -37,7 +34,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
 
   // search params || URL params
   const { search } = useLocation();
-  var { customCategory, customQuery } = queryString.parse(search);
+  var { customCategory } = queryString.parse(search);
 
   // handlers
   const followTopicHandler = async () => {
@@ -83,7 +80,6 @@ const PageSearch = ({ className = "", data, loading, error }) => {
 
   if (data) {
     var sortOptions = data?.results.summary.sortOptions;
-    // const langaugeList = data?.results.facets[5].entries;
     var langaugeList = data?.results.facets.filter(
       (item) => item.identifier == "language"
     )[0].entries;
@@ -126,19 +122,12 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     console.log("An error Occured" + error);
   }
 
-  // if (loading) {
-  //   return <div className="flex justify-center items-center mt-4">
-  //     <LoadingVideo />
-  //   </div>;
-  // }
-
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
           <title>Nc || Search Page Template</title>
         </Helmet>
-        {/* <SearchBoxMain pageType="searchpage" category={customCateogry}/> */}
       </div>
 
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
@@ -178,6 +167,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
             <div className="flex justify-between items-center">
+              
               {/* ========== follow button div ============  */}
               <div className="sm:hidden">
                 {isFollowing ? (
@@ -234,7 +224,6 @@ const PageSearch = ({ className = "", data, loading, error }) => {
             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center"
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            {/* <CustomPagination data={data?.results} /> */}
           </div>
         </main>
       </div>
@@ -242,5 +231,4 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   );
 };
 
-// export default withSearchkit(withSearchkitRouting(PageSearch));
 export default PageSearch;

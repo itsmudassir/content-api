@@ -1,29 +1,12 @@
-// import { PostActionDropdownProps } from "components/PostActionDropdown/PostActionDropdown";
-import BookmarkContainer from "../../containers/BookmarkContainer/BookmarkContainer";
-// import { PostDataType } from "data/types";
-import React, { FC } from "react";
-
-// export interface PostCardSaveActionProps
-//   extends Pick<PostActionDropdownProps, "dropdownPositon"> {
-//   className?: string;
-//   classBgIcon?: string;
-//   readingTime?: number;
-//   hidenReadingTime?: boolean;
-//   postData: PostDataType;
-// }
+import React from "react";
 
 const PostCardSaveAction = ({
   className = "",
   hidenReadingTime = false,
-  classBgIcon,
   readingTime,
-  postData,
 }) => {
 
   // getting postData from Card11
-
-
-  const bookmark = true
 
   return (
     <div
@@ -33,11 +16,6 @@ const PostCardSaveAction = ({
       {!hidenReadingTime && !!readingTime && (
         <span>{readingTime} min read</span>
       )}
-
-      {/* <BookmarkContainer
-        initBookmarked={bookmark.isBookmarked}
-        containerClassName={classBgIcon}
-      /> */}
     </div>
   );
 };

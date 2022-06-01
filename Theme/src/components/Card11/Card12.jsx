@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import PostCardSaveAction from "../../components/PostCardSaveAction/PostCardSaveAction";
-import { Link } from "react-router-dom";
 import PostCardLikeAndComment from "../../components/PostCardLikeAndComment/PostCardLikeAndComment";
 import PostCardMeta from "../../components/PostCardMeta/PostCardMeta";
 import PostFeaturedMedia from "../../components/PostFeaturedMedia/PostFeaturedMedia";
-import {
-  useGetAllFoldersQuery,
-  useGetAllFavouritePostsQuery,
-} from "../../app/Api/contentApi";
 import { useHistory } from "react-router-dom";
 
 const Card12 = ({
@@ -20,20 +15,14 @@ const Card12 = ({
   console.log(cardItems);
 
   const {
-    category,
     date,
-    facebook,
-    image_url,
     title,
-    source_domain,
-    twitter,
-    language,
     _id,
     url,
   } = cardItems;
+
   // Giving a static value to herf
 
-  const href = "";
   const pushData = () => {
     history.push(`/mainpostpage/${_id}`, cardItems);
   };

@@ -33,7 +33,6 @@ const TopKeyWords = (props) => {
         colorOptions={{
             luminosity: 'dark',
           }}
-        // onClick={(tag) => alert(`'${tag.value}' was selected!`)}
       />
     </>
   );

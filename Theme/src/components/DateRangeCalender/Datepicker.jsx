@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import moment from "moment";
 import {
-  DateRangePicker,
   defaultStaticRanges,
   createStaticRanges,
   DateRange,
@@ -9,7 +8,6 @@ import {
 } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { useSearchkit } from "@searchkit/client";
 import "./DateRangeCalender.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
@@ -18,29 +16,13 @@ import dates from "../../data/globalVariables/globalDates";
 import queryString from "query-string";
 import { useHistory } from "react-router-dom";
 
-// import {  useEffect } from "react";
-
-// import { useLocation } from "react-router-dom";
-
-// import queryString from "query-string";
 
 function DatePicker({ toggleDisplay }) {
-  const queryParams = new URLSearchParams(window.location.search);
-  const sort = queryParams.get("sort");
-  // const { search, location } = useLocation();
-  // var { sort } = queryString.parse(search);
-  const api = useSearchkit();
   const history = useHistory();
-  const [currentSort, setCurrentSort] = useState(sort || "relevance");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const currentQueryParams = queryString.parse(window.location.search);
-  // useEffect(() => {
 
-  //   alert(currentSort)
-  //   setCurrentSort(sort)
-
-  //   }, [sort]);
 
   const selectionRange = {
     startDate: startDate,
@@ -48,13 +30,6 @@ function DatePicker({ toggleDisplay }) {
     key: "selection",
   };
 
-  const [ranges, setRanges] = useState([
-    {
-      startDate: null,
-      endDate: null,
-      key: "rollup",
-    },
-  ]);
 
   const staticRanges = createStaticRanges([
     ...defaultStaticRanges,
@@ -73,7 +48,6 @@ function DatePicker({ toggleDisplay }) {
       }),
     },
   ]);
-  // console.log(ranges);
 
   function handleSelect(range) {
     setStartDate(range.selection.startDate);
@@ -96,15 +70,6 @@ function DatePicker({ toggleDisplay }) {
   }
   return (
     <>
-      {/* <DateRangePicker
-        startDatePlaceholder="Start Date"
-        endDatePlaceholder="End Date"
-        ranges={[selectionRange]}
-        onChange={handleSelect}
-        staticRanges={staticRanges}
-        inputRanges={[]}
-      /> */}
-
       <div className="flex flex-col sm:flex-row ">
         <div className="flex flex-row justify-between">
           <DefinedRange

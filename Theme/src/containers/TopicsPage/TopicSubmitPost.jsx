@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../components/Input/Input";
 import ButtonPrimary from "../../components/Button/ButtonPrimary";
-import Select from "../../components/Select/Select";
 import Label from "../../components/Label/Label";
 import WidgetPosts from "../../components/WidgetPosts/WidgetPosts";
 import Chip from "../../components/chip/chip";

@@ -4,9 +4,7 @@ import NextPrev from "../../components/NextPrev/NextPrev";
 import React, { FC, useEffect } from "react";
 import ncNanoId from "../../utils/ncNanoId";
 
-// export interface GallerySliderProps {
-//   galleryImgs: string[];
-// }
+
 
 const GallerySlider = ({ galleryImgs }) => {
   const UNIQUE_CLASS = ncNanoId("gallerySlider_");

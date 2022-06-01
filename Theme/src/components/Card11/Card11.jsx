@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import PostCardSaveAction from "../../components/PostCardSaveAction/PostCardSaveAction";
-import { Link } from "react-router-dom";
-import { useRouteMatch } from "react-router";
 import PostCardLikeAndComment from "../../components/PostCardLikeAndComment/PostCardLikeAndComment";
 import PostCardMeta from "../../components/PostCardMeta/PostCardMeta";
 import PostFeaturedMedia from "../../components/PostFeaturedMedia/PostFeaturedMedia";
 import { useHistory } from "react-router-dom";
-// import { useAppDispatch } from "../../app/hooks";
 import { addpost } from "../../app/posts/posts";
 import { useDispatch } from "react-redux";
-import { add } from "date-fns";
-// import cogoToast from "cogo-toast";
 
 const Card11 = ({
   className = "h-full",
@@ -18,23 +13,13 @@ const Card11 = ({
   hiddenAuthor = false,
   ratio = "aspect-w-4 aspect-h-3",
 }) => {
-  console.log(cardvalue);
   const dispatch = useDispatch();
-
-  var { path , url} = useRouteMatch();
-
   const { id } = cardvalue;
   const history = useHistory();
-
   const cardvalues = cardvalue.fields;
-
-  const href = `/discover/discover_content/mainpostpage/${id}`;
-
-  //getting id from Page search
 
   //useState hook from the theme
   const [isHover, setIsHover] = useState(false);
-
 
   const pushData = () => {
     history.push(`/mainpostpage/${id}`, cardvalue);
@@ -44,7 +29,7 @@ const Card11 = ({
   const setPostToRedux = (e) => {
     try {
       e.preventDefault();
-      dispatch(addpost({...cardvalue.fields, id, isLiked: true  }));
+      dispatch(addpost({ ...cardvalue.fields, id, isLiked: true }));
     } catch (err) {
       console.log(err);
     }
@@ -71,7 +56,9 @@ const Card11 = ({
         {!hiddenAuthor ? (
           <PostCardMeta meta={cardvalue.fields} />
         ) : (
-          <span className="text-xs text-neutral-500">{cardvalues?.date_download}</span>
+          <span className="text-xs text-neutral-500">
+            {cardvalues?.date_download}
+          </span>
         )}
 
         <h2 className="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100 ">
@@ -80,9 +67,12 @@ const Card11 = ({
             className="line-clamp-2"
             title={cardvalues?.title}
           >
-            <a href={cardvalues?.url} target="_blank">{cardvalues?.title}</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href={cardvalues?.url} target="_blank">
+              {cardvalues?.title}
+            </a>{" "}
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
           </span>
         </h2>
         <div className="flex items-end justify-between mt-auto">

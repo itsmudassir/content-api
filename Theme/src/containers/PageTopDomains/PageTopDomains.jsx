@@ -1,35 +1,30 @@
 import React, { useMemo } from "react";
 import { useTable, useSortBy } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpLong, faArrowDownLong } from "@fortawesome/free-solid-svg-icons"
+import {
+  faArrowUpLong,
+  faArrowDownLong,
+} from "@fortawesome/free-solid-svg-icons";
 import millify from "millify";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
 
 const PageTopDomains = ({ insights }) => {
+  const data = useMemo(() => {
+    return insights?.top_domians_by_most_articles_published.buckets.map(
+      (item) => {
+        return {
+          key: item.key.substring(0, 30),
+          doc_count: millify(item.doc_count, { precision: 2 }),
+          total_engagment: millify(item["total engagment"].value, {
+            precision: 2,
+          }),
+          avg_engagment: millify(item["avg engagment"].value, { precision: 2 }),
+        };
+      }
+    );
+  }, []);
 
-  const data = useMemo(
-    () => {
-      return insights?.top_domians_by_most_articles_published.buckets.map((item)=>{
-          return {
-            key: item.key.substring(0, 30),
-            doc_count: millify(item.doc_count, {precision: 2}),
-            total_engagment: millify(item["total engagment"].value, {precision: 2}),
-            avg_engagment: millify(item["avg engagment"].value, {precision: 2})
-          }
-      })
-    },
-    []
-  );
-  
-  // const data = useMemo(
-  //   () => {
-  //     return insights?.top_domians_by_most_articles_published.buckets
-  //   },
-  //   []
-  // );
-
-
-console.log(data)
+  console.log(data);
   const columns = useMemo(
     () => [
       {
@@ -43,7 +38,6 @@ console.log(data)
       {
         Header: "Total Engagement",
         accessor: "total_engagment",
-
       },
       {
         Header: "Avg. Engagement",
@@ -65,9 +59,11 @@ console.log(data)
   const firstPageRows = rows;
 
   if (!insights) {
-    return <div className="flex justify-center items-center mt-4">
-      <LoadingVideo />
-    </div>;
+    return (
+      <div className="flex justify-center items-center mt-4">
+        <LoadingVideo />
+      </div>
+    );
   }
 
   return (
@@ -89,32 +85,47 @@ console.log(data)
                         className="py-4"
                       >
                         <div className="flex justify-start items-center px-4 text-xs sm:text-sm">
-                        {column.render("Header")}
-                        {/* Add a sort direction indicator */}
-                        <span>
-                          {column.isSorted
-                            ? column.isSortedDesc
-                            ? (
+                          {column.render("Header")}
+                          {/* Add a sort direction indicator */}
+                          <span>
+                            {column.isSorted ? (
+                              column.isSortedDesc ? (
+                                <div className="ml-2 flex justify-center items-center">
+                                  <FontAwesomeIcon
+                                    icon={faArrowUpLong}
+                                    className="text-xs sm:text-sm text-slate-400"
+                                  />
+                                  <FontAwesomeIcon
+                                    icon={faArrowDownLong}
+                                    className="text-xs sm:text-sm"
+                                  />
+                                </div>
+                              ) : (
+                                <div className="ml-2 flex justify-center items-center">
+                                  <FontAwesomeIcon
+                                    icon={faArrowUpLong}
+                                    className="text-xs sm:text-sm"
+                                  />
+                                  <FontAwesomeIcon
+                                    icon={faArrowDownLong}
+                                    className="text-xs sm:text-sm text-slate-400"
+                                  />
+                                </div>
+                              )
+                            ) : (
                               <div className="ml-2 flex justify-center items-center">
-                                <FontAwesomeIcon icon={faArrowUpLong} className="text-xs sm:text-sm text-slate-400"/>
-                                <FontAwesomeIcon icon={faArrowDownLong} className="text-xs sm:text-sm" />
+                                <FontAwesomeIcon
+                                  icon={faArrowUpLong}
+                                  className="text-xs sm:text-sm"
+                                />
+                                <FontAwesomeIcon
+                                  icon={faArrowDownLong}
+                                  className="text-xs sm:text-sm"
+                                />
                               </div>
-                            )
-                            : (
-                              <div className="ml-2 flex justify-center items-center">
-                                <FontAwesomeIcon icon={faArrowUpLong} className="text-xs sm:text-sm"/>
-                                <FontAwesomeIcon icon={faArrowDownLong} className="text-xs sm:text-sm text-slate-400" />
-                              </div>
-                            )
-                            :(
-                              <div className="ml-2 flex justify-center items-center">
-                                <FontAwesomeIcon icon={faArrowUpLong} className="text-xs sm:text-sm"/>
-                                <FontAwesomeIcon icon={faArrowDownLong} className="text-xs sm:text-sm" />
-                              </div>
-                            ) 
-                            }
-                        </span>
-                            </div>
+                            )}
+                          </span>
+                        </div>
                       </th>
                     ))}
                   </tr>
@@ -124,12 +135,13 @@ console.log(data)
                 {firstPageRows.map((row, i) => {
                   prepareRow(row);
                   return (
-                    <tr {...row.getRowProps()} className="text-xs sm:text-sm border-b border-slate-300">
+                    <tr
+                      {...row.getRowProps()}
+                      className="text-xs sm:text-sm border-b border-slate-300"
+                    >
                       {row.cells.map((cell) => {
                         return (
-                          <td {...cell.getCellProps()}
-                          className="px-4 py-2"
-                          >
+                          <td {...cell.getCellProps()} className="px-4 py-2">
                             {cell.render("Cell")}
                           </td>
                         );

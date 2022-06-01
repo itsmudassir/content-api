@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Tab } from "@headlessui/react";
 import CustomTopicsSearch from "./CustomTopicsSearch";
-import { gql, useQuery } from "@apollo/client";
 import CustomTopicInsights from "./CustomTopicInsights";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetSingleCustomTopicQuery } from "../../app/Api/contentApi";
 
 function classNames(...classes) {
@@ -28,23 +27,14 @@ const CustomTopicPosts = ({ className = "" }) => {
     console.log("error");
   }
 
-  const [go, setGo] = useState(false);
-  const [topicName, setTopicName] = useState(""); // topic name
-
   // selection
 
   const [any_keywords_list, setAny_keywords_list] = useState([]); // any_keywords_list
-  const [any_keywords_value, setAny_keywords_value] = useState(""); // any_keywords_value
 
   const [must_also_keywords_list, setMust_also_keywords_list] = useState([]); // must_also_keywords_list
-  const [must_also_keywords_value, setMust_also_keywords_value] = useState(""); // must_also_keywords_value
 
   const [must_not_contains_keywords_list, setMust_not_contains_keywords_list] =
     useState([]); // must_not_contains_keywords_list
-  const [
-    must_not_contains_keywords_value,
-    setMust_not_contains_keywords_value,
-  ] = useState(""); // must_not_contains_keywords_value
 
   const [exclude_domains_list, setExclude_domains_list] = useState([]); // exclude_domains
   const [limit_domains_results_list, setLimit_domains_results_list] = useState(
@@ -75,11 +65,9 @@ const CustomTopicPosts = ({ className = "" }) => {
     );
     setStartDate(singleCustomTopic?.data?.filters?.startdate);
     setEndDate(singleCustomTopic?.data?.filters?.enddate);
-    setTopicName(singleCustomTopic?.data?.name);
     setlanguage(singleCustomTopic?.data?.filters?.language);
     setEngagement(singleCustomTopic?.data?.filters?.engagement);
     setBodyORtitle(singleCustomTopic?.data?.filters?.type);
-    setGo(true);
   }, [singleCustomTopic.data]);
 
   useEffect(() => {
@@ -320,10 +308,8 @@ const CustomTopicPosts = ({ className = "" }) => {
         </Tab.Group>
       </div>
 
-      {/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */}
     </>
   );
 };
 
-// export default withSearchkit(withSearchkitRouting(PageSearchMain));
 export default CustomTopicPosts;

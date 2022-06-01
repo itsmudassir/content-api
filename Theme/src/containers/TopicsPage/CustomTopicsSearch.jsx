@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import LoadingVideo from "../../components/LoadingVideo/LoadingVideo";
-import LanguagesFilterBox1 from "../../components/LanguagesFilterBox/LanguagesFilterBox";
 import LanguagesFilterBox from "../../components/CustomTopicLanguageSelect/CustomTopicLanguageSelect";
 import { Helmet } from "react-helmet";
 import Card11 from "../../components/Card11/Card11";
-import DateRangeDropDown1 from "../../components/DateRangeCalender/DateRangeDropDown";
 import DateRangeDropDown from "../../components/CustomTopicDateRange/DateRangeDropDown";
-import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
-import RelevanceListBox1 from "../../components/RelevanceListBox/RelevanceListBox";
 import RelevanceListBox from "../../components/CustomTopicSortSelect/CustomTopicSortSelect";
 import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
-import cogoToast from "cogo-toast";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import { gql, useQuery } from "@apollo/client";
 
@@ -130,7 +125,6 @@ const CustomTopicsSearch = ({
 
   if (data) {
     var sortOptions = data?.results.summary.sortOptions;
-    // const langaugeList = data?.results.facets[5].entries;
     var langaugeList = data?.results.facets.filter(
       (item) => item.identifier == "language"
     )[0].entries;
@@ -164,7 +158,6 @@ const CustomTopicsSearch = ({
         <Helmet>
           <title>Nc || Search Page Template</title>
         </Helmet>
-        {/* <SearchBoxMain pageType="searchpage" category={customCateogry}/> */}
       </div>
 
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
@@ -174,7 +167,6 @@ const CustomTopicsSearch = ({
           <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row">
             <div className="flex justify-start items-center space-x-2.5">
               {/* ============ Language filter dropdown Button =============== */}
-              {/* {!loading ? <LanguagesFilterBox1 lists={langaugeList} /> : null} */}
               {!loading ? (
                 <LanguagesFilterBox
                   setlanguage={setlanguage}
@@ -183,14 +175,12 @@ const CustomTopicsSearch = ({
               ) : null}
 
               {/* ============ Date Range =============== */}
-              {/* <DateRangeDropDown1 facet={data?.results?.facets} /> */}
               <DateRangeDropDown
                 setStartDate={setStartDate}
                 setEndDate={setEndDate}
               />
 
               {/*======= relevence dropdown button ============*/}
-              {/* <RelevanceListBox1 lists={sortOptions} /> */}
               <RelevanceListBox
                 setEngagement={setEngagement}
                 lists={sortOptions}
@@ -225,7 +215,6 @@ const CustomTopicsSearch = ({
             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center"
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            {/* <CustomPagination data={data?.results} /> */}
           </div>
         </main>
       </div>
@@ -233,5 +222,4 @@ const CustomTopicsSearch = ({
   );
 };
 
-// export default withSearchkit(withSearchkitRouting(PageSearch));
 export default CustomTopicsSearch;

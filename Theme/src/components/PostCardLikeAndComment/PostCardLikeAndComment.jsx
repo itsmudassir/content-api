@@ -1,16 +1,7 @@
-import React, { FC } from "react";
+import React from "react";
 import PostCardCommentBtn from "../../components/PostCardCommentBtn/PostCardCommentBtn";
 import PostCardLikeContainer from "../../containers/PostCardLikeContainer/PostCardLikeContainer";
-import PostCardAddtoFavouritesFolderBtn from "../PostCardAddtoFavouritesFolderBtn/PostCardAddtoFavouritesFolderBtn"
-// import { PostDataType } from "data/types";
-// export interface PostCardLikeAndCommentProps {
-//   className?: string;
-//   itemClass?: string;
-//   postData: Pick<PostDataType, "like" | "id" | "href" | "commentCount">;
-//   hiddenCommentOnMobile?: boolean;
-//   onClickLike?: (id: PostDataType["id"]) => void;
-// }
-
+import PostCardAddtoFavouritesFolderBtn from "../PostCardAddtoFavouritesFolderBtn/PostCardAddtoFavouritesFolderBtn";
 
 const PostCardLikeAndComment = ({
   className = "",
@@ -20,17 +11,16 @@ const PostCardLikeAndComment = ({
   setPostToRedux,
   onClickLike = () => {},
 }) => {
-
   //getting postData from the Card11 component
-  const {category, twitter_shares ,facebook_shares , date , facebook , image_url  , date_publish, title ,source_domain ,twitter ,language} =  postData.fields || postData;
+  const { twitter_shares, facebook_shares, facebook, twitter } =
+    postData.fields || postData;
 
   // setting href statically
 
-  const href = "/"
- const isLiked =  false
+  const href = "/";
   return (
     <div
-    // space-x-2
+      // space-x-2
       className={`nc-PostCardLikeAndComment flex justify-center items-center   ${className}`}
       data-nc-id="PostCardLikeAndComment"
     >
@@ -41,7 +31,7 @@ const PostCardLikeAndComment = ({
         onClickLike={onClickLike}
         // postId={id}
       />
-    
+
       <PostCardCommentBtn
         href={href}
         facebook_shares={facebook_shares}
@@ -51,9 +41,10 @@ const PostCardLikeAndComment = ({
         }  ${itemClass}`}
       />
 
-      <PostCardAddtoFavouritesFolderBtn postData={postData} setPostToRedux={setPostToRedux}/>
-
-      
+      <PostCardAddtoFavouritesFolderBtn
+        postData={postData}
+        setPostToRedux={setPostToRedux}
+      />
     </div>
   );
 };

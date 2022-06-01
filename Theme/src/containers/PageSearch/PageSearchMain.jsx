@@ -1,127 +1,22 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Helmet } from "react-helmet";
-import SearchBoxMain from "../../components/SearchBoxMain/SearchBoxMain";
-import SBox from "../../components/SBox/SBox"
 import { Tab } from "@headlessui/react";
 import PageSearch from "./PageSearch";
-import { gql, useQuery } from "@apollo/client";
-import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
-import queryString from "query-string";
-import { useLocation } from "react-router-dom";
 import PageInsights from "../PageInsights/PageInsights";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const gqlQuery = gql`
-  query resultSet(
-    $query: String
-    $filters: [SKFiltersSet]
-    $page: SKPageInput
-    $sortBy: String
-  ) {
-    results(query: $query, filters: $filters) {
-      summary {
-        total
-        appliedFilters {
-          id
-          identifier
-          display
-          label
-          ... on DateRangeSelectedFilter {
-            dateMin
-            dateMax
-            __typename
-          }
-
-          ... on ValueSelectedFilter {
-            value
-            __typename
-          }
-          __typename
-        }
-        sortOptions {
-          id
-          label
-          __typename
-        }
-        query
-        __typename
-      }
-      hits(page: $page, sortBy: $sortBy) {
-        page {
-          total
-          totalPages
-          pageNumber
-          from
-          size
-          __typename
-        }
-        sortedBy
-
-        items {
-          ... on ResultHit {
-            id
-            fields {
-              article_length
-              category
-              authors
-              date_download
-              language
-              facebook_shares
-              readtime
-              sentiment
-              url
-              image_url
-              twitter_shares
-              maintext
-              source_domain
-              title
-              __typename
-            }
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      facets {
-        identifier
-        type
-        label
-        display
-        entries {
-          label
-          count
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-
 const PageSearchMain = ({ className = "", searchKitData }) => {
-  // const api = useSearchkit();
-  // const variables = useSearchkitVariables();
-  // if (variables?.page.size) {
-  //   variables.page.size = 20;
-  // }
-  
   const { data, loading, error } = searchKitData;
-  const { search, location } = useLocation();
-  var { customCateogry, customQuery } = queryString.parse(search);
-  
+
   return (
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
           <title>Nc || Search Page Template</title>
         </Helmet>
-        {/* <SearchBoxMain pageType="searchpage" category={customCateogry} /> */}
-        {/* <SBox pageType="searchpage" category={customCateogry} /> */}
       </div>
 
       {/* XXXXXXXXXXXXXXXXX>> TABS <<XXXXXXXXXXXXXXXXXXXX*/}
@@ -164,18 +59,15 @@ const PageSearchMain = ({ className = "", searchKitData }) => {
                 <PageSearch data={data} loading={loading} error={error} />
               </Tab.Panel>
 
-              <Tab.Panel >
-                  <PageInsights searchKitData={data}/>
+              <Tab.Panel>
+                <PageInsights searchKitData={data} />
               </Tab.Panel>
             </Tab.Panels>
           </div>
         </Tab.Group>
       </div>
-
-      {/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */}
     </>
   );
 };
 
-// export default withSearchkit(withSearchkitRouting(PageSearchMain));
 export default PageSearchMain;

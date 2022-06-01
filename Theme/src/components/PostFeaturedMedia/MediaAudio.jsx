@@ -1,10 +1,6 @@
-import React, { FC } from "react";
-// import { PostDataType } from "data/types";
+import React from "react";
 import ButtonPlayMusicRunningContainer from "../../containers/ButtonPlayMusicRunningContainer/ButtonPlayMusicRunningContainer";
 
-// export interface MediaAudioProps {
-//   post: PostDataType;
-// }
 
 const MediaAudio = ({ post }) => {
   return (
