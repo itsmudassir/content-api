@@ -465,6 +465,7 @@ const TopicsPage = ({ className = "" }) => {
                               <Card12 key={index} cardItems={value} />
                             </>
                           );
+                          
                         })
                       ) : (
                         <p className="text-right text-slate-600">
