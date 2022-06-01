@@ -17,7 +17,6 @@ import ScrollToTop from "../../routers/ScrollToTop";
 import PageSearch from "../../containers/PageSearch/PageSearch";
 import PageSearchMain from "../../containers/PageSearch/PageSearchMain";
 import PageDashboard from "../../containers/PageDashboard/PageDashboard";
-import PageContentFeed from "../../containers/PageContentFeed/PageContentFeed";
 import Analytics from "../../containers/Analytics/Analytics";
 import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3";
@@ -55,8 +54,6 @@ function App() {
             // component={PageSearch}
             component={PageSearchMain}
           />
-
-          <PrivateRoute path={"/content-feed"} component={PageContentFeed} />
 
           <PrivateRoute
             path={"/discover/dicover_insights"}

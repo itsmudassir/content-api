@@ -15,14 +15,13 @@ import PageSignUp from "../containers/PageSignUp/PageSignUp";
 import PageForgotPass from "../containers/PageForgotPass/PageForgotPass";
 import PageDashboard from "../containers/PageDashboard/PageDashboard";
 import MainNav1 from "../components/Header/MainNav1";
-import PageContentFeed from "../containers/PageContentFeed/PageContentFeed";
 import PageHome from "../containers/PageHome/PageHome";
 import Analytics from "../containers/Analytics/Analytics";
 import TopicsPage from "../containers/TopicsPage/TopicsPage";
 import { PrivateRoute } from "../authentication/_components/PrivateRoute";
 
 const Routes = () => {
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
   return (
     <>
       <BrowserRouter>
@@ -50,7 +49,6 @@ const Routes = () => {
           <PrivateRoute path={"/dashboard"} component={PageDashboard} />
           {/* <Route path={"/search"} component={PageSearch} /> */}
           {/* <Route path={"/search-v2"} component={PageSearchV2} /> */}
-          <PrivateRoute path={"/content-feed"} component={PageContentFeed} />
           <PrivateRoute path={"/discover/dicover_insights"} component={Analytics} />
           {/* <Route path={"/:id"} component={SingleCard} /> */}
           <PrivateRoute path={path+"/topics"} component={TopicsPage} />
