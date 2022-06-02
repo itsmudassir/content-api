@@ -185,7 +185,6 @@ async function resetPassword({ token, password }) {
 
 async function refreshToken({ token, ipAddress }) {
     const refreshToken = await getRefreshToken(token);
-
     const user = refreshToken.userId;
     // replace old refresh token with a new one and save
     const newRefreshToken = generateRefreshToken(user, ipAddress);
@@ -281,11 +280,14 @@ function basicDetails(user) {
 async function getRefreshToken(token) {
     try {
         const refreshToken = await refreshTokenModel.findOne({ token }).populate('userId');
-        if (!refreshToken || !refreshToken.isActive) throw 'Invalid token';
-        return refreshToken;
-
+        console.log( !refreshToken.isActive)
+        if (!refreshToken || !refreshToken.isActive){
+            throw 'Invalid token';
+        } else{
+            return refreshToken;
+        }
     } catch (err) {
-        console.log(err)
+        console.log("ERROR OCCOURED WHILE GETTING REFRESH TOKEN",err)
     }
 }
 

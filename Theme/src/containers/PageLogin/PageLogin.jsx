@@ -12,7 +12,7 @@ import { alertService } from "../../authentication/_services/alert.service";
 import cogoToast from "cogo-toast";
 import ReactLoading from "react-loading";
 
-const LoginValidationSchema = yup.object().shape({
+const loginValidationSchema = yup.object().shape({
   email: yup.string().email("Must be an Email").required("Email is required"),
   password: yup.string().required("Password is required"),
 });
@@ -24,7 +24,7 @@ const PageLogin = ({ history, location, className = "" }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(LoginValidationSchema),
+    resolver: yupResolver(loginValidationSchema),
   });
 
   function onSubmit({ email, password }) {

@@ -72,7 +72,6 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
                       <>
                         {lists.length == 1 && language? (
                           <div
-                            onClick={() => console.log("saad")}
                             className="flex justify-between items-center z-50"
                           >
                             <p>Remove {item.label}</p>

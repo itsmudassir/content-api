@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import cogoToast from "cogo-toast";
+import ReactLoading from "react-loading";
+
 
 const updateValidationSchema = yup.object().shape({
   firstName: yup
@@ -28,6 +30,8 @@ const updateValidationSchema = yup.object().shape({
 });
 
 const EditUserProfile = ({ history }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -50,15 +54,18 @@ const EditUserProfile = ({ history }) => {
         return null;
       }
     }
-
+    
+    setIsLoading(true);
     accountService
-      .update(user.id, fields)
-      .then(() => {
-        cogoToast.success("Updated successfully");
-        history.push(".");
-      })
-      .catch((error) => {
-        cogoToast.error(error);
+    .update(user.id, fields)
+    .then(() => {
+      cogoToast.success("Updated successfully");
+      history.push(".");
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      cogoToast.error(error);
+      setIsLoading(false);
       });
 
   };
@@ -135,7 +142,19 @@ const EditUserProfile = ({ history }) => {
           onClick={handleSubmit(onSubmit)}
           className="md:col-span-2 "
         >
-          Update profile
+          {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <p>Loading...</p>&nbsp;&nbsp;
+                  <ReactLoading
+                    type="spin"
+                    color={"white"}
+                    height={24}
+                    width={24}
+                  />
+                </div>
+              ) : (
+                "Update profile"
+              )}
         </ButtonPrimary>
       </form>
     </div>
