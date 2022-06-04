@@ -31,7 +31,6 @@ function login(email, password) {
             // publish user to subscribers and start timer to refresh token
             userSubject.next(user);
             startRefreshTokenTimer();
-            console.log(user);
             return user;
         });
 }
@@ -50,7 +49,6 @@ function refreshToken() {
             // publish user to subscribers and start timer to refresh token
             userSubject.next(user);
             startRefreshTokenTimer();
-            console.log(user)
             return user;
         });
 }

@@ -11,7 +11,6 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
   const [selected, setSelected] = useState(null);
   const currentQueryParams = queryString.parse(window.location.search);
   const { language } = currentQueryParams;
-  console.log(lists);
 
   const handelOnChange = (e) => {
     setSelected(e);

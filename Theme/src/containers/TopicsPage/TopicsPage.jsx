@@ -27,7 +27,6 @@ import CustomTopicPosts from "./CustomTopicPosts";
 import "./topicpage.css";
 
 const TopicsPage = ({ className = "" }) => {
-  console.log("rerender");
   const history = useHistory();
   const [folderID, setFolderID] = useState();
   const [customTopicId, setCustomTopicId] = useState(null);
@@ -40,7 +39,7 @@ const TopicsPage = ({ className = "" }) => {
 
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
-  const favouritePosts = useGetAllFavouritePostsQuery(folderID);
+  const favouritePosts = useGetAllFavouritePostsQuery(folderID? folderID: undefined);
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
   const getAllFollowedTopics = useGetAllFollowedTopicsQuery();
@@ -288,7 +287,7 @@ const TopicsPage = ({ className = "" }) => {
               ) : (
                 getAllFolders?.data?.map(({ folderName, _id }, index) => {
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {toggleFolderNameHide &&
                       toggleFolderNameHideId === _id ? (
                         <form className="mt-0  relative max-w-[80%]" key={_id}>
@@ -369,7 +368,7 @@ const TopicsPage = ({ className = "" }) => {
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </li>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 })
               )}
@@ -425,11 +424,7 @@ const TopicsPage = ({ className = "" }) => {
                     <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
                       {favouritePosts?.data?.length !== 0 ? (
                         favouritePosts?.data?.map((value, index) => {
-                          return (
-                            <>
-                              <Card12 key={index} cardItems={value} />
-                            </>
-                          );
+                          return <Card12 key={index} cardItems={value} />;
                         })
                       ) : (
                         <p className="text-right text-slate-600">
