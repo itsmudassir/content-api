@@ -130,16 +130,6 @@ const contentApi = createApi({
 
         //============== FAVOURITE POSTS QUERIES ============
         
-        // get all favourite posts by folder id
-        getAllFavouritePosts: builder.query({
-            query: (folderId) => ({
-                url: `/api/favouritePosts/all_posts/${folderId}`,
-                method: "GET"
-            }),
-            providesTags: ["FavouritePosts"]
-        }),
-
-        
         // get all favourite posts by authenticated user
         getAllFavouritePostsbyUser: builder.query({
             query: () => ({
@@ -147,6 +137,19 @@ const contentApi = createApi({
             }),
             providesTags: ["FavouritePosts"]
         }),
+
+
+        // get all favourite posts by folder id
+        getAllFavouritePosts: builder.mutation({
+            query: (obj) => ({
+                url: `/api/favouritePosts/getAllPostsByFolderId`,
+                method: "POST",
+                body: obj 
+            }),
+            invalidatesTags: ["FavouritePosts"]
+        }),
+
+        
 
         //add a post to favouritesFolder
         addPostToFavouritesFolder: builder.mutation({
@@ -240,7 +243,7 @@ const contentApi = createApi({
 export { contentApi };
 export const {
     useGetAllFoldersQuery,
-    useGetAllFavouritePostsQuery,
+    useGetAllFavouritePostsMutation,
     useGetAllFavouritePostsbyUserQuery,
     useCreateFolderMutation,
     useAddPostToFavouritesFolderMutation,

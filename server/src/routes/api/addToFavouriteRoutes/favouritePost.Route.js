@@ -2,7 +2,7 @@ import express from "express";
 import {
     postFavouritePost,
     getSinglePost,
-    getAllPosts,
+    getAllPostsByFolderId,
     deleteSinglePost,
     deleteAllPosts,
     updatePost,
@@ -15,6 +15,11 @@ import {
 import authorize from "../../../middlewares/authorize.js"
 const router = express.Router();
 
+// route:  POST /api/favouritePosts/getAllPostsByFolderId
+// desc:   reading all posts in favourites folder by folder-id
+// access: PROTECTED
+router.post("/getAllPostsByFolderId",  getAllPostsByFolderId);
+
 
 // route:  POST /api/favouritePosts/:id
 // desc:   creating post by favourites folder id
@@ -26,12 +31,6 @@ router.post("/:id", authorize(), postValidation , postFavouritePost);
 // desc:   reading a single post by post id
 // access: PROTECTED
 router.get("/post/:id", authorize(), getSinglePost);
-
-
-// route:  GET /api/favouritePosts/all_posts/:id
-// desc:   reading all posts in favourites folder by folder-id
-// access: PROTECTED
-router.get("/all_posts/:id", authorize(), getAllPosts);
 
 
 // route:  GET /api/favouritePosts/all_posts

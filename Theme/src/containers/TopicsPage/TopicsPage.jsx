@@ -9,6 +9,7 @@ import CreateFolderModal from "../../components/CreateFolderModal/createFolderMo
 import {
   useGetAllFoldersQuery,
   useGetAllFavouritePostsQuery,
+  useGetAllFavouritePostsMutation,
   useGetAllCustomTopicsQuery,
   useDeleteCustomTopicMutation,
   useDeleteFolderMutation,
@@ -28,36 +29,32 @@ import "./topicpage.css";
 
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
-  const [folderID, setFolderID] = useState();
+  const [favouritePosts, setFavouritePosts] = useState();
   const [customTopicId, setCustomTopicId] = useState(null);
   const [showModal, setshowModal] = useState(false);
+  const [folderNameState, setFolderNameState] = useState("");
+  const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
+  const [toggleFolderNameHideId, setToggleFolderNameHideId] = useState("");
 
   // Routing
   let { path, url } = useRouteMatch();
 
-  // refrences
-
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
-  const favouritePosts = useGetAllFavouritePostsQuery(folderID? folderID: undefined);
+  const [getAllFavouritePosts, getAllFavouritePosts_obj] =
+    useGetAllFavouritePostsMutation();
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
   const getAllFollowedTopics = useGetAllFollowedTopicsQuery();
   const [deleteFollowedTopic, deleteFollowedTopic_Obj] =
     useDeleteFollowedTopicMutation();
-
   var [deletePost] = useDeleteCustomTopicMutation();
+  var [deleteFolder] = useDeleteFolderMutation();
+  var [updateFolder] = useUpdateFolderMutation();
 
   // handlers
   const closeModal = () => setshowModal(false);
   const showModalOnClick = () => setshowModal(true);
-
-  var [deleteFolder] = useDeleteFolderMutation();
-  var [updateFolder] = useUpdateFolderMutation();
-
-  const [folderNameState, setFolderNameState] = useState("");
-  const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
-  const [toggleFolderNameHideId, setToggleFolderNameHideId] = useState("");
 
   const RemoveClick = (e) => {
     e.preventDefault();
@@ -95,6 +92,22 @@ const TopicsPage = ({ className = "" }) => {
       console.log(
         "Error occoured while creating topic",
         deleteFollowedTopic_Obj
+      );
+    }
+  };
+
+  const onFolderClick = async (id) => {
+    try {
+      const res = await getAllFavouritePosts({id : id});
+      setFavouritePosts(res);
+      if (res.error) {
+        cogoToast.error(res.error?.data?.errorMsg);
+      }
+    } catch (err) {
+      console.log("ERROR OCCOURED WHILE GETTING FAVOURITE POSTS", err);
+      console.log(
+        "ERROR OCCOURED WHILE GETTING FAVOURITE POSTS",
+        getAllFavouritePosts_obj.error
       );
     }
   };
@@ -323,7 +336,7 @@ const TopicsPage = ({ className = "" }) => {
                             // to={`/topics/${_id}`}
                             to={`${url}/favourite-posts/${_id}`}
                             onClick={() => {
-                              setFolderID(_id);
+                              onFolderClick(_id);
                             }}
                           >
                             {folderName}

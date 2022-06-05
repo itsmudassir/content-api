@@ -98,5 +98,17 @@ Content-Type:  application/json
 }
 
 
+###
+GET http://localhost:7777/saad
+Content-Type: application/json
+
+{
+    "email":"smsidrees10@gmail.com",
+    "password":"saad01",
+    "firstName":"Saad", 
+    "lastName":"Idrees",
+    "title":"Mr"
+} 
+
 
 

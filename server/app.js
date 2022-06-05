@@ -31,7 +31,6 @@ app.use(
   })
 );
 
-// server.applyMiddleware({ app });
 
 // database connections
 connectDatabase();
@@ -49,8 +48,10 @@ app.use("/api/customTopicSearch", customTopicSearch);
 app.use("/api/insights", insights);
 app.use("/api/followedTopics", followedTopics);
 app.get("/saad", (req, res)=>{
-    res.send("SAAD")
+
+    res.send(req.body);
 })
+
 
 // error handling middleware
 app.use(errorHandler);

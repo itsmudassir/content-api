@@ -53,16 +53,15 @@ const getSinglePost = async (req, res) => {
 };
 
 
-// route:  GET /api/favouritePosts/all_posts/:id
+// route:  GET /api/favouritePosts/getAllPostsByFolderId
 // desc:   reading all posts in favourites folder by folder id
 // access: PROTECTED
-const getAllPosts = async (req, res,) => {
+const getAllPostsByFolderId = async (req, res) => {
 
     try {
-
-        const folderId = req.params.id;
-
-        if (folderId == null || folderId == undefined) {
+        const folderId = req.body.id;
+        console.log('saad');
+        if (folderId == null) {
             return res.status(400).json({ errorMsg: "must provide folder id" })
         }
 
@@ -73,7 +72,6 @@ const getAllPosts = async (req, res,) => {
         }
 
         return res.status(200).json(posts);
-
 
     } catch (err) {
         res.status(500).json({ errorMsg: "Server error" }) //500 for server error
@@ -165,7 +163,7 @@ const updatePost = async (req, res) => {
 export {
     postFavouritePost,
     getSinglePost,
-    getAllPosts,
+    getAllPostsByFolderId,
     deleteSinglePost,
     deleteAllPosts,
     updatePost,
