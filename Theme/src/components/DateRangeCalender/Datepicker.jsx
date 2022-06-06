@@ -62,7 +62,7 @@ function DatePicker({ toggleDisplay }) {
       endDate: endDatec,
     };
     history.push({
-      pathname: "/discover/discover_search",
+      // pathname: "/discover/discover_search",
       search: queryString.stringify(newQueryParams),
     });
 

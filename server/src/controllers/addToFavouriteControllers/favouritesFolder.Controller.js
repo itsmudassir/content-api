@@ -1,4 +1,5 @@
-import favouritesFolderModel from "../../models/addToFavouriteModels/favouritesFolder.Model.js"
+import favouritesFolderModel from "../../models/addToFavouriteModels/favouritesFolder.Model.js";
+import favouritePostsModel from "../../models/addToFavouriteModels/favouritePost.Model.js";
 import { validationResult } from "express-validator";
 
 
@@ -91,7 +92,8 @@ const getAllFavouriteFolder = async (req, res) => {
 // access: PROTECTED
 const deleteSingleFolder = async (req, res) => {
     try {
-        await favouritesFolderModel.deleteOne({ _id: req.params.id })
+        await favouritesFolderModel.deleteOne({ _id: req.params.id });
+        await favouritePostsModel.deleteMany({folderId: req.params.id});
         return res.status(200).json({ successMsg: "Folder deleted successfully" });
     } catch (err) {
         res.status(500).json({ errorMsg: "Server Error" }) // server error

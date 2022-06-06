@@ -187,7 +187,6 @@ const sortingList = [
 ];
 
 const TopicSubmitPost = () => {
-  
   // states
   const [topicName, setTopicName] = useState(null); // topic name
 
@@ -213,7 +212,7 @@ const TopicSubmitPost = () => {
   ); // limit_domains_results
 
   // filters
-  const [bodyORtitle, setBodyORtitle] = useState("title");
+  const [bodyORtitle, setBodyORtitle] = useState("titles");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [language, setlanguage] = useState(null);
@@ -401,8 +400,7 @@ const TopicSubmitPost = () => {
       filters: [
         {
           identifier: "CustomFilter",
-          value: jsonob 
-  
+          value: jsonob,
         },
       ],
       page: {
@@ -434,6 +432,7 @@ const TopicSubmitPost = () => {
       <LoadingVideo />
     </div>;
   }
+
   return (
     <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
       {/* {/ div container /} */}
@@ -450,7 +449,6 @@ const TopicSubmitPost = () => {
 
         <label className="block md:col-span-2">
           <Label className="font-bold text-lg">Build Your Query</Label>
-
 
           <p className="mt-5 text-base text-neutral-500 font-medium">
             Each result must contain at least <b>ONE</b> one of these keywords
@@ -629,7 +627,7 @@ const TopicSubmitPost = () => {
               type="radio"
               id="titles"
               value={bodyORtitle}
-              checked={bodyORtitle == "titles"}
+              defaultChecked={bodyORtitle == "titles"? true: false}
               onClick={() => setBodyORtitle("titles")}
               className="w-3.5 h-3.5"
             />
@@ -642,7 +640,7 @@ const TopicSubmitPost = () => {
               type="radio"
               id="body"
               value={bodyORtitle}
-              checked={bodyORtitle == "body"}
+              defaultChecked={bodyORtitle == "body"? true: false}
               onClick={() => setBodyORtitle("body")}
               className="w-3.5 h-3.5"
             />

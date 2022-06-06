@@ -8,8 +8,6 @@ import EditCustomTopicForm from "./EditCustomTopicForm";
 import CreateFolderModal from "../../components/CreateFolderModal/createFolderModal";
 import {
   useGetAllFoldersQuery,
-  useGetAllFavouritePostsQuery,
-  useGetAllFavouritePostsMutation,
   useGetAllCustomTopicsQuery,
   useDeleteCustomTopicMutation,
   useDeleteFolderMutation,
@@ -22,43 +20,46 @@ import Input from "../../components/Input/Input";
 import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cogoToast from "cogo-toast";
-import Card12 from "../../components/Card11/Card12";
 import ReactLoading from "react-loading";
 import CustomTopicPosts from "./CustomTopicPosts";
 import "./topicpage.css";
+import FavouritePosts from "../../containers/FavouritePostsContainer/FavouritePosts";
+import FollowedTopicsMain from "../../containers/FollowedTopics/FollowedTopicsMain";
+
 
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
-  const [favouritePosts, setFavouritePosts] = useState();
+  const [folderID, setFolderID] = useState();
   const [customTopicId, setCustomTopicId] = useState(null);
   const [showModal, setshowModal] = useState(false);
-  const [folderNameState, setFolderNameState] = useState("");
-  const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
-  const [toggleFolderNameHideId, setToggleFolderNameHideId] = useState("");
 
   // Routing
   let { path, url } = useRouteMatch();
 
+
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
-  const [getAllFavouritePosts, getAllFavouritePosts_obj] =
-    useGetAllFavouritePostsMutation();
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
   const getAllFollowedTopics = useGetAllFollowedTopicsQuery();
   const [deleteFollowedTopic, deleteFollowedTopic_Obj] =
     useDeleteFollowedTopicMutation();
+
   var [deletePost] = useDeleteCustomTopicMutation();
-  var [deleteFolder] = useDeleteFolderMutation();
-  var [updateFolder] = useUpdateFolderMutation();
 
   // handlers
   const closeModal = () => setshowModal(false);
   const showModalOnClick = () => setshowModal(true);
 
+  var [deleteFolder] = useDeleteFolderMutation();
+  var [updateFolder] = useUpdateFolderMutation();
+
+  const [folderNameState, setFolderNameState] = useState("");
+  const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
+  const [toggleFolderNameHideId, setToggleFolderNameHideId] = useState("");
+
   const RemoveClick = (e) => {
     e.preventDefault();
-
     setToggleFolderNameHide(false);
     setToggleFolderNameHideId("");
   };
@@ -92,22 +93,6 @@ const TopicsPage = ({ className = "" }) => {
       console.log(
         "Error occoured while creating topic",
         deleteFollowedTopic_Obj
-      );
-    }
-  };
-
-  const onFolderClick = async (id) => {
-    try {
-      const res = await getAllFavouritePosts({id : id});
-      setFavouritePosts(res);
-      if (res.error) {
-        cogoToast.error(res.error?.data?.errorMsg);
-      }
-    } catch (err) {
-      console.log("ERROR OCCOURED WHILE GETTING FAVOURITE POSTS", err);
-      console.log(
-        "ERROR OCCOURED WHILE GETTING FAVOURITE POSTS",
-        getAllFavouritePosts_obj.error
       );
     }
   };
@@ -156,10 +141,7 @@ const TopicsPage = ({ className = "" }) => {
                         <NavLink
                           className="customTopicsNavLink"
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
-                          to={`${url}/followed-topics/${_id}`}
-                          onClick={() => {
-                            setCustomTopicId(_id);
-                          }}
+                          to={`${url}/followed-topics/${topic}`}
                         >
                           {topic}
                           <span className="topicsSpan">
@@ -336,7 +318,7 @@ const TopicsPage = ({ className = "" }) => {
                             // to={`/topics/${_id}`}
                             to={`${url}/favourite-posts/${_id}`}
                             onClick={() => {
-                              onFolderClick(_id);
+                              setFolderID(_id);
                             }}
                           >
                             {folderName}
@@ -410,6 +392,18 @@ const TopicsPage = ({ className = "" }) => {
                 }}
               />
 
+              {/* Followed topics Route */}
+              <Route
+                path={`${path}/followed-topics/:category`}
+                render={() => {
+                  return (
+                    <>
+                      <FollowedTopicsMain />
+                    </>
+                  );
+                }}
+              />
+
               {/* Edit Custom topic Route  */}
               <Route
                 path={`${path}/custom_topics/:id`}
@@ -434,17 +428,9 @@ const TopicsPage = ({ className = "" }) => {
                 path={`${path}/favourite-posts/:id`}
                 render={() => {
                   return (
-                    <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
-                      {favouritePosts?.data?.length !== 0 ? (
-                        favouritePosts?.data?.map((value, index) => {
-                          return <Card12 key={index} cardItems={value} />;
-                        })
-                      ) : (
-                        <p className="text-right text-slate-600">
-                          No articles available in this folder.
-                        </p>
-                      )}
-                    </div>
+                    <>
+                      {folderID ? <FavouritePosts folderID={folderID} /> : null}
+                    </>
                   );
                 }}
               />

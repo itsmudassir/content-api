@@ -20,7 +20,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
         ...currentQueryParams
       };
       history.push({
-        pathname: "/discover/discover_search",
+        // pathname: "/discover/discover_search",
         search: queryString.stringify(newQueryParams),
       });
 
@@ -30,7 +30,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
         language: e.label,
       };
       history.push({
-        pathname: "/discover/discover_search",
+        // pathname: "/discover/discover_search",
         search: queryString.stringify(newQueryParams),
       });
     }
