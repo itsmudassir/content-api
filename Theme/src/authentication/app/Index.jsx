@@ -37,6 +37,7 @@ function App() {
         <MainNav1 />
 
         <Switch>
+
           <Route exact path={`/`}>
             <Redirect to={`/discover/discover_search`} />
           </Route>

@@ -26,7 +26,6 @@ import "./topicpage.css";
 import FavouritePosts from "../../containers/FavouritePostsContainer/FavouritePosts";
 import FollowedTopicsMain from "../../containers/FollowedTopics/FollowedTopicsMain";
 
-
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
   const [folderID, setFolderID] = useState();
@@ -35,7 +34,6 @@ const TopicsPage = ({ className = "" }) => {
 
   // Routing
   let { path, url } = useRouteMatch();
-
 
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
@@ -96,7 +94,8 @@ const TopicsPage = ({ className = "" }) => {
       );
     }
   };
-
+  const height = window.innerHeight - (window.innerHeight*(20/100));
+  console.log(height);
   return (
     <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
       <Helmet>
@@ -108,15 +107,17 @@ const TopicsPage = ({ className = "" }) => {
         headingEmoji="⚙"
         heading="Dash board"
       >
-        <div className="flex flex-col space-y-8 xl:space-y-0 xl:flex-row">
+        <div className="flex flex-col space-y-8 xl:space-y-0 lg:flex-row">
           {/* {/ SIDEBAR  /} */}
-
-          <div className="flex-shrink-0 max-w-xl xl:w-70 xl:pr-8">
+          <div
+            style={{ height: height + "px" }}
+            className="flex-shrink-0 w-48 overflow-y-scroll sticky top-0"
+          >
             {/* ============ FOLLOWED TOPICS ================== */}
-            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex justify-between items-center">
+            <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+              <li className="flex justify-between items-center w-44">
                 <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
-                  Followed Topics
+                  FOLLOWED TOPICS
                 </p>
               </li>
               {!getAllFollowedTopics.data ? (
@@ -143,7 +144,10 @@ const TopicsPage = ({ className = "" }) => {
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
                           to={`${url}/followed-topics/${topic}`}
                         >
-                          {topic}
+                          <p title={topic} className="w-32 truncate ...">
+                            {topic}
+                          </p>
+
                           <span className="topicsSpan">
                             <div>
                               <button
@@ -156,7 +160,8 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faTrashCan}
-                                  style={{ color: "gray", fontSize: "12px" }}
+                                  // style={{ color: "gray", fontSize: "12px" }}
+                                  className="hover:text-rose-600 hover:text-lg text-slate-400"
                                 />
                               </button>
                             </div>
@@ -168,11 +173,12 @@ const TopicsPage = ({ className = "" }) => {
                 })
               )}
             </ul>
+            <br />
 
             {/* ============ CUSTOM TOPICS ================== */}
 
-            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex justify-between items-center">
+            <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+              <li className="flex justify-between items-center w-44">
                 <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
                   CUSTOM TOPICS
                 </p>
@@ -210,7 +216,9 @@ const TopicsPage = ({ className = "" }) => {
                             setCustomTopicId(_id);
                           }}
                         >
-                          {name}
+                          <p title={name} className="w-[110px] truncate ...">
+                            {name}
+                          </p>
                           <span className="topicsSpan">
                             <div>
                               <button
@@ -223,7 +231,8 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faPen}
-                                  style={{ color: "gray", fontSize: "12px" }}
+                                  // style={{ color: "gray", fontSize: "12px" }}
+                                  className="hover:text-green-600 hover:text-lg text-slate-400"
                                 />
                               </button>
 
@@ -237,7 +246,8 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faTrashCan}
-                                  style={{ color: "gray", fontSize: "12px" }}
+                                  // style={{ color: "gray", fontSize: "12px" }}
+                                  className="hover:text-rose-600 hover:text-lg text-slate-400"
                                 />
                               </button>
                             </div>
@@ -249,11 +259,12 @@ const TopicsPage = ({ className = "" }) => {
                 })
               )}
             </ul>
+            <br />
 
             {/* FAVOURITES FOLDER */}
             {/* ============ FAVOURITES FOLDER ================== */}
-            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex justify-between items-center">
+            <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+              <li className="flex justify-between items-center w-44">
                 <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
                   FAVOURITES
                 </p>
@@ -321,8 +332,12 @@ const TopicsPage = ({ className = "" }) => {
                               setFolderID(_id);
                             }}
                           >
-                            {folderName}
-
+                            <p
+                              title={folderName}
+                              className="w-[110px] truncate ..."
+                            >
+                              {folderName}
+                            </p>
                             <span className="folderSpan">
                               <button
                                 title="Change folder name"
@@ -335,10 +350,7 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faPen}
-                                  style={{
-                                    color: "gray",
-                                    fontSize: "12px",
-                                  }}
+                                  className="hover:text-green-600 hover:text-lg text-slate-400"
                                 />
                               </button>
 
@@ -352,10 +364,7 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faTrashCan}
-                                  style={{
-                                    color: "gray",
-                                    fontSize: "12px",
-                                  }}
+                                  className="hover:text-rose-600 hover:text-lg text-slate-400"
                                 />
                               </button>
                             </span>

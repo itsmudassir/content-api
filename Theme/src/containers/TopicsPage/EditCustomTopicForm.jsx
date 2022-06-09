@@ -4,8 +4,9 @@ import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import Label from "../../components/Label/Label";
 import WidgetPosts from "../../components/WidgetPosts/WidgetPosts";
 import Chip from "../../components/chip/chip";
-import ExcludeResultInputField from "../../components/ExcludeResultInputField/ExcludeResultInputField";
+import ExcludeDomainInputField from "../../components/ExcludeDomainInputField/ExcludeDomainInputField";
 import LimitResultInputField from "../../components/LimitResultInputField/LimitResultInputField";
+import LimitDomainsInputField from "../../components/LimitDomainsInputField/LimitDomainsInputField";
 import { useParams } from "react-router-dom";
 import { useUpdateCustomTopicMutation } from "../../app/Api/contentApi";
 import CustomTopicLanguageSelect from "../../components/CustomTopicLanguageSelect/CustomTopicLanguageSelect";
@@ -560,7 +561,7 @@ const EditCustomTopicForm = () => {
                 <b>EXCLUDE</b> results from these domains
               </p>
 
-              <ExcludeResultInputField
+              <ExcludeDomainInputField
                 getSelectedvalve={exclude_domains_list_addItem}
               />
               {/* {/ CHIPS /} */}
@@ -584,7 +585,7 @@ const EditCustomTopicForm = () => {
                 <b>LIMIT</b> results to these domais only
               </p>
 
-              <LimitResultInputField
+              <LimitDomainsInputField
                 getSelectedvalve={limit_domains_results_list_addItem}
               />
               {/* {/ CHIPS /} */}
@@ -642,8 +643,8 @@ const EditCustomTopicForm = () => {
                   type="radio"
                   id="titles"
                   // value={bodyORtitle}
-                  defaultChecked={bodyORtitle == "titles"}
-                  onClick={() => setBodyORtitle("titles")}
+                  checked={bodyORtitle == "titles"}
+                  onChange={() => setBodyORtitle("titles")}
                   className="w-3.5 h-3.5"
                 />
                 <label className="text-sm ml-4 font-normal" htmlFor="titles">
@@ -655,8 +656,8 @@ const EditCustomTopicForm = () => {
                   type="radio"
                   id="body"
                   // value={bodyORtitle}
-                  defaultChecked={bodyORtitle == "body"}
-                  onClick={() => setBodyORtitle("body")}
+                  checked={bodyORtitle == "body"}
+                  onChange={() => setBodyORtitle("body")}
                   className="w-3.5 h-3.5"
                 />
                 <label className="text-sm ml-4 font-normal" htmlFor="body">

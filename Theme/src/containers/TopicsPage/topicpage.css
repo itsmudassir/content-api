@@ -12,6 +12,7 @@
   padding-bottom: 5px;
   font-size: small;
   color: #8c8c8c;
+
 }
 .customTopicsNavLink:hover {
   color: rgb(23 23 23);
@@ -43,3 +44,33 @@
 .favouriteSFolderNavLink:hover span{
     display: inline-block;
 }
+
+
+/* flex-shrink-0 w-48 overflow-y-scroll sticky top-0 */
+
+.scrollbar {
+  width: 192px !important;
+  position: sticky;
+  top: 0;  
+  overflow-y: scroll;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: white;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #e0cbcb;
+  border-radius: 100vh;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c0a0b9;
+}
+

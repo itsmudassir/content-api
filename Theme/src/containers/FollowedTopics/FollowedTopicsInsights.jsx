@@ -33,7 +33,6 @@ const FollowedTopicsInsights = ({ searchKitData,category}) => {
       });
       setInsights(res?.data?.aggregations.range.buckets[0]);
 
-      // console.log(res?.data?.aggregations.range.buckets[0]);
     } catch (err) {
       console.log("ERROR OCCOURED WHILE FETCHING INSIGHTS", err);
       console.log(getInsightsObj?.error);

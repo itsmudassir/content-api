@@ -2,10 +2,11 @@ import { validationResult, body } from "express-validator";
 import validator from "validator";
 
 const postValidation = [
-    // body("name")
-    //     .trim()
-    //     .notEmpty().withMessage("Name field can not be empty")
-    //     .isLength({ min: 3, max: 50 }).withMessage("Name field can be 50 characters maximum and 3 characters minimum"),
+    body("name")
+        .trim()
+        .notEmpty().withMessage("Name field can not be empty")
+        .isLength({ min: 3, max: 100 }).withMessage("Name field can be 100 characters maximum and 3 characters minimum")
+
 
     // body("match_type")
     //     .trim()
@@ -165,4 +166,4 @@ const patchvalidation = [
 
 
 
-export {postValidation, patchvalidation};
+export { postValidation, patchvalidation };

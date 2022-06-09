@@ -26,7 +26,7 @@ const createCustomTopic = async (req, res) => {
     try {
         const validationErrors = validationResult(req);
         if (!validationErrors.isEmpty()) {
-            res.status(400).json(validationErrors.array()[0]);
+           return res.status(400).json(validationErrors.array()[0]);
         }
 
         const topicsFields = {};
