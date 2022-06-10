@@ -21,6 +21,7 @@ import Analytics from "../../containers/Analytics/Analytics";
 import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3";
 import EditUserProfile from "../../containers/PageEditUserProfile/PageEditUserProfile";
+import SidebarMobile from "../../components/SidebarMobile/SidebarMobile";
 
 function App() {
   const { pathname } = useLocation();
@@ -37,6 +38,8 @@ function App() {
         <MainNav1 />
 
         <Switch>
+
+          <Route path="/sidebar" component={SidebarMobile} />
 
           <Route exact path={`/`}>
             <Redirect to={`/discover/discover_search`} />

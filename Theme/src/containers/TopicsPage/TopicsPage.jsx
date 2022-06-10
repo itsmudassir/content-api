@@ -25,6 +25,7 @@ import CustomTopicPosts from "./CustomTopicPosts";
 import "./topicpage.css";
 import FavouritePosts from "../../containers/FavouritePostsContainer/FavouritePosts";
 import FollowedTopicsMain from "../../containers/FollowedTopics/FollowedTopicsMain";
+import SidebarMobile from "../../components/SidebarMobile/SidebarMobile";
 
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
@@ -34,6 +35,8 @@ const TopicsPage = ({ className = "" }) => {
 
   // Routing
   let { path, url } = useRouteMatch();
+
+  const screenHeight = window.innerHeight - window.innerHeight * (15 / 100);
 
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
@@ -94,8 +97,7 @@ const TopicsPage = ({ className = "" }) => {
       );
     }
   };
-  const height = window.innerHeight - (window.innerHeight*(20/100));
-  console.log(height);
+
   return (
     <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
       <Helmet>
@@ -107,11 +109,16 @@ const TopicsPage = ({ className = "" }) => {
         headingEmoji="⚙"
         heading="Dash board"
       >
+        {/* =========== md, sm and xs screens SIDEBAR ============== */}
+        <div className="block lg:hidden">
+          <SidebarMobile setFolderID={setFolderID} />
+        </div>
+
         <div className="flex flex-col space-y-8 xl:space-y-0 lg:flex-row">
-          {/* {/ SIDEBAR  /} */}
+          {/* =========== lg and xl screens SIDEBAR ============== */}
           <div
-            style={{ height: height + "px" }}
-            className="flex-shrink-0 w-48 overflow-y-scroll sticky top-0"
+            style={{ height: screenHeight + "px" }}
+            className="flex-shrink-0 w-48 overflow-y-scroll sticky top-0 hidden lg:block scrollbar-w-1 scrollbar-thumb-slate-300 scrollbar-track-slate-0"
           >
             {/* ============ FOLLOWED TOPICS ================== */}
             <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
@@ -378,9 +385,7 @@ const TopicsPage = ({ className = "" }) => {
               )}
             </ul>
           </div>
-
           {/* ============ PAGES CONTAINERS =================  */}
-
           <div className="border border-neutral-100 dark:border-neutral-800 md:hidden"></div>
           <div className="flex-grow">
             <CreateFolderModal
