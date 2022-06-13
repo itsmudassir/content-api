@@ -12,14 +12,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const PageInsights = ({ searchKitData }) => {
+const FollowedTopicsInsights = ({ searchKitData,category}) => {
   const [insights, setInsights] = useState();
 
   // RTK Query
   const [getInsights, getInsightsObj] = useGetInsightsMutation();
 
   // URL search params
-  const { startDate, endDate, customCategory, customQuery } = queryString.parse(
+  const { startDate, endDate} = queryString.parse(
     window.location.search
   );
 
@@ -28,17 +28,16 @@ const PageInsights = ({ searchKitData }) => {
       const res = await getInsights({
         startDate: startDate? startDate: dates.startDate,
         endDate: endDate? endDate: dates.endDate,
-        customQuery: customQuery,
-        category: customCategory,
+        // customQuery: customQuery,
+        category: category,
       });
       setInsights(res?.data?.aggregations.range.buckets[0]);
 
-      // console.log(res?.data?.aggregations.range.buckets[0]);
     } catch (err) {
       console.log("ERROR OCCOURED WHILE FETCHING INSIGHTS", err);
       console.log(getInsightsObj?.error);
     }
-  }, [startDate, endDate, customCategory, customQuery]);
+  }, [startDate, endDate, category]);
 
   return (
     <>
@@ -113,4 +112,4 @@ const PageInsights = ({ searchKitData }) => {
   );
 };
 
-export default PageInsights;
+export default FollowedTopicsInsights;

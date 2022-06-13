@@ -134,14 +134,17 @@ const contentApi = createApi({
         getAllFavouritePosts: builder.query({
             query: (folderId) => ({
                 url: `/api/favouritePosts/all_posts/${folderId}`,
+                method: "GET"
             }),
             providesTags: ["FavouritePosts"]
         }),
+
         
         // get all favourite posts by authenticated user
         getAllFavouritePostsbyUser: builder.query({
             query: () => ({
                 url: `/api/favouritePosts/all_posts`,
+                method: "GET"
             }),
             providesTags: ["FavouritePosts"]
         }),

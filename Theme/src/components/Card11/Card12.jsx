@@ -12,7 +12,6 @@ const Card12 = ({
   ratio = "aspect-w-4 aspect-h-3",
 }) => {
   const history = useHistory();
-  console.log(cardItems);
 
   const {
     date,
@@ -28,22 +27,18 @@ const Card12 = ({
   };
 
   //useState hook from the theme
-  const [isHover, setIsHover] = useState(false);
 
   //returning of fuction starts here
   return (
     <div
       className={`nc-Card11 relative flex flex-col group [ nc-box-has-hover ] [ nc-dark-box-bg-has-hover ] ${className}`}
       data-nc-id="Card11"
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      //
     >
       <div
         className={`block flex-shrink-0 relative w-full rounded-t-xl overflow-hidden ${ratio}`}
       >
         <div className="absolute inset-0" onClick={pushData}>
-          <PostFeaturedMedia isHover={isHover} post={cardItems} />
+          <PostFeaturedMedia post={cardItems} />
         </div>
       </div>
 

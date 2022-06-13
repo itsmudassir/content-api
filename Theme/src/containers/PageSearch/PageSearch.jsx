@@ -90,7 +90,6 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     try {
       const res = await isFollingTopic({ topicName: customCategory });
       setIsFollowing(res.data);
-      console.log(res.data);
     } catch (err) {
       console.log("ERROR OCCOURED WHILE FETCHING SINGLE TOPIC NAME", err);
       console.log(isFollingTopic_obj.error);

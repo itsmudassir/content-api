@@ -37,14 +37,13 @@ const MainNav1 = ({ isTop }) => {
               </>
             ) : null}
           </div>
-          <div className="flex items-center xl:hidden">
+          <div className="flex items-center lg:hidden">
             {user ? (
               <>
                 <UserBtnDropDown />
                 <p className="font-normal">{user.firstName}</p>
               </>
             ) : null}
-
             <div className="px-1" />
             <MenuBar />
           </div>

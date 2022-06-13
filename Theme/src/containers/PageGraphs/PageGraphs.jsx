@@ -47,8 +47,8 @@ const PageGraphs = ({ data }) => {
         twitter: data?.sum_twitter_shares.value,
       });
       setPopular_word_count(data?.popular_word_count);
-      setPopularReadingLevels(data["Popular Reading Levels"]);
-      setPopularDays(data["Popular Days"]);
+      setPopularReadingLevels(data? data["Popular Reading Levels"]: null);
+      setPopularDays(data? data["Popular Days"]: null);
       setTop_domians(data?.top_domians_by_most_articles_published);
       setTop_keywords(data?.top_keywords);
     } catch (err) {
@@ -56,7 +56,6 @@ const PageGraphs = ({ data }) => {
     }
   }, [data]);
 
-  console.log(articlesAnalyzed)
   if (articlesAnalyzed == 0){
     return <p className="text-slate-600 text-start ml-10 mt-16">Sorry, No insights available for this search</p>
   }

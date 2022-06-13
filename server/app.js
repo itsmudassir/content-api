@@ -11,6 +11,8 @@ import followedTopics from "./src/routes/api/followedTopicsRoutes/followedTopics
 import errorHandler from "./src/middlewares/errorHandler.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+// import { server } from "./src/GQL_SearchKit/gqlSearchkit.js";
+
 
 // cache
 import { clearHash } from "./src/controllers/cachingControllers/redis.Controller.js";
@@ -29,9 +31,13 @@ app.use(
   })
 );
 
+// server.applyMiddleware({ app });
+
 // database connections
 connectDatabase();
 // checkConnection();
+
+
 
 // api routes
 app.use(express.json());
@@ -42,6 +48,9 @@ app.use("/api/articleSearch", articleSearch);
 app.use("/api/customTopicSearch", customTopicSearch);
 app.use("/api/insights", insights);
 app.use("/api/followedTopics", followedTopics);
+app.get("/saad", (req, res)=>{
+    res.send("SAAD")
+})
 
 // error handling middleware
 app.use(errorHandler);

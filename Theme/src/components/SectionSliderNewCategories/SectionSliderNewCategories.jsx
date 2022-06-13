@@ -91,11 +91,9 @@ const SectionSliderNewCategories = ({
                 {newData?.map((entry, index) => {
                   if (categoriesFilter.includes(entry.label))
                     return (
-                      <ul className="rem">
-                        <li key={index}>
-                          {renderCard(entry, index, searchkitOutput)}
-                        </li>
-                      </ul>
+                      <div key={index}>
+                        {renderCard(entry, index, searchkitOutput)}
+                      </div>
                     );
                 })}
               </div>
@@ -114,11 +112,9 @@ const SectionSliderNewCategories = ({
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-8 mt-8 lg:mt-10">
                 {newData?.map((entry, index) => {
                   return (
-                    <ul className="rem">
-                      <li key={index}>
-                        {renderCard(entry, index, searchkitOutput)}
-                      </li>
-                    </ul>
+                    <div key={index}>
+                      {renderCard(entry, index, searchkitOutput)}
+                    </div>
                   );
                 })}
               </div>

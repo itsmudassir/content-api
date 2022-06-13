@@ -4,8 +4,8 @@ import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import Label from "../../components/Label/Label";
 import WidgetPosts from "../../components/WidgetPosts/WidgetPosts";
 import Chip from "../../components/chip/chip";
-import ExcludeResultInputField from "../../components/ExcludeResultInputField/ExcludeResultInputField";
-import LimitResultInputField from "../../components/LimitResultInputField/LimitResultInputField";
+import ExcludeDomainInputField from "../../components/ExcludeDomainInputField/ExcludeDomainInputField";
+import LimitDomainsInputField from "../../components/LimitDomainsInputField/LimitDomainsInputField";
 import { useCreateTopicMutation } from "../../app/Api/contentApi";
 import cogoToast from "cogo-toast";
 import { gql, useQuery } from "@apollo/client";
@@ -187,7 +187,6 @@ const sortingList = [
 ];
 
 const TopicSubmitPost = () => {
-  
   // states
   const [topicName, setTopicName] = useState(null); // topic name
 
@@ -213,7 +212,7 @@ const TopicSubmitPost = () => {
   ); // limit_domains_results
 
   // filters
-  const [bodyORtitle, setBodyORtitle] = useState("title");
+  const [bodyORtitle, setBodyORtitle] = useState("titles");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [language, setlanguage] = useState(null);
@@ -254,7 +253,7 @@ const TopicSubmitPost = () => {
   // EVENT HANDLERS
   // any_keywords
   const any_keywords_addItem = (e) => {
-    if (["Enter"].includes(e.key)) {
+    if (["Enter", ","].includes(e.key)) {
       e.preventDefault();
       let value = any_keywords_value.trim();
       if (value) {
@@ -269,7 +268,7 @@ const TopicSubmitPost = () => {
 
   // must_also_keywords
   const must_also_keywords_addItem = (e) => {
-    if (["Enter"].includes(e.key)) {
+    if (["Enter", ","].includes(e.key)) {
       e.preventDefault();
       let value = must_also_keywords_value.trim();
       if (value) {
@@ -286,7 +285,7 @@ const TopicSubmitPost = () => {
 
   // must_not_contains_keywords
   const must_not_contains_keywords_addItem = (e) => {
-    if (["Enter"].includes(e.key)) {
+    if (["Enter", ","].includes(e.key)) {
       e.preventDefault();
       let value = must_not_contains_keywords_value.trim();
       if (value) {
@@ -332,7 +331,7 @@ const TopicSubmitPost = () => {
       const res = await createTopic(customTopic);
       console.log(res);
       if (res.data) cogoToast.success(res.data.successMsg);
-      if (res.error) cogoToast.error(res.error.data.errorMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg || res.error.data.msg);
     } catch (err) {
       console.log("ERROR OCCOURED WHILE CREATING CUSTOM TOPIC IN DB", err);
       console.log(
@@ -401,8 +400,7 @@ const TopicSubmitPost = () => {
       filters: [
         {
           identifier: "CustomFilter",
-          value: jsonob 
-  
+          value: jsonob,
         },
       ],
       page: {
@@ -434,6 +432,7 @@ const TopicSubmitPost = () => {
       <LoadingVideo />
     </div>;
   }
+
   return (
     <div className="flex lg:flex-row flex-col gap-6 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
       {/* {/ div container /} */}
@@ -450,7 +449,6 @@ const TopicSubmitPost = () => {
 
         <label className="block md:col-span-2">
           <Label className="font-bold text-lg">Build Your Query</Label>
-
 
           <p className="mt-5 text-base text-neutral-500 font-medium">
             Each result must contain at least <b>ONE</b> one of these keywords
@@ -543,7 +541,7 @@ const TopicSubmitPost = () => {
             <b>EXCLUDE</b> results from these domains
           </p>
 
-          <ExcludeResultInputField
+          <ExcludeDomainInputField
             getSelectedvalve={exclude_domains_list_addItem}
           />
           {/* {/ CHIPS /} */}
@@ -567,8 +565,7 @@ const TopicSubmitPost = () => {
           <p className="mt-2 text-base text-neutral-500 font-medium">
             <b>LIMIT</b> results to these domais only
           </p>
-
-          <LimitResultInputField
+          <LimitDomainsInputField
             getSelectedvalve={limit_domains_results_list_addItem}
           />
           {/* {/ CHIPS /} */}
@@ -630,7 +627,7 @@ const TopicSubmitPost = () => {
               id="titles"
               value={bodyORtitle}
               checked={bodyORtitle == "titles"}
-              onClick={() => setBodyORtitle("titles")}
+              onChange={() => setBodyORtitle("titles")}
               className="w-3.5 h-3.5"
             />
             <label className="text-sm ml-4 font-normal" htmlFor="titles">
@@ -643,7 +640,7 @@ const TopicSubmitPost = () => {
               id="body"
               value={bodyORtitle}
               checked={bodyORtitle == "body"}
-              onClick={() => setBodyORtitle("body")}
+              onChange={() => setBodyORtitle("body")}
               className="w-3.5 h-3.5"
             />
             <label className="text-sm ml-4 font-normal" htmlFor="body">

@@ -24,7 +24,7 @@ const PageTopDomains = ({ insights }) => {
     );
   }, []);
 
-  console.log(data);
+  // console.log(data);
   const columns = useMemo(
     () => [
       {

@@ -19,7 +19,7 @@ const RelevanceListBox = ({ className = "", lists }) => {
       sortBy: e.id,
     };
     history.push({
-      pathname: "/discover/discover_search",
+      // pathname: "/discover/discover_search",
       search: queryString.stringify(newQueryParams),
     });
   };

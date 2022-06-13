@@ -8,7 +8,6 @@ import EditCustomTopicForm from "./EditCustomTopicForm";
 import CreateFolderModal from "../../components/CreateFolderModal/createFolderModal";
 import {
   useGetAllFoldersQuery,
-  useGetAllFavouritePostsQuery,
   useGetAllCustomTopicsQuery,
   useDeleteCustomTopicMutation,
   useDeleteFolderMutation,
@@ -21,13 +20,14 @@ import Input from "../../components/Input/Input";
 import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cogoToast from "cogo-toast";
-import Card12 from "../../components/Card11/Card12";
 import ReactLoading from "react-loading";
 import CustomTopicPosts from "./CustomTopicPosts";
 import "./topicpage.css";
+import FavouritePosts from "../../containers/FavouritePostsContainer/FavouritePosts";
+import FollowedTopicsMain from "../../containers/FollowedTopics/FollowedTopicsMain";
+import SidebarMobile from "../../components/SidebarMobile/SidebarMobile";
 
 const TopicsPage = ({ className = "" }) => {
-  console.log("rerender");
   const history = useHistory();
   const [folderID, setFolderID] = useState();
   const [customTopicId, setCustomTopicId] = useState(null);
@@ -36,11 +36,10 @@ const TopicsPage = ({ className = "" }) => {
   // Routing
   let { path, url } = useRouteMatch();
 
-  // refrences
+  const screenHeight = window.innerHeight - window.innerHeight * (15 / 100);
 
   // RTK-Query
   const getAllFolders = useGetAllFoldersQuery();
-  const favouritePosts = useGetAllFavouritePostsQuery(folderID);
   //For CustomTopic
   const getAllCustomTopics = useGetAllCustomTopicsQuery();
   const getAllFollowedTopics = useGetAllFollowedTopicsQuery();
@@ -62,7 +61,6 @@ const TopicsPage = ({ className = "" }) => {
 
   const RemoveClick = (e) => {
     e.preventDefault();
-
     setToggleFolderNameHide(false);
     setToggleFolderNameHideId("");
   };
@@ -111,15 +109,22 @@ const TopicsPage = ({ className = "" }) => {
         headingEmoji="⚙"
         heading="Dash board"
       >
-        <div className="flex flex-col space-y-8 xl:space-y-0 xl:flex-row">
-          {/* {/ SIDEBAR  /} */}
+        {/* =========== md, sm and xs screens SIDEBAR ============== */}
+        <div className="block lg:hidden">
+          <SidebarMobile setFolderID={setFolderID} />
+        </div>
 
-          <div className="flex-shrink-0 max-w-xl xl:w-70 xl:pr-8">
+        <div className="flex flex-col space-y-8 xl:space-y-0 lg:flex-row">
+          {/* =========== lg and xl screens SIDEBAR ============== */}
+          <div
+            style={{ height: screenHeight + "px" }}
+            className="flex-shrink-0 w-48 overflow-y-scroll sticky top-0 hidden lg:block scrollbar-w-1 scrollbar-thumb-slate-300 scrollbar-track-slate-0"
+          >
             {/* ============ FOLLOWED TOPICS ================== */}
-            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex justify-between items-center">
+            <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+              <li className="flex justify-between items-center w-44">
                 <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
-                  Followed Topics
+                  FOLLOWED TOPICS
                 </p>
               </li>
               {!getAllFollowedTopics.data ? (
@@ -144,12 +149,12 @@ const TopicsPage = ({ className = "" }) => {
                         <NavLink
                           className="customTopicsNavLink"
                           activeClassName="bg-indigo-50 text-[#000000] dark:bg-neutral-800 dark:text-neutral-900"
-                          to={`${url}/followed-topics/${_id}`}
-                          onClick={() => {
-                            setCustomTopicId(_id);
-                          }}
+                          to={`${url}/followed-topics/${topic}`}
                         >
-                          {topic}
+                          <p title={topic} className="w-32 truncate ...">
+                            {topic}
+                          </p>
+
                           <span className="topicsSpan">
                             <div>
                               <button
@@ -162,7 +167,8 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faTrashCan}
-                                  style={{ color: "gray", fontSize: "12px" }}
+                                  // style={{ color: "gray", fontSize: "12px" }}
+                                  className="hover:text-rose-600 hover:text-lg text-slate-400"
                                 />
                               </button>
                             </div>
@@ -174,11 +180,12 @@ const TopicsPage = ({ className = "" }) => {
                 })
               )}
             </ul>
+            <br />
 
             {/* ============ CUSTOM TOPICS ================== */}
 
-            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex justify-between items-center">
+            <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+              <li className="flex justify-between items-center w-44">
                 <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
                   CUSTOM TOPICS
                 </p>
@@ -216,7 +223,9 @@ const TopicsPage = ({ className = "" }) => {
                             setCustomTopicId(_id);
                           }}
                         >
-                          {name}
+                          <p title={name} className="w-[110px] truncate ...">
+                            {name}
+                          </p>
                           <span className="topicsSpan">
                             <div>
                               <button
@@ -229,7 +238,8 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faPen}
-                                  style={{ color: "gray", fontSize: "12px" }}
+                                  // style={{ color: "gray", fontSize: "12px" }}
+                                  className="hover:text-green-600 hover:text-lg text-slate-400"
                                 />
                               </button>
 
@@ -243,7 +253,8 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faTrashCan}
-                                  style={{ color: "gray", fontSize: "12px" }}
+                                  // style={{ color: "gray", fontSize: "12px" }}
+                                  className="hover:text-rose-600 hover:text-lg text-slate-400"
                                 />
                               </button>
                             </div>
@@ -255,11 +266,12 @@ const TopicsPage = ({ className = "" }) => {
                 })
               )}
             </ul>
+            <br />
 
             {/* FAVOURITES FOLDER */}
             {/* ============ FAVOURITES FOLDER ================== */}
-            <ul className=" flex justify-center items-start ml-4 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex justify-between items-center">
+            <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
+              <li className="flex justify-between items-center w-44">
                 <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
                   FAVOURITES
                 </p>
@@ -288,7 +300,7 @@ const TopicsPage = ({ className = "" }) => {
               ) : (
                 getAllFolders?.data?.map(({ folderName, _id }, index) => {
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {toggleFolderNameHide &&
                       toggleFolderNameHideId === _id ? (
                         <form className="mt-0  relative max-w-[80%]" key={_id}>
@@ -327,8 +339,12 @@ const TopicsPage = ({ className = "" }) => {
                               setFolderID(_id);
                             }}
                           >
-                            {folderName}
-
+                            <p
+                              title={folderName}
+                              className="w-[110px] truncate ..."
+                            >
+                              {folderName}
+                            </p>
                             <span className="folderSpan">
                               <button
                                 title="Change folder name"
@@ -341,10 +357,7 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faPen}
-                                  style={{
-                                    color: "gray",
-                                    fontSize: "12px",
-                                  }}
+                                  className="hover:text-green-600 hover:text-lg text-slate-400"
                                 />
                               </button>
 
@@ -358,10 +371,7 @@ const TopicsPage = ({ className = "" }) => {
                               >
                                 <FontAwesomeIcon
                                   icon={faTrashCan}
-                                  style={{
-                                    color: "gray",
-                                    fontSize: "12px",
-                                  }}
+                                  className="hover:text-rose-600 hover:text-lg text-slate-400"
                                 />
                               </button>
                             </span>
@@ -369,15 +379,13 @@ const TopicsPage = ({ className = "" }) => {
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </li>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 })
               )}
             </ul>
           </div>
-
           {/* ============ PAGES CONTAINERS =================  */}
-
           <div className="border border-neutral-100 dark:border-neutral-800 md:hidden"></div>
           <div className="flex-grow">
             <CreateFolderModal
@@ -393,6 +401,18 @@ const TopicsPage = ({ className = "" }) => {
                   return (
                     <>
                       <CustomTopicPosts />
+                    </>
+                  );
+                }}
+              />
+
+              {/* Followed topics Route */}
+              <Route
+                path={`${path}/followed-topics/:category`}
+                render={() => {
+                  return (
+                    <>
+                      <FollowedTopicsMain />
                     </>
                   );
                 }}
@@ -422,21 +442,9 @@ const TopicsPage = ({ className = "" }) => {
                 path={`${path}/favourite-posts/:id`}
                 render={() => {
                   return (
-                    <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8 mt-8 lg:mt-10">
-                      {favouritePosts?.data?.length !== 0 ? (
-                        favouritePosts?.data?.map((value, index) => {
-                          return (
-                            <>
-                              <Card12 key={index} cardItems={value} />
-                            </>
-                          );
-                        })
-                      ) : (
-                        <p className="text-right text-slate-600">
-                          No articles available in this folder.
-                        </p>
-                      )}
-                    </div>
+                    <>
+                      {folderID ? <FavouritePosts folderID={folderID} /> : null}
+                    </>
                   );
                 }}
               />

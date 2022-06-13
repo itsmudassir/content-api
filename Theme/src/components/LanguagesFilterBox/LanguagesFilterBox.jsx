@@ -11,7 +11,6 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
   const [selected, setSelected] = useState(null);
   const currentQueryParams = queryString.parse(window.location.search);
   const { language } = currentQueryParams;
-  console.log(lists);
 
   const handelOnChange = (e) => {
     setSelected(e);
@@ -21,7 +20,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
         ...currentQueryParams
       };
       history.push({
-        pathname: "/discover/discover_search",
+        // pathname: "/discover/discover_search",
         search: queryString.stringify(newQueryParams),
       });
 
@@ -31,7 +30,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
         language: e.label,
       };
       history.push({
-        pathname: "/discover/discover_search",
+        // pathname: "/discover/discover_search",
         search: queryString.stringify(newQueryParams),
       });
     }
@@ -72,7 +71,6 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
                       <>
                         {lists.length == 1 && language? (
                           <div
-                            onClick={() => console.log("saad")}
                             className="flex justify-between items-center z-50"
                           >
                             <p>Remove {item.label}</p>

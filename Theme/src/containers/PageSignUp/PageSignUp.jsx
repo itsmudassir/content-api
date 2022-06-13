@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
-import facebookSvg from "../../images/Facebook.svg";
-import twitterSvg from "../../images/Twitter.svg";
-import googleSvg from "../../images/Google.svg";
 import Input from "../../components/Input/Input";
 import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import NcLink from "../../components/NcLink/NcLink";
@@ -12,24 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import cogoToast from "cogo-toast";
-
-const loginSocials = [
-  {
-    name: "Continue with Facebook",
-    href: "#",
-    icon: facebookSvg,
-  },
-  {
-    name: "Continue with Twitter",
-    href: "#",
-    icon: twitterSvg,
-  },
-  {
-    name: "Continue with Google",
-    href: "#",
-    icon: googleSvg,
-  },
-];
+import ReactLoading from "react-loading";
 
 const registerValidationSchema = yup.object().shape({
   firstName: yup.string().required("First name is required").min(4).max(20),
@@ -46,6 +26,8 @@ const registerValidationSchema = yup.object().shape({
 });
 
 const PageSignUp = ({ className = "", history }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -57,14 +39,17 @@ const PageSignUp = ({ className = "", history }) => {
   const title = "Mr";
 
   function onSubmit(values) {
+    setIsLoading(true);
     accountService
       .register({ ...values, title })
       .then(() => {
-        cogoToast.success("loggedin successfully");
         history.push("login");
+        setIsLoading(false);
+        cogoToast.success("loggedin successfully");
       })
       .catch((error) => {
-        cogoToast.error(error)
+        cogoToast.error(error);
+        setIsLoading(false);
       });
   }
 
@@ -85,7 +70,6 @@ const PageSignUp = ({ className = "", history }) => {
 
           {/* FORM */}
           <form className="grid grid-cols-1 gap-6">
-
             <label className="block">
               <span className="text-neutral-800 dark:text-neutral-200">
                 First Name
@@ -160,7 +144,19 @@ const PageSignUp = ({ className = "", history }) => {
             </label>
 
             <ButtonPrimary onClick={handleSubmit(onSubmit)}>
-              Register
+              {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <p>Loading...</p>&nbsp;&nbsp;
+                  <ReactLoading
+                    type="spin"
+                    color={"white"}
+                    height={24}
+                    width={24}
+                  />
+                </div>
+              ) : (
+                "Register"
+              )}
             </ButtonPrimary>
           </form>
 

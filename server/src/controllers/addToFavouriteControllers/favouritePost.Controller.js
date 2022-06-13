@@ -15,8 +15,8 @@ const postFavouritePost = async (req, res) => {
         if (await favouritePostsModel.findOne({ post_id: req.body.id, folderId: req.params.id })) {
             return res.status(400).json({ errorMsg: "This post is already added to this folder" })
         }
-        
-        const post = new favouritePostsModel(req.body); 
+
+        const post = new favouritePostsModel(req.body);
         post.post_id = req.body.id;
         post.folderId = req.params.id;
         post.userId = req.user.id;
@@ -57,13 +57,14 @@ const getSinglePost = async (req, res) => {
 // desc:   reading all posts in favourites folder by folder id
 // access: PROTECTED
 const getAllPosts = async (req, res,) => {
-    try {
-        const folderId = req.params.id;
-        console.log(folderId);
 
-        if(folderId == undefined){
-            return res.status(400).send("Must provide folderID");
-        } 
+    try {
+
+        const folderId = req.params.id;
+
+        if (folderId == null || folderId == undefined) {
+            return res.status(400).json({ errorMsg: "must provide folder id" })
+        }
 
         const posts = await favouritePostsModel.find({ folderId: folderId });
 
@@ -76,7 +77,7 @@ const getAllPosts = async (req, res,) => {
 
     } catch (err) {
         res.status(500).json({ errorMsg: "Server error" }) //500 for server error
-        console.log("ERROR OCCOURED WHILE GETTING POSTs YYY", err);
+        console.log("ERROR OCCOURED WHILE GETTING POSTs", err);
     }
 };
 

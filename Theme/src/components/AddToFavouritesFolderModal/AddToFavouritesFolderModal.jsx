@@ -76,10 +76,10 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
   const renderContent = () => {
     return (
       <form action="#">
-        {getAllFolders?.data?.length == 0 ? (
-          <>
-            <p>There are no folders to add post</p>
-          </>
+        {getAllFolders?.data?.InformationMsg ? (
+          <p className="text-sm sm:text-lg ml-6 mb-10 mt-5 text-slate-400">
+            {getAllFolders.data.InformationMsg}
+          </p>
         ) : (
           <>
             <ScrollableSelectBox
