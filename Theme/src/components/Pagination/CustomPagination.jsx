@@ -1,52 +1,45 @@
 import Pagination from "react-pagination-js";
-import {  useSearchkit } from '@searchkit/client'
+import { useSearchkit } from "@searchkit/client";
 import "react-pagination-js/dist/styles.css";
-import "./style.css"
+import "./style.css";
+import queryString from "query-string";
+import { useHistory } from "react-router-dom";
+import { subQuarters } from "date-fns";
 
-const CustomPagination = ({data})=>{
-    const api = useSearchkit()
+const CustomPagination = ({ data }) => {
+  const api = useSearchkit();
+  const history = useHistory();
+  const currentQueryParams = queryString.parse(window.location.search);
 
-    const topButton = ()=>{
+  const topButton = () => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
 
-        window.scrollTo({
-            top:0,
-            left:0,
-            behavior:"smooth"
-        })
+  return (
+    <div>
+      <Pagination
+        currentPage={data?.hits.page.pageNumber + 1}
+        onClick={topButton()}
+        totalSize={data?.hits.page.total}
+        sizePerPage={data?.hits.page.size}
+        changeCurrentPage={(currentPage) => {
+          const newQueryParams = {
+            ...currentQueryParams,
+            page: currentPage,
+          };
+          history.push({
+            pathname: "/discover/discover_search",
+            search: queryString.stringify(newQueryParams),
+          });
+        }}
+        theme="bootstrap"
+      />
+    </div>
+  );
+};
 
-    }
-
-
-    return (
-      <div >
-
-       
-        <Pagination
-
-
-  
-  currentPage={data?.hits.page.pageNumber+1}
-
-  onClick={topButton()}
-
-  totalSize={data?.hits.page.total}
-
-  sizePerPage={data?.hits.page.size}
-
-  changeCurrentPage={(currentPage) => {
-    // var currentPaget=currentPage-1
-    var sum=(currentPage * data?.hits.page.size)-20
-    api.setPage({ size: data?.hits.page.size, from:sum  })
-    api.search()
-  }}
-
-  theme="bootstrap"
-
-/>
-  
-      </div>
-    )
-}
-
-
-export default CustomPagination
+export default CustomPagination;

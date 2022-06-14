@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import queryString from "query-string";
 import cogoToast from "cogo-toast";
+import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
 
 const PageSearch = ({ className = "", data, loading, error }) => {
   // states
@@ -166,7 +167,6 @@ const PageSearch = ({ className = "", data, loading, error }) => {
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
             <div className="flex justify-between items-center">
-              
               {/* ========== follow button div ============  */}
               <div className="sm:hidden">
                 {isFollowing ? (
@@ -223,6 +223,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center"
             style={{ justifyContent: "center", alignItems: "center" }}
           >
+            <CustomPagination data={data?.results} />
           </div>
         </main>
       </div>

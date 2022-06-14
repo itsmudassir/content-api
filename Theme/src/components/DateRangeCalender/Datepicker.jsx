@@ -55,7 +55,7 @@ function DatePicker({ toggleDisplay }) {
     var startDatec = moment(range.selection.startDate).format("YYYY-MM-DD");
     var endDatec = moment(range.selection.endDate).format("YYYY-MM-DD");
     console.log(startDatec, endDatec, "---------------->");
-    
+    delete currentQueryParams.page;
     const newQueryParams = {
       ...currentQueryParams,
       startDate: startDatec,

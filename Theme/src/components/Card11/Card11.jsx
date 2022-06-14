@@ -54,7 +54,6 @@ const Card11 = ({
 
       <div className="p-4 flex flex-col justify-between flex-grow space-y-3">
         {!hiddenAuthor ? (
-
           <PostCardMeta meta={cardvalue.fields} />
         ) : (
           <span className="text-xs text-neutral-500">

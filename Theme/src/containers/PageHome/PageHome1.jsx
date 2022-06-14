@@ -108,8 +108,15 @@ const PageHome1 = () => {
   // const prefetchCustomTopics = usePrefetch("getAllCustomTopics");
   // const prefetchFavFolders = usePrefetch("getAllFolders");
 
-  var { customCategory, customQuery, language, sortBy, startDate, endDate } =
-    queryString.parse(search);
+  var {
+    customCategory,
+    customQuery,
+    language,
+    sortBy,
+    startDate,
+    endDate,
+    page,
+  } = queryString.parse(search);
   const searchkitOutput = useQuery(query, { variables });
 
   // prefetchCustomTopics(null, {force:true});
@@ -124,15 +131,14 @@ const PageHome1 = () => {
   }, []);
 
   useEffect(() => {
-
     const customState = {
       query: "",
       sortBy: "",
       filters: [
         {
           identifier: "date_download",
-          dateMin:startDate? startDate: dates.startDate,
-          dateMax: endDate? endDate: dates.endDate,
+          dateMin: startDate ? startDate : dates.startDate,
+          dateMax: endDate ? endDate : dates.endDate,
         },
       ],
       page: {
@@ -140,7 +146,7 @@ const PageHome1 = () => {
         from: 0,
       },
     };
-
+    console.log(searchkitOutput.data);
     if (customCategory) {
       customState.filters.push({
         identifier: "category",
@@ -160,9 +166,14 @@ const PageHome1 = () => {
       });
     }
 
+    if(page){
+      const sum = page * 20 - 20;
+      customState.page.from = sum;
+    }
+
     api.setSearchState(customState);
     api.search();
-  }, [customCategory, customQuery, language, sortBy, startDate, endDate]);
+  }, [customCategory, customQuery, language, sortBy, startDate, endDate, page]);
 
   return (
     <div className="nc-PageHome relative ">

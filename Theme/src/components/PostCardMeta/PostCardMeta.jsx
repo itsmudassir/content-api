@@ -16,7 +16,6 @@ const PostCardMeta = ({
   const res = dateFormat(date_download, "mmm d, yyyy");
 
   var [emoji, setEmoji] = useState(sentiment);
-  console.log(sentiment);
   function EmojiSetelment() {
     if (emoji == "POS") {
       setEmoji(<FontAwesomeIcon icon={faSmile} className="text-green-400" />);
