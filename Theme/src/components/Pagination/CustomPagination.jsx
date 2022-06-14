@@ -32,7 +32,6 @@ const CustomPagination = ({ data }) => {
             page: currentPage,
           };
           history.push({
-            pathname: "/discover/discover_search",
             search: queryString.stringify(newQueryParams),
           });
         }}

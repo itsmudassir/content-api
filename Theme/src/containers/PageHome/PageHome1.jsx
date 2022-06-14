@@ -166,7 +166,7 @@ const PageHome1 = () => {
       });
     }
 
-    if(page){
+    if (page) {
       const sum = page * 20 - 20;
       customState.page.from = sum;
     }
@@ -180,8 +180,8 @@ const PageHome1 = () => {
       <Helmet>
         <title>Home || Blog Magazine React Template</title>
       </Helmet>
+      <SBox category={customCategory} />
       {/* {/ Call the  Auto Complete Search Box /} */}
-      <SBox pageType="searchpage" category={customCategory} />
       {customCategory == null &&
       customCategory == undefined &&
       customQuery == null &&

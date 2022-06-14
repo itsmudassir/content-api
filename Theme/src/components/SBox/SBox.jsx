@@ -55,32 +55,31 @@ const SBox = () => {
           }
           size={5}
           style={{
-            paddingTop: "10px",
+            paddingTop: "20px",
             paddingLeft: "10px",
             paddingBottom: "6px",
-            width: "45%",
-            marginLeft: "28%",
+            width: window.innerWidth <= 700 ? "80%" : "45%",
+            marginLeft: window.innerWidth <= 700 ? "10%" : "28%",
           }}
           onValueSelected={function (value, cause, source) {
             console.log("current value: ", value);
-            
-            const currentQueryParams = queryString.parse(window.location.search);
-           delete currentQueryParams.page;
+
+            const currentQueryParams = queryString.parse(
+              window.location.search
+            );
+            delete currentQueryParams.page;
             const newQueryParams = {
               ...currentQueryParams,
-              customQuery: value
-            }
+              customQuery: value,
+            };
             history.push({
               pathname: "/discover/discover_search",
               search: queryString.stringify(newQueryParams),
             });
-           }}
+          }}
           value={input}
           onChange={(value, triggerQuery, event) => {
-            Setinput(
-              value,
-              () => triggerQuery()
-            );
+            Setinput(value, () => triggerQuery());
           }}
         />
       </ReactiveBase>

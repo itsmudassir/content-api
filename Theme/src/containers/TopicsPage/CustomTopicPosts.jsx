@@ -5,6 +5,7 @@ import CustomTopicsSearch from "./CustomTopicsSearch";
 import CustomTopicInsights from "./CustomTopicInsights";
 import { useParams } from "react-router-dom";
 import { useGetSingleCustomTopicQuery } from "../../app/Api/contentApi";
+import queryString from "query-string"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -13,7 +14,6 @@ function classNames(...classes) {
 const CustomTopicPosts = ({ className = "" }) => {
   var topicId = useParams();
   topicId = topicId.id;
-  console.log("//////////////////////////////////", topicId);
   const singleCustomTopic = useGetSingleCustomTopicQuery(topicId);
   console.log(singleCustomTopic);
 
@@ -48,6 +48,7 @@ const CustomTopicPosts = ({ className = "" }) => {
   const [language, setlanguage] = useState(null);
   const [engagement, setEngagement] = useState(null);
   const [customState, setCustomState] = useState(null);
+  const {page} = queryString.parse(window.location.search)
 
   useEffect(() => {
     setAny_keywords_list(singleCustomTopic?.data?.selection?.any_keywords);
@@ -146,7 +147,7 @@ const CustomTopicPosts = ({ className = "" }) => {
         },
       ],
       page: {
-        size: 8,
+        size: 20,
         from: 0,
       },
     };
@@ -222,11 +223,14 @@ const CustomTopicPosts = ({ className = "" }) => {
           },
         ],
         page: {
-          size: 8,
+          size: 20,
           from: 0,
         },
       };
-
+      if (page) {
+        const sum = page * 20 - 20;
+        customState1.page.from = sum;
+      }
       setCustomState(customState1);
       console.log("------------customState", customState);
     }
@@ -241,6 +245,7 @@ const CustomTopicPosts = ({ className = "" }) => {
     must_also_keywords_list,
     must_not_contains_keywords_list,
     limit_domains_results_list,
+    page
   ]);
 
   return (
