@@ -1,8 +1,8 @@
 import React from "react";
-import convertNumbThousand from "../../utils/convertNumbThousand";
+import millify from "millify";
 
 const PostCardLikeAction = ({
-  className = "px-3 h-8 text-xs",
+  className = "h-8 text-xs",
   twitter_shares,
   topic_twitter,
 }) => {
@@ -15,12 +15,11 @@ const PostCardLikeAction = ({
       data-nc-id="PostCardLikeAction"
     >
       <i
-        className="lab la-twitter mr-1 w-1 text-base"
-        style={{ padding: "10px" }}
+        className="lab la-twitter mr-2 w-2 text-base text-blue-600"
       ></i>
 
       <span className={`ml-1`}>
-        {convertNumbThousand(!twitter_shares ? topic_twitter : "")}
+        {twitter_shares ? millify(twitter_shares) : null}
       </span>
     </button>
   );

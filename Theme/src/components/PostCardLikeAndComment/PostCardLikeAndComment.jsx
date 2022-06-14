@@ -5,7 +5,7 @@ import PostCardAddtoFavouritesFolderBtn from "../PostCardAddtoFavouritesFolderBt
 
 const PostCardLikeAndComment = ({
   className = "",
-  itemClass = "px-3 h-8 text-xs",
+  itemClass = "",
   hiddenCommentOnMobile = true,
   postData,
   setPostToRedux,
@@ -18,28 +18,30 @@ const PostCardLikeAndComment = ({
   // setting href statically
 
   const href = "/";
+
   return (
     <div
       // space-x-2
-      className={`nc-PostCardLikeAndComment flex justify-center items-center   ${className}`}
+      className={`nc-PostCardLikeAndComment w-full px-2 flex justify-between items-center   ${className}`}
       data-nc-id="PostCardLikeAndComment"
     >
-      <PostCardLikeContainer
-        className={itemClass}
-        twitter_shares={twitter_shares}
-        topic_twitter={twitter}
-        onClickLike={onClickLike}
-        // postId={id}
-      />
+     
+        <PostCardLikeContainer
+          className={itemClass}
+          twitter_shares={twitter_shares}
+          topic_twitter={twitter}
+          onClickLike={onClickLike}
+          // postId={id}
+          />
+      
 
+      <div className="">
       <PostCardCommentBtn
         href={href}
         facebook_shares={facebook_shares}
         topic_facebook={facebook}
-        className={`${
-          hiddenCommentOnMobile ? "hidden sm:flex" : "flex"
-        }  ${itemClass}`}
-      />
+        />
+        </div>
 
       <PostCardAddtoFavouritesFolderBtn
         postData={postData}

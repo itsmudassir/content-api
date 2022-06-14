@@ -36,7 +36,7 @@ const PostCardAddtoFavouritesFolderBtn = ({ setPostToRedux, postData }) => {
   return (
     <>
       <button
-        className="flex justify-center items-center hover:bg-rose-200 hover:text-rose-600 rounded-full"
+        className="flex justify-center items-center w-6 hover:bg-rose-200 hover:text-rose-600 rounded-full"
         title={
           postData?.isLiked ? "Remove from favourites" : "Add to favourites"
         }
@@ -44,12 +44,12 @@ const PostCardAddtoFavouritesFolderBtn = ({ setPostToRedux, postData }) => {
         {postData?.isLiked ? (
           <HeartSolid
             onClick={() => deletePostHandler()}
-            className="w-5 h-5 ml-6 text-red-600"
+            className="w-5 h-5 text-red-600"
           />
         ) : (
           <HeartOutline
             onClick={(e) => heartClickhandler(e)}
-            className="w-5 h-5 ml-4"
+            className="w-5 h-5"
           />
         )}
       </button>

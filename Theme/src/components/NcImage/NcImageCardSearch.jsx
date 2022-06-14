@@ -1,19 +1,13 @@
 import React, {
-    FC,
-    ImgHTMLAttributes,
     useEffect,
     useRef,
     useState,
   } from "react";
   import checkInViewIntersectionObserver from "../../utils/isInViewPortIntersectionObserver";
-  import PlaceIcon from "./PlaceIcon";
   import moment from 'moment'
   import dateFormat from 'dateformat';
 import LoadingVideo from "../LoadingVideo/LoadingVideo";
   
-  // export interface NcImageProps extends ImgHTMLAttributes<HTMLImageElement> {
-  //   containerClassName?: string;
-  // }
   
   const NcImageCardSearch = ({
     containerClassName = "",
@@ -126,7 +120,9 @@ import LoadingVideo from "../LoadingVideo/LoadingVideo";
             opacity: "0.8",
           }}
         >
-          <p style={{fontSize: "12px" , paddingLeft :"10px", color : "#d2d2d2" }}>{source_domain} . {relativeTime(date_download)} </p>
+          <p style={{fontSize: "12px" , paddingLeft :"10px", color : "#d2d2d2" }}>{source_domain}
+           {/* . {relativeTime(date_download)}  */}
+           </p>
         </span>
   
         

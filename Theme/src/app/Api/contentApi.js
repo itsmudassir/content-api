@@ -70,7 +70,7 @@ const contentApi = createApi({
         //Get All Customtopic
         getAllCustomTopics: builder.query({
             query: () => ({
-                url: "/api/customTopicSearch/getcustomtopics",
+                url: "/api/customTopicSearch/getcustomtopics/",
                 method: "GET"
             }),
             providesTags: ["CustomTopics"],
@@ -260,5 +260,6 @@ export const {
     useCreateFollowedTopicMutation,
     useDeleteFollowedTopicMutation,
     useIsFollowingTopicMutation,
+    usePrefetch
 
 } = contentApi;

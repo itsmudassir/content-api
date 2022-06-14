@@ -4,6 +4,7 @@ import Card12 from "../../components/Card11/Card12";
 
 const FavouritePosts = ({folderID}) => {
   const favouritePosts = useGetAllFavouritePostsQuery(folderID);
+  console.log(favouritePosts)
 
   return (
     <>

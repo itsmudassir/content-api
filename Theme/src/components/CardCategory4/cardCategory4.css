@@ -13,7 +13,7 @@
   top: 110px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 10;
 }
 .follow_btn:hover {
   background-color: white;
@@ -34,7 +34,7 @@
   top: 110px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 10;
 }
 
 .unfollow_btn {
@@ -51,7 +51,7 @@
   top: 110px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 10;
 }
 
 .label_div {
@@ -62,7 +62,7 @@
   top: 50px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 10;
 }
 
 /* @media only screen and (max-width: 900px) {
