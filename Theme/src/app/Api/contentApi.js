@@ -51,7 +51,7 @@ const contentApi = createApi({
                 url: `/api/favouritesFolder/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["FavouritesFolder"],
+            invalidatesTags: ["FavouritesFolder","FavouritePosts"]
         }),
         
         // Create Folder

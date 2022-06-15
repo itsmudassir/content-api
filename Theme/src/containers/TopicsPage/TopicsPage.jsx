@@ -14,6 +14,7 @@ import {
   useUpdateFolderMutation,
   useGetAllFollowedTopicsQuery,
   useDeleteFollowedTopicMutation,
+  useGetAllFavouritePostsbyUserQuery,
 } from "../../app/Api/contentApi";
 import ButtonCircle from "../../components/Button/ButtonCircle";
 import Input from "../../components/Input/Input";
@@ -47,7 +48,6 @@ const TopicsPage = ({ className = "" }) => {
   const getAllFollowedTopics = useGetAllFollowedTopicsQuery();
   const [deleteFollowedTopic, deleteFollowedTopic_Obj] =
     useDeleteFollowedTopicMutation();
-
   var [deletePost, deletePost_Obj] = useDeleteCustomTopicMutation();
 
   // handlers

@@ -98,7 +98,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   }, []);
 
   if (data) {
-    console.log(data);
+    console.log(RtkData?.data);
 
     var allFavoriteFolder = {};
     RtkData?.data?.filter((item) => {
@@ -114,7 +114,9 @@ const PageSearch = ({ className = "", data, loading, error }) => {
         } else {
           return { ...item, isLiked: true };
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     });
   }
 
