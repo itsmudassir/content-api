@@ -193,7 +193,7 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
-          <title>Nc || Search Page Template</title>
+          <title>Contentgizmo</title>
         </Helmet>
       </div>
 

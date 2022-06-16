@@ -33,6 +33,8 @@ function App() {
 
   return (
     <div className={"app-container" + (user && " bg-light")}>
+
+      
       <BrowserRouter>
         <ScrollToTop />
         <MainNav1  isTop={true}/>

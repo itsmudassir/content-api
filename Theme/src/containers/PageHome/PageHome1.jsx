@@ -178,7 +178,7 @@ const PageHome1 = () => {
   return (
     <div className="nc-PageHome relative ">
       <Helmet>
-        <title>Home || Blog Magazine React Template</title>
+        <title>Contentgizmo</title>
       </Helmet>
       <SBox category={customCategory} />
       {/* {/ Call the  Auto Complete Search Box /} */}

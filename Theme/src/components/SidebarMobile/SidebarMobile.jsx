@@ -48,7 +48,7 @@ const SidebarMobile = ({ setFolderID }) => {
   const showModalOnClick = () => setshowModal(true);
 
   var [deleteFolder,deleteFolder_Obj] = useDeleteFolderMutation();
-  var [updateFolder] = useUpdateFolderMutation();
+  var [updateFolder,updateFolder_Obj] = useUpdateFolderMutation();
 
   const [folderNameState, setFolderNameState] = useState("");
   const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
@@ -61,17 +61,26 @@ const SidebarMobile = ({ setFolderID }) => {
   };
 
   const SaveClick = async (e) => {
-    e.preventDefault();
-    if (toggleFolderNameHideId !== "" && folderNameState !== "") {
-      const res = await updateFolder({
-        id: toggleFolderNameHideId,
-        folderName: folderNameState,
-      });
-      if (res.data) cogoToast.success(res.data.successMsg);
-      if (res.error) cogoToast.error(res.error.data.errorMsg);
+    try {
+      e.preventDefault();
+      if (toggleFolderNameHideId !== "" && folderNameState !== "") {
+        const res = await updateFolder({
+          id: toggleFolderNameHideId,
+          folderName: folderNameState,
+        });
+        if (res.data) cogoToast.success(res.data.successMsg);
+        if (res.error)
+          cogoToast.error(res.error.data.errorMsg || res.error.data.msg);
+      }
+      setToggleFolderNameHide(false);
+      setToggleFolderNameHideId("");
+    } catch (err) {
+      console.log("ERROR OCCOURED WHILE UPDATING FOLDER NAME", err);
+      console.log(
+        "ERROR OCCOURED WHILE UPDATING FOLDER NAME",
+        updateFolder_Obj
+      );
     }
-    setToggleFolderNameHide(false);
-    setToggleFolderNameHideId("");
   };
   
   const unFollowTopicHandler = async (topic) => {

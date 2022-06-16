@@ -4,6 +4,7 @@ import { HeartIcon as HeartOutline } from "@heroicons/react/outline";
 import AddToFavouritesFolderModal from "../AddToFavouritesFolderModal/AddToFavouritesFolderModal";
 import { useDeletePostByElasticIdMutation } from "../../app/Api/contentApi";
 import cogoToast from "cogo-toast";
+import confirmAlert from "../../app/confirmAlert";
 
 const PostCardAddtoFavouritesFolderBtn = ({ setPostToRedux, postData }) => {
   const [showModal, setshowModal] = useState(false);
@@ -21,11 +22,11 @@ const PostCardAddtoFavouritesFolderBtn = ({ setPostToRedux, postData }) => {
   };
   const deletePostHandler = async () => {
     try {
-      if (window.confirm("Are you sure You want to dislike?")) {
+      confirmAlert("Are you sure you want to dislike this post?", async () => {
         const res = await deletePost(postData?.id || postData?.post_id);
         if (res.data) cogoToast.success("Removed From favourites");
         if (res.error) cogoToast.error(res.error.data.errorMsg);
-      }
+      });
     } catch (err) {
       console.log("ERROR OCCOURED WHILE REMOVING POST", err);
       console.log("ERROR OCCOURED WHILE REMOVING POST", deletePostObj.error);

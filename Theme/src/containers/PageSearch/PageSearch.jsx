@@ -128,10 +128,10 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
-          <title>Nc || Search Page Template</title>
+          <title>Contentgizmo</title>
         </Helmet>
       </div>
-
+    
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
       <div className="container space-y-16 lg:space-y-28">

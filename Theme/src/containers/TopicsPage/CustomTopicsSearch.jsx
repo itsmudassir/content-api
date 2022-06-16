@@ -100,6 +100,65 @@ const gqlQuery = gql`
   }
 `;
 
+const hardCodeLanguagesList = [
+  {
+    label: "English",
+    count: 25190,
+  },
+  {
+    label: "Greek",
+    count: 515,
+  },
+  {
+    label: "Spanish",
+    count: 492,
+  },
+  {
+    label: "German",
+    count: 229,
+  },
+  {
+    label: "Italian",
+    count: 168,
+  },
+  {
+    label: "French",
+    count: 138,
+  },
+  {
+    label: "Dutch",
+    count: 129,
+  },
+  {
+    label: "Russian",
+    count: 60,
+  },
+  {
+    label: "Romanian",
+    count: 32,
+  },
+  {
+    label: "Arabic",
+    count: 30,
+  },
+  {
+    label: "Japanese",
+    count: 27,
+  },
+  {
+    label: "Telugu",
+    count: 13,
+  },
+  {
+    label: "Portuguese",
+    count: 8,
+  },
+  {
+    label: "Turkish",
+    count: 7,
+  },
+];
+
 const CustomTopicsSearch = ({
   className = "",
   customTopic,
@@ -157,7 +216,7 @@ const CustomTopicsSearch = ({
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
-          <title>Nc || Search Page Template</title>
+          <title>Contentgizmo</title>
         </Helmet>
       </div>
 
@@ -171,6 +230,7 @@ const CustomTopicsSearch = ({
               {!loading ? (
                 <LanguagesFilterBox
                   setlanguage={setlanguage}
+                  // lists={hardCodeLanguagesList}
                   lists={langaugeList}
                 />
               ) : null}

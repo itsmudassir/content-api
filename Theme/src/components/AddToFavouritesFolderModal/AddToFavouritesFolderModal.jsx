@@ -32,7 +32,7 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
     try {
       const res = await createFolder({ folderName: folderName });
       if (res.data) cogoToast.success(res.data.successMsg);
-      if (res.error) cogoToast.error(res.error.data.errorMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg  || res.error.data.msg);
     } catch (err) {
       console.log("ERROR OCCOURED WHILE CREATING FOLDER", createFolderObj);
       cogoToast.error(createFolderObj?.error?.data?.errorMsg);
@@ -50,9 +50,7 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
     try {
       if (folderId !== undefined && selectedPost !== null) {
         const res = await addPostToFavFolder({ folderId, selectedPost });
-
         if (res.data) cogoToast.success(res.data.successMsg);
-
         if (res.error) cogoToast.error(res.error.data.errorMsg);
       }
     } catch (err) {
