@@ -131,7 +131,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
           <title>Contentgizmo</title>
         </Helmet>
       </div>
-    
+
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
       <div className="container space-y-16 lg:space-y-28">
@@ -144,53 +144,65 @@ const PageSearch = ({ className = "", data, loading, error }) => {
               {/* ============ Date Range =============== */}
               <DateRangeDropDown facet={data?.results?.facets} />
 
-              {/* ========== follow button div ============  */}
-              <div className="hidden sm:block">
-                {isFollowing ? (
-                  <button
-                    onClick={() => unFollowTopicHandler()}
-                    className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                  >
-                    <FontAwesomeIcon
-                      className="mr-1 text-green-700"
-                      icon={faCheck}
-                    />
-                    FOLLOWING
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => followTopicHandler()}
-                    className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                  >
-                    FOLLOW
-                  </button>
-                )}
-              </div>
+              {/* ========== follow button div large screens ============  */}
+              {customCategory ? (
+                <div className="hidden sm:block">
+                  {isFollowing ? (
+                    <button
+                      onClick={() => unFollowTopicHandler()}
+                      className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                    >
+                      <FontAwesomeIcon
+                        className="mr-1 text-green-700"
+                        icon={faCheck}
+                      />
+                      FOLLOWING
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => followTopicHandler()}
+                      className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                    >
+                      FOLLOW
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="hidden sm:block">
+                  <div className="py-2 px-6 rounded " />
+                </div>
+              )}
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
             <div className="flex justify-between items-center">
-              {/* ========== follow button div ============  */}
-              <div className="sm:hidden">
-                {isFollowing ? (
-                  <button
-                    onClick={() => unFollowTopicHandler()}
-                    className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                  >
-                    <FontAwesomeIcon
-                      className="mr-1 text-green-700"
-                      icon={faCheck}
-                    />
-                    FOLLOWING
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => followTopicHandler()}
-                    className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                  >
-                    FOLLOW
-                  </button>
-                )}
-              </div>
+              {/* ========== follow button div small screens ============  */}
+              {customCategory ? (
+                <div className="sm:hidden">
+                  {isFollowing ? (
+                    <button
+                      onClick={() => unFollowTopicHandler()}
+                      className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                    >
+                      <FontAwesomeIcon
+                        className="mr-1 text-green-700"
+                        icon={faCheck}
+                      />
+                      FOLLOWING
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => followTopicHandler()}
+                      className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                    >
+                      FOLLOW
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="sm:hidden">
+                  <div className="py-2 px-6 rounded " />
+                </div>
+              )}
 
               {/*======= relevence dropdown button ============*/}
               <RelevanceListBox lists={sortOptions} />

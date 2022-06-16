@@ -9,25 +9,12 @@ import * as yup from "yup";
 import cogoToast from "cogo-toast";
 import ReactLoading from "react-loading";
 import confirmAlert from "../../app/confirmAlert";
-import { Field } from "formik";
 
 const updateValidationSchema = yup.object().shape({
-  firstName: yup
-    .string()
-    .min(4)
-    .max(20)
-    .required("First name is required")
-    .min(4)
-    .max(30),
-  lastName: yup
-    .string()
-    .min(4)
-    .max(20)
-    .required("Last name is required")
-    .min(4)
-    .max(30),
+  firstName: yup.string().required("First name is required").min(2).max(20),
+  lastName: yup.string().required("Last name is required").min(2).max(20),
   password: yup.string().max(20),
-  confirmPassword: yup.string().oneOf([yup.ref("password"), null]),
+  confirmPassword: yup.string().oneOf([yup.ref("password"), null], 'Passwords must match'),
 });
 
 const EditUserProfile = ({ history }) => {

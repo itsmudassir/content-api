@@ -58,7 +58,7 @@ const PostMeta2 = ({
         </div>
         <div className="text-xs mt-[6px]">
           <span className="text-neutral-700 dark:text-neutral-300">
-            {date_download}
+            {date_download.split("T")[0]}
           </span>
           <span className="mx-2 font-semibold">·</span>
           <span className="text-neutral-700 dark:text-neutral-300">
