@@ -10,10 +10,13 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import "./DateRangeCalender.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import dates from "../../data/globalVariables/globalDates";
+import { addDays } from "date-fns";
+
 
 function DatePicker({ setStartDate, setEndDate, toggleDisplay }) {
-  const [startDate1, setStartDate1] = useState(null);
-  const [endDate1, setEndDate1] = useState(null);
+  const [startDate1, setStartDate1] = useState(new Date(dates.startDate));
+  const [endDate1, setEndDate1] = useState(new Date(dates.endDate));
 
   const selectionRange = {
     startDate: startDate1,
@@ -70,6 +73,8 @@ function DatePicker({ setStartDate, setEndDate, toggleDisplay }) {
         />
         <br />
         <DateRange
+          minDate={addDays(new Date(dates.minDate), 0)} // mindate: "2022-03-01"
+          maxDate={addDays(new Date(dates.minDate), +30)}
           startDatePlaceholder="Start Date"
           endDatePlaceholder="End Date"
           ranges={[selectionRange]}

@@ -9,6 +9,7 @@ import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import { gql, useQuery } from "@apollo/client";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
 
 
 const gqlQuery = gql`
@@ -219,6 +220,8 @@ const CustomTopicsSearch = ({
           <title>Contentgizmo</title>
         </Helmet>
       </div>
+
+      <ScrollToTopButton/>
 
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 

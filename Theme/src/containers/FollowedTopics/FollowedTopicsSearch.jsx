@@ -12,6 +12,7 @@ import dates from "../../data/globalVariables/globalDates";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
 
 const gqlQuery = gql`
   query resultSet(
@@ -116,7 +117,8 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
   console.log(data);
 
   const { search } = useLocation();
-  var { language, sortBy, startDate, endDate,page } = queryString.parse(search);
+  var { language, sortBy, startDate, endDate, page } =
+    queryString.parse(search);
 
   useEffect(() => {
     const customState = {
@@ -144,7 +146,7 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
     if (sortBy) {
       customState.sortBy = sortBy;
     }
-  
+
     if (language) {
       customState.filters.push({
         identifier: "language",
@@ -159,7 +161,7 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
 
     api.setSearchState(customState);
     api.search();
-  }, [category, language, sortBy, startDate, endDate,page]);
+  }, [category, language, sortBy, startDate, endDate, page]);
 
   if (data) {
     var sortOptions = data?.results.summary.sortOptions;
@@ -196,6 +198,8 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
           <title>Contentgizmo</title>
         </Helmet>
       </div>
+
+      <ScrollToTopButton />
 
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 

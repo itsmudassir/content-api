@@ -13,10 +13,11 @@ import {
   useDeleteFollowedTopicMutation,
 } from "../../app/Api/contentApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import queryString from "query-string";
 import cogoToast from "cogo-toast";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
 
 const PageSearch = ({ className = "", data, loading, error }) => {
   // states
@@ -132,6 +133,9 @@ const PageSearch = ({ className = "", data, loading, error }) => {
         </Helmet>
       </div>
 
+      {/* =============== Scroll to top button ================ */}
+      <ScrollToTopButton />
+      
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
       <div className="container space-y-16 lg:space-y-28">

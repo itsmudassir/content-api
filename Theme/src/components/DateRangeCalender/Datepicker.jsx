@@ -19,8 +19,8 @@ import { useHistory } from "react-router-dom";
 
 function DatePicker({ toggleDisplay }) {
   const history = useHistory();
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date(dates.startDate));
+  const [endDate, setEndDate] = useState(new Date(dates.endDate));
   const currentQueryParams = queryString.parse(window.location.search);
 
 
@@ -86,6 +86,7 @@ function DatePicker({ toggleDisplay }) {
             className="cancelButton"
           />
         </div>
+
         <DateRange
           minDate={addDays(new Date(dates.minDate), 0)} // mindate: "2022-03-01"
           maxDate={addDays(new Date(dates.minDate), +30)}
