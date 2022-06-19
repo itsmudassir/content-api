@@ -13,12 +13,7 @@ const Card12 = ({
 }) => {
   const history = useHistory();
 
-  const {
-    date,
-    title,
-    _id,
-    url,
-  } = cardItems;
+  const { date, title, _id, url } = cardItems;
 
   // Giving a static value to herf
 
@@ -48,18 +43,18 @@ const Card12 = ({
         ) : (
           <span className="text-xs text-neutral-500">{date}</span>
         )}
-
-        <h2
-          title={title}
-          className="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100 "
-        >
-          <a href={url} target="_blank">
-            {title}
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-          </a>
+        <h2 className="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100 ">
+          <span
+            style={{ cursor: "pointer" }}
+            className="line-clamp-2"
+            title={title}
+          >
+            <a href={url} target="_blank">
+              {title}
+            </a>{" "}
+          </span>
         </h2>
+
         <div className="flex items-end justify-between mt-auto">
           <PostCardLikeAndComment className="relative" postData={cardItems} />
 
