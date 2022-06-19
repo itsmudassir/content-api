@@ -20,8 +20,8 @@ import LoadingVideo from "../LoadingVideo/LoadingVideo";
   }) => {
   
     //getting source_domain and date_download from PostFeaturedMedia
-  
-  
+    
+    
     let isMounted = false;
     const _containerRef = useRef(null);
     let _imageEl = null;
@@ -121,7 +121,7 @@ import LoadingVideo from "../LoadingVideo/LoadingVideo";
           }}
         >
           <p style={{fontSize: "12px" , paddingLeft :"10px", color : "#d2d2d2" }}>{source_domain}
-           {/* . {relativeTime(date_download)}  */}
+           . {relativeTime(date_download)} 
            </p>
         </span>
   
