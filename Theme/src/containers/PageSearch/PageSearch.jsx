@@ -20,6 +20,7 @@ import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
 import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
 
 const PageSearch = ({ className = "", data, loading, error }) => {
+  
   // states
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -135,7 +136,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
 
       {/* =============== Scroll to top button ================ */}
       <ScrollToTopButton />
-      
+
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
       <div className="container space-y-16 lg:space-y-28">
