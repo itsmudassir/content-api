@@ -1,7 +1,8 @@
 import React from "react";
+import millify from "millify";
 
 const PostCardCommentBtn = ({
-  className = "flex px-3 h-8 text-xs",
+  className = "flex h-8 text-xs",
   facebook_shares,
   topic_facebook,
 }) => {
@@ -14,12 +15,11 @@ const PostCardCommentBtn = ({
       data-nc-id="PostCardLikeAction"
     >
       <i
-        className="lab la-facebook-f mr-1 w-1 text-base"
-        style={{ padding: "10px" }}
+        className="lab la-facebook-f mr-2 w-1 text-base text-blue-700"
       ></i>
 
       <span className="ml-1 text-neutral-900 dark:text-neutral-200">
-        {!facebook_shares ? topic_facebook : ""}
+        {facebook_shares? millify(facebook_shares): null}
       </span>
     </button>
   );

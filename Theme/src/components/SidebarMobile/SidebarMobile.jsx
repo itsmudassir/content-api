@@ -20,6 +20,8 @@ import ReactLoading from "react-loading";
 import "../../containers/TopicsPage/topicpage.css";
 import CreateFolderModal from "../../components/CreateFolderModal/createFolderModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import confirmAlert from "../../app/confirmAlert.js";
+
 
 const SidebarMobile = ({ setFolderID }) => {
   const [isVisable, setIsVisable] = useState(false);
@@ -39,14 +41,14 @@ const SidebarMobile = ({ setFolderID }) => {
   const [deleteFollowedTopic, deleteFollowedTopic_Obj] =
     useDeleteFollowedTopicMutation();
 
-  var [deletePost] = useDeleteCustomTopicMutation();
+  var [deletePost,deletePost_Obj ] = useDeleteCustomTopicMutation();
 
   // handlers
   const closeModal = () => setshowModal(false);
   const showModalOnClick = () => setshowModal(true);
 
-  var [deleteFolder] = useDeleteFolderMutation();
-  var [updateFolder] = useUpdateFolderMutation();
+  var [deleteFolder,deleteFolder_Obj] = useDeleteFolderMutation();
+  var [updateFolder,updateFolder_Obj] = useUpdateFolderMutation();
 
   const [folderNameState, setFolderNameState] = useState("");
   const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
@@ -59,29 +61,42 @@ const SidebarMobile = ({ setFolderID }) => {
   };
 
   const SaveClick = async (e) => {
-    e.preventDefault();
-    if (toggleFolderNameHideId !== "" && folderNameState !== "") {
-      const res = await updateFolder({
-        id: toggleFolderNameHideId,
-        folderName: folderNameState,
-      });
-      if (res.data) cogoToast.success(res.data.successMsg);
-      if (res.error) cogoToast.error(res.error.data.errorMsg);
+    try {
+      e.preventDefault();
+      if (toggleFolderNameHideId !== "" && folderNameState !== "") {
+        const res = await updateFolder({
+          id: toggleFolderNameHideId,
+          folderName: folderNameState,
+        });
+        if (res.data) cogoToast.success(res.data.successMsg);
+        if (res.error)
+          cogoToast.error(res.error.data.errorMsg || res.error.data.msg);
+      }
+      setToggleFolderNameHide(false);
+      setToggleFolderNameHideId("");
+    } catch (err) {
+      console.log("ERROR OCCOURED WHILE UPDATING FOLDER NAME", err);
+      console.log(
+        "ERROR OCCOURED WHILE UPDATING FOLDER NAME",
+        updateFolder_Obj
+      );
     }
-    setToggleFolderNameHide(false);
-    setToggleFolderNameHideId("");
   };
+  
   const unFollowTopicHandler = async (topic) => {
     try {
-      if (window.confirm(`are you sure you want to unfollow ${topic}?`)) {
-        const res = await deleteFollowedTopic({ topicName: topic });
-        if (res.data) {
-          cogoToast.success(res.data?.successMsg);
+      confirmAlert(
+        `Are you sure you want to unfollow topic ${topic}?`,
+        async () => {
+          const res = await deleteFollowedTopic({ topicName: topic });
+          if (res.data) {
+            cogoToast.success(res.data?.successMsg);
+          }
+          if (res.error) {
+            cogoToast.error(res.error?.data?.errorMsg);
+          }
         }
-        if (res.error) {
-          cogoToast.error(res.error?.data?.errorMsg);
-        }
-      }
+      );
     } catch (err) {
       console.log("Error occoured while creating topic", err);
       console.log(
@@ -90,6 +105,54 @@ const SidebarMobile = ({ setFolderID }) => {
       );
     }
   };
+
+  const deleteCustomTopic = async (id, topic) => {
+    try {
+      confirmAlert(
+        `Are you sure you want to delete Topic ${topic}?`,
+        async () => {
+          const res = await deletePost({ id: id });
+          if (res.data) {
+            cogoToast.success(res.data?.successMsg);
+          }
+          if (res.error) {
+            cogoToast.error(res.error?.data?.errorMsg);
+          }
+        }
+      );
+    } catch (err) {
+      console.log("Error occoured while creating topic", err);
+      console.log(
+        "Error occoured while deleting custom topic",
+        deletePost_Obj.error
+      );
+    }
+  };
+
+  const deleteFavFolder = async (id, folderName) => {
+    try {
+      confirmAlert(
+        `Are you sure you want to delete Folder ${folderName}? Deleting folder will also delete the liked posts.`,
+        async () => {
+          const res = await deleteFolder({ id: id });
+          if (res.data) {
+            cogoToast.success(res.data?.successMsg);
+          }
+          if (res.error) {
+            cogoToast.error(res.error?.data?.errorMsg);
+          }
+        }
+      );
+    } catch (err) {
+      console.log("Error occoured while deteting Folder", err);
+      console.log(
+        "Error occoured while deleting deteting Folder",
+        deleteFolder_Obj.error
+      );
+    }
+  };
+
+
 
   useEffect(() => {
     setIsVisable(false);
@@ -275,7 +338,7 @@ const SidebarMobile = ({ setFolderID }) => {
                                           className="ml-5"
                                           onClick={(e) => {
                                             e.preventDefault();
-                                            deletePost({ id: _id });
+                                            deleteCustomTopic(_id, name);
                                           }}
                                         >
                                           <FontAwesomeIcon
@@ -400,7 +463,7 @@ const SidebarMobile = ({ setFolderID }) => {
                                           className="ml-5"
                                           onClick={(e) => {
                                             e.preventDefault();
-                                            deleteFolder({ id: _id });
+                                            deleteFavFolder(_id, folderName);
                                           }}
                                         >
                                           <FontAwesomeIcon

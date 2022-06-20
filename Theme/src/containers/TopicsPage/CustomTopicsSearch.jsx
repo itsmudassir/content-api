@@ -8,6 +8,9 @@ import RelevanceListBox from "../../components/CustomTopicSortSelect/CustomTopic
 import { useGetAllFavouritePostsbyUserQuery } from "../../app/Api/contentApi";
 import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import { gql, useQuery } from "@apollo/client";
+import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
+
 
 const gqlQuery = gql`
   query resultSet(
@@ -98,13 +101,72 @@ const gqlQuery = gql`
   }
 `;
 
+const hardCodeLanguagesList = [
+  {
+    label: "English",
+    count: 25190,
+  },
+  {
+    label: "Greek",
+    count: 515,
+  },
+  {
+    label: "Spanish",
+    count: 492,
+  },
+  {
+    label: "German",
+    count: 229,
+  },
+  {
+    label: "Italian",
+    count: 168,
+  },
+  {
+    label: "French",
+    count: 138,
+  },
+  {
+    label: "Dutch",
+    count: 129,
+  },
+  {
+    label: "Russian",
+    count: 60,
+  },
+  {
+    label: "Romanian",
+    count: 32,
+  },
+  {
+    label: "Arabic",
+    count: 30,
+  },
+  {
+    label: "Japanese",
+    count: 27,
+  },
+  {
+    label: "Telugu",
+    count: 13,
+  },
+  {
+    label: "Portuguese",
+    count: 8,
+  },
+  {
+    label: "Turkish",
+    count: 7,
+  },
+];
+
 const CustomTopicsSearch = ({
   className = "",
   customTopic,
   setlanguage,
   setEngagement,
   setStartDate,
-  setEndDate
+  setEndDate,
 }) => {
   // states
   let newData;
@@ -147,8 +209,7 @@ const CustomTopicsSearch = ({
         } else {
           return { ...item, isLiked: true };
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     });
   }
 
@@ -156,9 +217,11 @@ const CustomTopicsSearch = ({
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
-          <title>Nc || Search Page Template</title>
+          <title>Contentgizmo</title>
         </Helmet>
       </div>
+
+      <ScrollToTopButton/>
 
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
@@ -170,6 +233,7 @@ const CustomTopicsSearch = ({
               {!loading ? (
                 <LanguagesFilterBox
                   setlanguage={setlanguage}
+                  // lists={hardCodeLanguagesList}
                   lists={langaugeList}
                 />
               ) : null}
@@ -195,7 +259,9 @@ const CustomTopicsSearch = ({
                   return <Card11 key={index} cardvalue={value} />;
                 })
               ) : (
-                <p className="text-center text-slate-600">Sorry, No articles available for this search.</p>
+                <p className="text-center text-slate-600">
+                  Sorry, No articles available for this search.
+                </p>
               )}
             </div>
           ) : (
@@ -215,6 +281,7 @@ const CustomTopicsSearch = ({
             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center"
             style={{ justifyContent: "center", alignItems: "center" }}
           >
+            <CustomPagination data={data?.results} />
           </div>
         </main>
       </div>

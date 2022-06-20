@@ -1,19 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import NcModal from "../NcModal/NcModal";
-import Textarea from "../Textarea/Textarea";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import ButtonSecondary from "../Button/ButtonSecondary";
-import { RadioGroup } from "@headlessui/react";
-import twFocusClass from "../../utils/twFocusClass";
 import { useCreateFolderMutation } from "../../app/Api/contentApi";
-import ArchiveFilterListBox from "../ArchiveFilterListBox/ArchiveFilterListBox";
 import Input from "../Input/Input";
 import cogoToast from "cogo-toast"
 
 const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
   const textareaRef = useRef(null);
-  const history = useHistory();
   const [folderName, setFolderName] = useState();
   const [createFolder, createFolderObj] = useCreateFolderMutation();
 
@@ -35,7 +30,7 @@ const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
     try{
       const res = await createFolder({ folderName: folderName });
       if (res.data) cogoToast.success(res.data.successMsg);
-      if (res.error) cogoToast.error(res.error.data.errorMsg);
+      if (res.error) cogoToast.error(res.error.data.errorMsg || res.error.data.msg);
     }catch(err){
       console.log("ERROR OCCOURED WHILE CREATING FOLDER", createFolderObj)
       cogoToast.error(createFolderObj?.error?.data?.errorMsg);

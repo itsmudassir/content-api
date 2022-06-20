@@ -4,10 +4,10 @@ import PostCardLikeAction from "../../components/PostCardLikeAction/PostCardLike
 
 const PostCardLikeContainer = ({ twitter_shares, topic_twitter }) => {
   return (
-    <PostCardLikeAction
-      twitter_shares={twitter_shares}
-      topic_twitter={topic_twitter}
-    />
+      <PostCardLikeAction
+        twitter_shares={twitter_shares}
+        topic_twitter={topic_twitter}
+      />
   );
 };
 

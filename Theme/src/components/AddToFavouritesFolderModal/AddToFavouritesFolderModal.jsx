@@ -32,7 +32,8 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
     try {
       const res = await createFolder({ folderName: folderName });
       if (res.data) cogoToast.success(res.data.successMsg);
-      if (res.error) cogoToast.error(res.error.data.errorMsg);
+      if (res.error)
+        cogoToast.error(res.error.data.errorMsg || res.error.data.msg);
     } catch (err) {
       console.log("ERROR OCCOURED WHILE CREATING FOLDER", createFolderObj);
       cogoToast.error(createFolderObj?.error?.data?.errorMsg);
@@ -50,9 +51,7 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
     try {
       if (folderId !== undefined && selectedPost !== null) {
         const res = await addPostToFavFolder({ folderId, selectedPost });
-
         if (res.data) cogoToast.success(res.data.successMsg);
-
         if (res.error) cogoToast.error(res.error.data.errorMsg);
       }
     } catch (err) {
@@ -87,7 +86,7 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
               setFolderId={setFolderId}
             />
             <ButtonPrimary
-              className="!mt-3 mb-2 bg-green-400"
+              className="!mt-3"
               onClick={(e) => handelAddPostToFavFolder(e)}
             >
               Add To Folder
@@ -96,7 +95,14 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
           </>
         )}
 
-        {!showAddFolder ? (
+        {/* =========== DIVIDER ==================== */}
+        <div class="relative flex py-5 items-center mt-2">
+          <div class="flex-grow border-t border-slate-300"></div>
+          <span class="flex-shrink mx-4 text-slate-400">OR</span>
+          <div class="flex-grow border-t border-slate-300"></div>
+        </div>
+
+        {/* {!showAddFolder ? (
           <ButtonPrimary
             onClick={(e) => handelShowAddFolder(e)}
             className="bg-green-300 hover:bg-green-400 rounded-sm h-11 mt-3"
@@ -104,31 +110,28 @@ const AddToFavouritesFolderModal = ({ show, onCloseModalReportItem }) => {
             Create New Folder
           </ButtonPrimary>
         ) : (
-          <>
-            <div className="mt-4">
-              <h6 className="text-md text-neutral-700">Folder Name</h6>
-              <Input
-                type="text"
-                placeholder="Enter Folder Name"
-                className="mt-1 rounded-md border-slate-400"
-                required={true}
-                id="report-message"
-                onChange={(e) => setFolderName(e.target.value)}
-              />
-            </div>
-            <div className="mt-4 space-x-6">
-              <ButtonPrimary
-                onClick={(e) => handelCreateFolder(e)}
-                type="submit"
-              >
-                Create
-              </ButtonPrimary>
-              <ButtonSecondary type="button" onClick={onCloseModalReportItem}>
+          <> */}
+        <div>
+          <h6 className="text-sm text-neutral-700">Create folder</h6>
+          <Input
+            type="text"
+            placeholder="Enter Folder Name"
+            className="mt-1 rounded-md border-slate-300"
+            required={true}
+            id="report-message"
+            onChange={(e) => setFolderName(e.target.value)}
+          />
+        </div>
+        <div className="mt-3 space-x-6">
+          <ButtonPrimary onClick={(e) => handelCreateFolder(e)} type="submit">
+            Create
+          </ButtonPrimary>
+          {/* <ButtonSecondary type="button" onClick={onCloseModalReportItem}>
                 Cancel
-              </ButtonSecondary>
-            </div>
-          </>
-        )}
+              </ButtonSecondary> */}
+        </div>
+        {/* </>
+        )} */}
       </form>
     );
   };

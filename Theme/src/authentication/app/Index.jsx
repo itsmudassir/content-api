@@ -33,12 +33,12 @@ function App() {
 
   return (
     <div className={"app-container" + (user && " bg-light")}>
+
+      
       <BrowserRouter>
         <ScrollToTop />
-        <MainNav1 />
-
+        <MainNav1  isTop={true}/>
         <Switch>
-
           <Route path="/sidebar" component={SidebarMobile} />
 
           <Route exact path={`/`}>

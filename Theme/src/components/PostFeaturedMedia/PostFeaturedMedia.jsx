@@ -44,7 +44,7 @@ const PostFeaturedMedia = ({
         containerClassName="absolute inset-0"
         src={image_url}
         source_domain={source_domain}
-        date_download={!date_download ? date_publish : date}
+        date_download={date_download}
       />
     </div>
   );

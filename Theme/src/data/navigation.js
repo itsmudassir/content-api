@@ -366,9 +366,14 @@ export const NAVIGATION_DEMO = [
   },
   {
     id: ncNanoId(),
-    href: "/discover/dicover_insights",
-    name: "Analytics",
+    href: "/about",
+    name: "About",
   },
+  // {
+  //   id: ncNanoId(),
+  //   href: "/discover/dicover_insights",
+  //   name: "Analytics",
+  // },
 
   // {
   //   id: ncNanoId(),
@@ -392,18 +397,18 @@ export const NAVIGATION_DEMO = [
   //   type: "dropdown",
   //   children: templateChilds,
   // },
-  {
-    id: ncNanoId(),
-    href: "#",
-    name: "Discovery",
-    type: "dropdown",
-    children: discoveryDropdwonItems,
-  },
-  {
-    id: ncNanoId(),
-    href: "#",
-    name: "Other pages",
-    type: "dropdown",
-    children: otherPageChildMenus,
-  },
+  // {
+  //   id: ncNanoId(),
+  //   href: "#",
+  //   name: "Discovery",
+  //   type: "dropdown",
+  //   children: discoveryDropdwonItems,
+  // },
+  // {
+  //   id: ncNanoId(),
+  //   href: "#",
+  //   name: "Other pages",
+  //   type: "dropdown",
+  //   children: otherPageChildMenus,
+  // },
 ];

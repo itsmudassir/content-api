@@ -8,25 +8,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import cogoToast from "cogo-toast";
 import ReactLoading from "react-loading";
-
+import confirmAlert from "../../app/confirmAlert";
 
 const updateValidationSchema = yup.object().shape({
-  firstName: yup
-    .string()
-    .min(4)
-    .max(20)
-    .required("First name is required")
-    .min(4)
-    .max(30),
-  lastName: yup
-    .string()
-    .min(4)
-    .max(20)
-    .required("Last name is required")
-    .min(4)
-    .max(30),
+  firstName: yup.string().required("First name is required").min(2).max(20),
+  lastName: yup.string().required("Last name is required").min(2).max(20),
   password: yup.string().max(20),
-  confirmPassword: yup.string().oneOf([yup.ref("password"), null]),
+  confirmPassword: yup.string().oneOf([yup.ref("password"), null], 'Passwords must match'),
 });
 
 const EditUserProfile = ({ history }) => {
@@ -41,7 +29,6 @@ const EditUserProfile = ({ history }) => {
   });
   const user = accountService.userValue;
 
-
   const onSubmit = (fields) => {
     // password validation
     if (fields.password) {
@@ -54,22 +41,37 @@ const EditUserProfile = ({ history }) => {
         return null;
       }
     }
-    
-    setIsLoading(true);
-    accountService
-    .update(user.id, fields)
-    .then(() => {
-      cogoToast.success("Updated successfully");
-      history.push(".");
-      setIsLoading(false);
-    })
-    .catch((error) => {
-      cogoToast.error(error);
-      setIsLoading(false);
+
+    if (fields.password) {
+      confirmAlert("Are you sure you want to change password?", async () => {
+        setIsLoading(true);
+        accountService
+          .update(user.id, fields)
+          .then(() => {
+            cogoToast.success("Updated successfully");
+            history.push(".");
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            cogoToast.error(error);
+            setIsLoading(false);
+          });
       });
-
+    } else {
+      setIsLoading(true);
+      accountService
+        .update(user.id, fields)
+        .then(() => {
+          cogoToast.success("Updated successfully");
+          history.push(".");
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          cogoToast.error(error);
+          setIsLoading(false);
+        });
+    }
   };
-
 
   return (
     <div className="px-8 sm:px-24 md:px-20 lg:px-32 xl:px-72 py-20 rounded-xl md:border md:border-neutral-100 dark:border-neutral-800">
@@ -143,18 +145,18 @@ const EditUserProfile = ({ history }) => {
           className="md:col-span-2 "
         >
           {isLoading ? (
-                <div className="flex justify-center items-center">
-                  <p>Loading...</p>&nbsp;&nbsp;
-                  <ReactLoading
-                    type="spin"
-                    color={"white"}
-                    height={24}
-                    width={24}
-                  />
-                </div>
-              ) : (
-                "Update profile"
-              )}
+            <div className="flex justify-center items-center">
+              <p>Loading...</p>&nbsp;&nbsp;
+              <ReactLoading
+                type="spin"
+                color={"white"}
+                height={24}
+                width={24}
+              />
+            </div>
+          ) : (
+            "Update profile"
+          )}
         </ButtonPrimary>
       </form>
     </div>

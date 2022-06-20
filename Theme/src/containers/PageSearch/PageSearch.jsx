@@ -13,9 +13,11 @@ import {
   useDeleteFollowedTopicMutation,
 } from "../../app/Api/contentApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import queryString from "query-string";
 import cogoToast from "cogo-toast";
+import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
 
 const PageSearch = ({ className = "", data, loading, error }) => {
   // states
@@ -97,7 +99,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
   }, []);
 
   if (data) {
-    console.log(data);
+    console.log(RtkData?.data);
 
     var allFavoriteFolder = {};
     RtkData?.data?.filter((item) => {
@@ -113,7 +115,9 @@ const PageSearch = ({ className = "", data, loading, error }) => {
         } else {
           return { ...item, isLiked: true };
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     });
   }
 
@@ -125,10 +129,13 @@ const PageSearch = ({ className = "", data, loading, error }) => {
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
-          <title>Nc || Search Page Template</title>
+          <title>Contentgizmo</title>
         </Helmet>
       </div>
 
+      {/* =============== Scroll to top button ================ */}
+      <ScrollToTopButton />
+      
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
       <div className="container space-y-16 lg:space-y-28">
@@ -141,54 +148,65 @@ const PageSearch = ({ className = "", data, loading, error }) => {
               {/* ============ Date Range =============== */}
               <DateRangeDropDown facet={data?.results?.facets} />
 
-              {/* ========== follow button div ============  */}
-              <div className="hidden sm:block">
-                {isFollowing ? (
-                  <button
-                    onClick={() => unFollowTopicHandler()}
-                    className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                  >
-                    <FontAwesomeIcon
-                      className="mr-1 text-green-700"
-                      icon={faCheck}
-                    />
-                    FOLLOWING
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => followTopicHandler()}
-                    className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                  >
-                    FOLLOW
-                  </button>
-                )}
-              </div>
+              {/* ========== follow button div large screens ============  */}
+              {customCategory ? (
+                <div className="hidden sm:block">
+                  {isFollowing ? (
+                    <button
+                      onClick={() => unFollowTopicHandler()}
+                      className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                    >
+                      <FontAwesomeIcon
+                        className="mr-1 text-green-700"
+                        icon={faCheck}
+                      />
+                      FOLLOWING
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => followTopicHandler()}
+                      className="flex justify-center items-center text-xs sm:text-sm py-1 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                    >
+                      FOLLOW
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="hidden sm:block">
+                  <div className="py-2 px-6 rounded " />
+                </div>
+              )}
             </div>
             <div className="block my-4 border-b w-full border-neutral-100 sm:hidden"></div>
             <div className="flex justify-between items-center">
-              
-              {/* ========== follow button div ============  */}
-              <div className="sm:hidden">
-                {isFollowing ? (
-                  <button
-                    onClick={() => unFollowTopicHandler()}
-                    className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                  >
-                    <FontAwesomeIcon
-                      className="mr-1 text-green-700"
-                      icon={faCheck}
-                    />
-                    FOLLOWING
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => followTopicHandler()}
-                    className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
-                  >
-                    FOLLOW
-                  </button>
-                )}
-              </div>
+              {/* ========== follow button div small screens ============  */}
+              {customCategory ? (
+                <div className="sm:hidden">
+                  {isFollowing ? (
+                    <button
+                      onClick={() => unFollowTopicHandler()}
+                      className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                    >
+                      <FontAwesomeIcon
+                        className="mr-1 text-green-700"
+                        icon={faCheck}
+                      />
+                      FOLLOWING
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => followTopicHandler()}
+                      className="flex justify-center items-center text-xs sm:text-sm py-2 px-6 rounded text-green-700 font-semibold bg-green-200 hover:bg-green-300"
+                    >
+                      FOLLOW
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="sm:hidden">
+                  <div className="py-2 px-6 rounded " />
+                </div>
+              )}
 
               {/*======= relevence dropdown button ============*/}
               <RelevanceListBox lists={sortOptions} />
@@ -223,6 +241,7 @@ const PageSearch = ({ className = "", data, loading, error }) => {
             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center"
             style={{ justifyContent: "center", alignItems: "center" }}
           >
+            <CustomPagination data={data?.results} />
           </div>
         </main>
       </div>

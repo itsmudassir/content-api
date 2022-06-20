@@ -11,21 +11,16 @@ const PostCardMeta = ({
   hiddenAvatar = false,
   size = "normal",
 }) => {
-  var {
-    category,
-    date_download,
-    sentiment,
-  } = meta;
+  var { category, date_download, sentiment } = meta;
 
   const res = dateFormat(date_download, "mmm d, yyyy");
 
   var [emoji, setEmoji] = useState(sentiment);
-
   function EmojiSetelment() {
     if (emoji == "POS") {
-      setEmoji(<FontAwesomeIcon icon={faSmile} style={{ color: "#b2adaa" }} />);
-    } else if (emoji == "NEU") {
-      setEmoji(<FontAwesomeIcon icon={faMeh} style={{ color: "#7aca05" }} />);
+      setEmoji(<FontAwesomeIcon icon={faSmile} className="text-green-400" />);
+    } else if (emoji == "NEU" || emoji == "unknown") {
+      setEmoji(<FontAwesomeIcon icon={faMeh} className="text-slate-400" />);
     } else if (emoji == "NEG") {
       setEmoji(<FontAwesomeIcon icon={faAngry} style={{ color: "#b80518" }} />);
     }
@@ -51,7 +46,8 @@ const PostCardMeta = ({
               ? "Negative"
               : sentiment == "NEU"
               ? "Neutral"
-              : "Nothing"
+              : sentiment == "unknown"
+              ? "Neutral": null
           }
           data-nc-id="PostCardLikeAction"
         >

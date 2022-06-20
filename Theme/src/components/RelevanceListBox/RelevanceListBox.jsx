@@ -14,6 +14,7 @@ const RelevanceListBox = ({ className = "", lists }) => {
 
   const handelOnChange = (e) => {
     setSelected(e);
+    delete currentQueryParams.page;
     const newQueryParams = {
       ...currentQueryParams,
       sortBy: e.id,

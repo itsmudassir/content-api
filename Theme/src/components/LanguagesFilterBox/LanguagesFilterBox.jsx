@@ -16,6 +16,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
     setSelected(e);
     if (lists.length == 1 && language) {
       delete currentQueryParams.language;
+      delete currentQueryParams.page;
       const newQueryParams = {
         ...currentQueryParams
       };
@@ -25,6 +26,7 @@ const LanguagesFilterBox = ({ className = "", lists }) => {
       });
 
     } else {
+      delete currentQueryParams.page;
       const newQueryParams = {
         ...currentQueryParams,
         language: e.label,

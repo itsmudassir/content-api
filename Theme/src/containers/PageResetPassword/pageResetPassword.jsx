@@ -1,9 +1,6 @@
 import LayoutPage from "../../components/LayoutPage/LayoutPage";
 import React, { useState, useEffect } from "react";
 import queryString from "query-string";
-import facebookSvg from "../../images/Facebook.svg";
-import twitterSvg from "../../images/Twitter.svg";
-import googleSvg from "../../images/Google.svg";
 import Input from "../../components/Input/Input";
 import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import NcLink from "../../components/NcLink/NcLink";
@@ -20,7 +17,7 @@ const passwordValidation = yup.object().shape({
   password: yup.string().required("Password is required").min(6).max(20),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password"), null])
+    .oneOf([yup.ref("password"), null], 'Passwords must match')
     .required("Confirm password is required"),
 });
 

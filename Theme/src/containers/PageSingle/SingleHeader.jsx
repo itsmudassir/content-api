@@ -25,22 +25,23 @@ const SingleHeader = ({
   return (
     <>
       <Helmet>
-        <title>Single || Blog Magazine React Template</title>
+        <title>Contentgizmo</title>
       </Helmet>
+
       <div className={`nc-SingleHeader ${className}`}>
         <div className="space-y-5">
-          <CategoryBadgeList itemClass="!px-3" categories={category} />
+          {/* <CategoryBadgeList itemClass="!px-3" categories={category} /> */}
           <SingleTitle mainClass={titleMainClass} title={title} />
 
           <div className="w-full border-b border-neutral-100 dark:border-neutral-800"></div>
           <div className="flex flex-col sm:flex-row justify-between sm:items-end space-y-5 sm:space-y-0 sm:space-x-5">
-            <PostMeta2
-              size="large"
-              className="leading-none flex-shrink-0"
-              meta={pageData}
-              hiddenCategories
-              avatarRounded="rounded-full shadow-inner"
-            />
+              <PostMeta2
+                size="large"
+                className="leading-none flex-shrink-0"
+                meta={pageData}
+                hiddenCategories
+                avatarRounded="rounded-full shadow-inner"
+              />
             {/* <SingleMetaAction meta={pageData} /> */}
             <SingleMetaAction2 meta={pageData} />
           </div>

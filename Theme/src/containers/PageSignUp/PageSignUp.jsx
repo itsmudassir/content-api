@@ -12,16 +12,16 @@ import cogoToast from "cogo-toast";
 import ReactLoading from "react-loading";
 
 const registerValidationSchema = yup.object().shape({
-  firstName: yup.string().required("First name is required").min(4).max(20),
-  lastName: yup.string().required("Last name is required").min(4).max(20),
+  firstName: yup.string().required("First name is required").min(2).max(20),
+  lastName: yup.string().required("Last name is required").min(2).max(20),
   email: yup
     .string()
     .required("Email is required")
     .email("Must be a proper email"),
-  password: yup.string().required("password is required").min(6).max(20),
+  password: yup.string().required("Password is required").min(6).max(20),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password"), null])
+    .oneOf([yup.ref("password", "HI im saad"), null], 'Passwords must match')
     .required("Confirm password is required"),
 });
 
@@ -45,7 +45,7 @@ const PageSignUp = ({ className = "", history }) => {
       .then(() => {
         history.push("login");
         setIsLoading(false);
-        cogoToast.success("loggedin successfully");
+        cogoToast.success("Registered successfully");
       })
       .catch((error) => {
         cogoToast.error(error);

@@ -8,6 +8,7 @@ import PageSearchMain from "../../containers/PageSearch/PageSearchMain";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 import dates from "../../data/globalVariables/globalDates";
+// import {usePrefetch} from "../../app/Api/contentApi";
 
 const query = gql`
   query resultSet(
@@ -103,9 +104,24 @@ const PageHome1 = () => {
   const api = useSearchkit();
   const variables = useSearchkitVariables();
   const { search } = useLocation();
-  var { customCategory, customQuery, language, sortBy, startDate, endDate } =
-    queryString.parse(search);
+  // const prefetchFollowedTopics = usePrefetch("getAllFollowedTopics");
+  // const prefetchCustomTopics = usePrefetch("getAllCustomTopics");
+  // const prefetchFavFolders = usePrefetch("getAllFolders");
+
+  var {
+    customCategory,
+    customQuery,
+    language,
+    sortBy,
+    startDate,
+    endDate,
+    page,
+  } = queryString.parse(search);
   const searchkitOutput = useQuery(query, { variables });
+
+  // prefetchCustomTopics(null, {force:true});
+  // prefetchFavFolders(null, {force:true});
+  // prefetchFollowedTopics(null, {force:true});
 
   useEffect(() => {
     if (api.canResetSearch()) {
@@ -115,15 +131,14 @@ const PageHome1 = () => {
   }, []);
 
   useEffect(() => {
-
     const customState = {
       query: "",
       sortBy: "",
       filters: [
         {
           identifier: "date_download",
-          dateMin:startDate? startDate: dates.startDate,
-          dateMax: endDate? endDate: dates.endDate,
+          dateMin: startDate ? startDate : dates.startDate,
+          dateMax: endDate ? endDate : dates.endDate,
         },
       ],
       page: {
@@ -131,7 +146,7 @@ const PageHome1 = () => {
         from: 0,
       },
     };
-
+    console.log(searchkitOutput.data);
     if (customCategory) {
       customState.filters.push({
         identifier: "category",
@@ -151,17 +166,22 @@ const PageHome1 = () => {
       });
     }
 
+    if (page) {
+      const sum = page * 20 - 20;
+      customState.page.from = sum;
+    }
+
     api.setSearchState(customState);
     api.search();
-  }, [customCategory, customQuery, language, sortBy, startDate, endDate]);
+  }, [customCategory, customQuery, language, sortBy, startDate, endDate, page]);
 
   return (
     <div className="nc-PageHome relative ">
       <Helmet>
-        <title>Home || Blog Magazine React Template</title>
+        <title>Contentgizmo</title>
       </Helmet>
+      <SBox category={customCategory} />
       {/* {/ Call the  Auto Complete Search Box /} */}
-      <SBox pageType="searchpage" category={customCategory} />
       {customCategory == null &&
       customCategory == undefined &&
       customQuery == null &&

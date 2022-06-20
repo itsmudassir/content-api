@@ -52,7 +52,7 @@ const Card11 = ({
         </div>
       </div>
 
-      <div className="p-4 flex flex-col flex-grow space-y-3">
+      <div className="p-4 flex flex-col justify-between flex-grow space-y-3">
         {!hiddenAuthor ? (
           <PostCardMeta meta={cardvalue.fields} />
         ) : (
@@ -70,24 +70,14 @@ const Card11 = ({
             <a href={cardvalues?.url} target="_blank">
               {cardvalues?.title}
             </a>{" "}
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
           </span>
         </h2>
-        <div className="flex items-end justify-between mt-auto">
-          <div className="flex items-end justify-between mt-auto">
+        <div className="flex items-end justify-center mt-auto">
             <PostCardLikeAndComment
               className="relative"
               setPostToRedux={setPostToRedux}
               postData={cardvalue}
             />
-
-            <PostCardSaveAction
-              className="relative"
-              postData={cardvalue.fields}
-            />
-          </div>
         </div>
       </div>
     </div>

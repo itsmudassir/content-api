@@ -28,7 +28,7 @@ const registerValidation = [
         .trim()
         .isString()
         .notEmpty().withMessage("First name is required")
-        .isLength({ max: 20, min: 4 }).withMessage("First name must be minimum of 4 characters and maximum of 20 characters")
+        .isLength({ max: 20, min: 2 }).withMessage("First name must be minimum of 4 characters and maximum of 20 characters")
         .custom(value => {
             if (value.includes("  ")) {
                 throw new Error("Name field must be a proper name")
@@ -42,7 +42,7 @@ const registerValidation = [
     body("lastName")
         .trim()
         .notEmpty().withMessage("Last name is required")
-        .isLength({ max: 20, min: 4 }).withMessage("Last name must be minimum of 4 characters and maximum of 20 characters")
+        .isLength({ max: 20, min: 2 }).withMessage("Last name must be minimum of 4 characters and maximum of 20 characters")
         .custom(value => {
             if (value.includes("  ")) {
                 throw new Error("Name field must be a proper name")
@@ -122,7 +122,7 @@ const updateValidation = [
         .trim()
         .isString()
         .notEmpty().withMessage("First name is required")
-        .isLength({ max: 20, min: 4 }).withMessage("First name must be minimum of 4 characters and maximum of 20 characters")
+        .isLength({ max: 20, min: 2 }).withMessage("First name must be minimum of 4 characters and maximum of 20 characters")
         .custom(value => {
             if (value.includes("  ")) {
                 throw new Error("Name field must be a proper name")
@@ -136,7 +136,7 @@ const updateValidation = [
     body("lastName")
         .trim()
         .notEmpty().withMessage("Last name is required")
-        .isLength({ max: 20, min: 4 }).withMessage("Last name must be minimum of 4 characters and maximum of 20 characters")
+        .isLength({ max: 20, min: 2 }).withMessage("Last name must be minimum of 4 characters and maximum of 20 characters")
         .custom(value => {
             if (value.includes("  ")) {
                 throw new Error("Name field must be a proper name")

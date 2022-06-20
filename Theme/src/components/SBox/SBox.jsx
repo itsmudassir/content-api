@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import "./searchbox.css";
+import "./sBox.css";
 import { ReactiveBase, DataSearch } from "@appbaseio/reactivesearch";
 import { useHistory } from "react-router-dom";
 import queryString from "query-string";
-import { useSearchkit } from "@searchkit/client";
 
-const SBox = ({ pageType, category }) => {
+const SBox = () => {
   const [input, Setinput] = useState("");
   const history = useHistory();
-  const api = useSearchkit();
 
   return (
     <div>
@@ -18,7 +16,7 @@ const SBox = ({ pageType, category }) => {
         url="http://localhost:5001/graphql"
       >
         <DataSearch
-          className="datasearch"
+          className=""
           dataField={["title"]}
           autosuggest={true}
           defaultSuggestions={[
@@ -45,7 +43,7 @@ const SBox = ({ pageType, category }) => {
           filterLabel="search"
           loading={true}
           innerClass={{
-            input: "searchbox",
+            input: "rounded-full",
             list: "suggestionlist",
           }}
           clearIcon={
@@ -57,31 +55,31 @@ const SBox = ({ pageType, category }) => {
           }
           size={5}
           style={{
-            paddingTop: "10px",
+            paddingTop: "20px",
             paddingLeft: "10px",
             paddingBottom: "6px",
-            width: "45%",
-            marginLeft: "28%",
+            width: window.innerWidth <= 700 ? "80%" : "45%",
+            marginLeft: window.innerWidth <= 700 ? "10%" : "28%",
           }}
           onValueSelected={function (value, cause, source) {
             console.log("current value: ", value);
-            
-            const currentQueryParams = queryString.parse(window.location.search);
+
+            const currentQueryParams = queryString.parse(
+              window.location.search
+            );
+            delete currentQueryParams.page;
             const newQueryParams = {
               ...currentQueryParams,
-              customQuery: value
-            }
+              customQuery: value,
+            };
             history.push({
               pathname: "/discover/discover_search",
               search: queryString.stringify(newQueryParams),
             });
-           }}
+          }}
           value={input}
           onChange={(value, triggerQuery, event) => {
-            Setinput(
-              value,
-              () => triggerQuery()
-            );
+            Setinput(value, () => triggerQuery());
           }}
         />
       </ReactiveBase>

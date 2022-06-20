@@ -11,6 +11,8 @@ import { gql, useQuery } from "@apollo/client";
 import dates from "../../data/globalVariables/globalDates";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
 
 const gqlQuery = gql`
   query resultSet(
@@ -115,7 +117,8 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
   console.log(data);
 
   const { search } = useLocation();
-  var { language, sortBy, startDate, endDate } = queryString.parse(search);
+  var { language, sortBy, startDate, endDate, page } =
+    queryString.parse(search);
 
   useEffect(() => {
     const customState = {
@@ -143,18 +146,22 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
     if (sortBy) {
       customState.sortBy = sortBy;
     }
-    // if (customQuery) {
-    //   customState.query = customQuery;
-    // }
+
     if (language) {
       customState.filters.push({
         identifier: "language",
         value: language,
       });
     }
+
+    if (page) {
+      const sum = page * 20 - 20;
+      customState.page.from = sum;
+    }
+
     api.setSearchState(customState);
     api.search();
-  }, [category, language, sortBy, startDate, endDate]);
+  }, [category, language, sortBy, startDate, endDate, page]);
 
   if (data) {
     var sortOptions = data?.results.summary.sortOptions;
@@ -188,9 +195,11 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
     <>
       <div className={`nc-PageSearch ${className}`} data-nc-id="PageSearch">
         <Helmet>
-          <title>Nc || Search Page Template</title>
+          <title>Contentgizmo</title>
         </Helmet>
       </div>
+
+      <ScrollToTopButton />
 
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
@@ -237,7 +246,9 @@ const FollowedTopicsSearch = ({ className = "", category }) => {
           <div
             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center"
             style={{ justifyContent: "center", alignItems: "center" }}
-          ></div>
+          >
+            <CustomPagination data={data?.results} />
+          </div>
         </main>
       </div>
     </>

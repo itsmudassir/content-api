@@ -404,7 +404,7 @@ const TopicSubmitPost = () => {
         },
       ],
       page: {
-        size: 8,
+        size: 20,
         from: 0,
       },
     };
