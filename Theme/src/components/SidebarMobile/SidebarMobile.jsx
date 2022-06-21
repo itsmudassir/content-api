@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, useMemo, useCallback } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import { useRouteMatch } from "react-router";
 import { NavLink, useHistory } from "react-router-dom";
@@ -44,7 +44,7 @@ const SidebarMobile = ({ setFolderID }) => {
   var [deletePost,deletePost_Obj ] = useDeleteCustomTopicMutation();
 
   // handlers
-  const closeModal = () => setshowModal(false);
+  const closeModal = useCallback(() => setshowModal(false), [showModal]);
   const showModalOnClick = () => setshowModal(true);
 
   var [deleteFolder,deleteFolder_Obj] = useDeleteFolderMutation();
@@ -158,8 +158,8 @@ const SidebarMobile = ({ setFolderID }) => {
     setIsVisable(false);
   }, [window.location.pathname]);
 
-  const handleOpenMenu = () => setIsVisable(true);
-  const handleCloseMenu = () => setIsVisable(false);
+  const handleOpenMenu = useCallback(() => setIsVisable(true), [isVisable]);
+  const handleCloseMenu = useCallback(() => setIsVisable(false), [isVisable]);
 
   const height = window.innerHeight;
 
@@ -531,4 +531,4 @@ const SidebarMobile = ({ setFolderID }) => {
   );
 };
 
-export default SidebarMobile;
+export default React.memo(SidebarMobile);

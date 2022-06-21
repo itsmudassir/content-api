@@ -157,7 +157,7 @@ const TopicsPage = ({ className = "" }) => {
       );
     }
   };
-
+console.log("TOPIC PAGE")
   return (
     <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
       <Helmet>

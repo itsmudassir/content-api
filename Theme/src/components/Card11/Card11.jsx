@@ -84,4 +84,4 @@ const Card11 = ({
   );
 };
 
-export default Card11;
+export default React.memo(Card11);

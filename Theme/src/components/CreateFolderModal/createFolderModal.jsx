@@ -94,4 +94,4 @@ const CreateFolderModal = ({ id, show, onCloseModalReportItem }) => {
   );
 };
 
-export default CreateFolderModal;
+export default React.memo(CreateFolderModal);

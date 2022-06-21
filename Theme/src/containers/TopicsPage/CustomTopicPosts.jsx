@@ -6,6 +6,7 @@ import CustomTopicInsights from "./CustomTopicInsights";
 import { useParams } from "react-router-dom";
 import { useGetSingleCustomTopicQuery } from "../../app/Api/contentApi";
 import queryString from "query-string"
+import { useCallback } from "react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -245,8 +246,13 @@ const CustomTopicPosts = ({ className = "" }) => {
     must_also_keywords_list,
     must_not_contains_keywords_list,
     limit_domains_results_list,
-    page
+    page,
   ]);
+
+  const getLanguage =  useCallback((val)=> setlanguage(val), [language]);
+  const getEngagement =  useCallback((val)=> setEngagement(val), [engagement]);
+  const getStartDate =  useCallback((val)=> setStartDate(val), [startDate]);
+  const getEnddate =  useCallback((val)=> setEndDate(val), [endDate]);
 
   return (
     <>
@@ -293,10 +299,10 @@ const CustomTopicPosts = ({ className = "" }) => {
             <Tab.Panel>
               {customState ? (
                 <CustomTopicsSearch
-                  setStartDate={setStartDate}
-                  setEndDate={setEndDate}
-                  setEngagement={setEngagement}
-                  setlanguage={setlanguage}
+                  setStartDate={getStartDate}
+                  setEndDate={getEnddate}
+                  setEngagement={getEngagement}
+                  setlanguage={getLanguage}
                   customTopic={customState}
                 />
               ) : null}
@@ -317,4 +323,4 @@ const CustomTopicPosts = ({ className = "" }) => {
   );
 };
 
-export default CustomTopicPosts;
+export default React.memo(CustomTopicPosts);
