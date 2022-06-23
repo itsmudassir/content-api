@@ -1,4 +1,10 @@
-import React, { useState, Fragment, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  Fragment,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import { useRouteMatch } from "react-router";
 import { NavLink, useHistory } from "react-router-dom";
@@ -13,7 +19,14 @@ import {
 } from "../../app/Api/contentApi";
 import ButtonCircle from "../../components/Button/ButtonCircle";
 import Input from "../../components/Input/Input";
-import { faTrashCan, faPen, faXmark, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrashCan,
+  faPen,
+  faXmark,
+  faArrowTrendUp,
+  faStar,
+  faFileLines,
+} from "@fortawesome/free-solid-svg-icons";
 import cogoToast from "cogo-toast";
 import ReactLoading from "react-loading";
 // import "./topicpage.css";
@@ -21,7 +34,6 @@ import "../../containers/TopicsPage/topicpage.css";
 import CreateFolderModal from "../../components/CreateFolderModal/createFolderModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import confirmAlert from "../../app/confirmAlert.js";
-
 
 const SidebarMobile = ({ setFolderID }) => {
   const [isVisable, setIsVisable] = useState(false);
@@ -41,14 +53,14 @@ const SidebarMobile = ({ setFolderID }) => {
   const [deleteFollowedTopic, deleteFollowedTopic_Obj] =
     useDeleteFollowedTopicMutation();
 
-  var [deletePost,deletePost_Obj ] = useDeleteCustomTopicMutation();
+  var [deletePost, deletePost_Obj] = useDeleteCustomTopicMutation();
 
   // handlers
   const closeModal = useCallback(() => setshowModal(false), [showModal]);
   const showModalOnClick = () => setshowModal(true);
 
-  var [deleteFolder,deleteFolder_Obj] = useDeleteFolderMutation();
-  var [updateFolder,updateFolder_Obj] = useUpdateFolderMutation();
+  var [deleteFolder, deleteFolder_Obj] = useDeleteFolderMutation();
+  var [updateFolder, updateFolder_Obj] = useUpdateFolderMutation();
 
   const [folderNameState, setFolderNameState] = useState("");
   const [toggleFolderNameHide, setToggleFolderNameHide] = useState(false);
@@ -82,7 +94,7 @@ const SidebarMobile = ({ setFolderID }) => {
       );
     }
   };
-  
+
   const unFollowTopicHandler = async (topic) => {
     try {
       confirmAlert(
@@ -152,8 +164,6 @@ const SidebarMobile = ({ setFolderID }) => {
     }
   };
 
-
-
   useEffect(() => {
     setIsVisable(false);
   }, [window.location.pathname]);
@@ -186,7 +196,6 @@ const SidebarMobile = ({ setFolderID }) => {
                   {/* <NavMobile onClickClose={handleCloseMenu} /> */}
 
                   {/* ============= SIDEBAR ======================= */}
-
                   <div
                     style={{ height: height + "px" }}
                     // className="flex-shrink-0 w-64 pl-5 pr-2 overflow-y-scroll sticky top-0 bg-white scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-200 scrollbar-track-[30px]"
@@ -199,11 +208,37 @@ const SidebarMobile = ({ setFolderID }) => {
                         className="px-4 py-3 rounded-full active:bg-slate-200 hover:bg-slate-200"
                       />
                     </div>
+
+                    {/* =========== TRENDING NEWS ==================== */}
+                    <div
+                      className="flex justify-start items-center w-full hover:cursor-pointer "
+                      onClick={() => history.push(`/topics`)}
+                    >
+                      <FontAwesomeIcon
+                        icon={faArrowTrendUp}
+                        className="text-xs text-slate-400 mr-2"
+                      />
+                      <p
+                        onClick={() => history.push(`/topics`)}
+                        className="flex py-2.5 mr-2 font-medium text-[#666666] hover:text-slate-400"
+                      >
+                        Trending News
+                      </p>
+                    </div>
+
+                    {/* =========== DIVIDER ==================== */}
+                    <div className="w-full my-3">
+                      <hr className="border w-32" />
+                    </div>
                     {/* ============ FOLLOWED TOPICS ================== */}
                     <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-                      <li className="flex justify-between items-center w-44">
+                      <li className="flex justify-start items-center w-44">
+                        <FontAwesomeIcon
+                          icon={faFileLines}
+                          className="text-xs text-slate-400 mr-2"
+                        />
                         <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
-                          FOLLOWED TOPICS
+                          Followed Topics
                         </p>
                       </li>
                       {!getAllFollowedTopics.data ? (
@@ -270,9 +305,15 @@ const SidebarMobile = ({ setFolderID }) => {
 
                     <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
                       <li className="flex justify-between items-center w-44">
-                        <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
-                          CUSTOM TOPICS
-                        </p>
+                        <div className="flex items-center">
+                          <FontAwesomeIcon
+                            icon={faFileLines}
+                            className="text-xs text-slate-400 mr-2"
+                          />
+                          <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
+                            Custom Topics
+                          </p>
+                        </div>
                         <button
                           onClick={() => history.push(`${url}/submit-post`)}
                           // className="flex flex-row justify-center items-end rounded p-1 h-6 font-bold text-[25px] bg-gray-300 text-[#8c8c8c] hover:text-indigo-600"
@@ -363,9 +404,15 @@ const SidebarMobile = ({ setFolderID }) => {
                     {/* ============ FAVOURITES FOLDER ================== */}
                     <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
                       <li className="flex justify-between items-center w-44">
-                        <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
-                          FAVOURITES
-                        </p>
+                        <div className="flex items-center">
+                          <FontAwesomeIcon
+                            icon={faStar}
+                            className="text-xs text-slate-400 mr-2"
+                          />
+                          <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
+                            Favourites
+                          </p>
+                        </div>
                         <button
                           onClick={showModalOnClick}
                           // className="flex flex-row justify-center items-end rounded p-1 h-6 font-bold text-[25px] bg-gray-300 text-[#8c8c8c] hover:text-indigo-600 "

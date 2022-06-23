@@ -31,7 +31,7 @@ const PageForgotPass = ({ className = "" }) => {
     accountService
       .forgotPassword(email)
       .then(() => {
-        cogoToast.success("loggedin successfully");
+        cogoToast.success("Please visit your email to verify.", {hideAfter:4});
         setIsLoading(false);
       })
       .catch((error) => {
