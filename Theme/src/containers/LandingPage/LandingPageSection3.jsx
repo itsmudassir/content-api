@@ -12,7 +12,7 @@ const LandingPageSection3 = ({ className = "", rightImg = section3Image }) => {
   return (
     <>
       <div
-        className={`px-5 nc-SectionBecomeAnAuthor relative flex flex-col lg:flex-row items-center  ${className}`}
+        className={`px-5 nc-SectionBecomeAnAuthor relative flex flex-col lg:flex-row items-start  ${className}`}
         data-nc-id="SectionBecomeAnAuthor"
       >
         <div className="flex-shrink-0 mb-14 lg:mb-0 lg:mr-10 lg:w-2/5">
@@ -44,21 +44,25 @@ const LandingPageSection3 = ({ className = "", rightImg = section3Image }) => {
           title="360 Degree Search"
           desc="Search for articles from the web, videos on YouTube, and what's trending on Twitter from one single platform"
           image={three60Image}
+          className="md:h-96 lg:h-56"
         />
         <SimpleCard
           title="Broaden Your Search Horizon"
           desc="Search for articles from the web, videos on YouTube, and trending on Twitter from one platform."
           image={search}
+          className="md:h-96 lg:h-56"
         />
         <SimpleCard
           title="Powerful Filters"
           desc="Filter search results by engagement across socials, time periods, regions, and language to get targeted content."
           image={filter}
+          className="md:h-96 lg:h-56"
         />
         <SimpleCard
           title="Content Insights"
           desc="Get a wide array of analytics about how a particular topic is performing and stay informed about what to publish"
           image={insights}
+          className="md:h-96 lg:h-56"
         />
       </div>
     </>
