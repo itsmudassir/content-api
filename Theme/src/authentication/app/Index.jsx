@@ -22,6 +22,7 @@ import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3";
 import EditUserProfile from "../../containers/PageEditUserProfile/PageEditUserProfile";
 import SidebarMobile from "../../components/SidebarMobile/SidebarMobile";
+import LandingPage from "../../containers/LandingPage/LandingPage"
 
 function App() {
   const { pathname } = useLocation();
@@ -38,6 +39,7 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <MainNav1  isTop={true}/>
+        <LandingPage/>
         <Switch>
           <Route path="/sidebar" component={SidebarMobile} />
 
@@ -48,14 +50,12 @@ function App() {
           <PrivateRoute
             exact
             path={`/discover/discover_search`}
-            // component={PageHome}
             component={PageHome1}
           />
 
           <PrivateRoute
             exact
             path={`/discover/discover_content`}
-            // component={PageSearch}
             component={PageSearchMain}
           />
 
