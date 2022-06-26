@@ -41,7 +41,6 @@ function App() {
         <MainNav1  isTop={true}/>
         <LandingPage/>
         <Switch>
-          <Route path="/sidebar" component={SidebarMobile} />
 
           <Route exact path={`/`}>
             <Redirect to={`/discover/discover_search`} />

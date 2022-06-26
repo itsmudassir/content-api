@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import NavigationItem from "./NavigationItem";
 import { NAVIGATION_DEMO } from "../../data/navigation";
-import {accountService} from "../../authentication/_services/account.Service"
+import { accountService } from "../../authentication/_services/account.Service";
+import UnauthorizeNavItems from "./UnauthorizeNavItems";
 
 function Navigation() {
   const [user, setUser] = useState({});
@@ -12,7 +13,9 @@ function Navigation() {
   }, []);
 
   // only show nav when logged in
-  if (!user) return null;
+  if (!user) {
+    return <UnauthorizeNavItems />;
+  }
 
   return (
     <ul className="nc-Navigation hidden lg:flex lg:flex-wrap lg:items-center lg:space-x-1 relative">
