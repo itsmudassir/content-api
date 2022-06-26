@@ -32,7 +32,7 @@ const UnauthorizeNavItems = () => {
           </ButtonSecondary>
         </li>
         <li>
-          <ButtonPrimary onClick={() => history.push(`register`)} className="">
+          <ButtonPrimary onClick={() => history.push(`register`)} className="ml-2">
             Start your free trial
           </ButtonPrimary>
         </li>

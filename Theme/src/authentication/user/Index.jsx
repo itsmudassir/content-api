@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Redirect, Switch ,useLocation} from "react-router-dom";
 import { accountService } from "../_services/account.Service";
 import PageLogin from "../../containers/PageLogin/PageLogin";
 import PageSignUp from "../../containers/PageSignUp/PageSignUp";
@@ -7,8 +7,11 @@ import PageForgotPass from "../../containers/PageForgotPass/PageForgotPass";
 import PageResetPassword from "../../containers/PageResetPassword/pageResetPassword";
 import PageContactUs from "../../containers/PageContactUs/PageContactUs";
 import PageSubscription from "../../containers/PageSubscription/PageSubscription";
+import LandingPage from "../../containers/LandingPage/LandingPage";
 
 function User({ history, match }) {
+    const { pathname } = useLocation();
+
   const { path } = match;
 
   useEffect(() => {
@@ -39,6 +42,12 @@ function User({ history, match }) {
                 path={`${path}/subscription`}
                 component={PageSubscription}
               />
+
+              <Route path={`${path}/home`} component={LandingPage} />
+
+              <Redirect from="*" to="/" />
+
+              <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
             </Switch>
           </div>
         </div>

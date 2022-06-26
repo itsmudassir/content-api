@@ -22,7 +22,6 @@ import TopicsPage from "../../containers/TopicsPage/TopicsPage";
 import PageSingleTemplate3 from "../../containers/PageSingle/PageSingleTemp3";
 import EditUserProfile from "../../containers/PageEditUserProfile/PageEditUserProfile";
 import SidebarMobile from "../../components/SidebarMobile/SidebarMobile";
-import LandingPage from "../../containers/LandingPage/LandingPage"
 
 function App() {
   const { pathname } = useLocation();
@@ -34,17 +33,15 @@ function App() {
 
   return (
     <div className={"app-container" + (user && " bg-light")}>
-
-      
       <BrowserRouter>
         <ScrollToTop />
-        <MainNav1  isTop={true}/>
-        <LandingPage/>
+        <MainNav1 isTop={true} />
         <Switch>
 
           <Route exact path={`/`}>
             <Redirect to={`/discover/discover_search`} />
           </Route>
+
 
           <PrivateRoute
             exact
