@@ -113,4 +113,4 @@ const PageInsights = ({ searchKitData }) => {
   );
 };
 
-export default PageInsights;
+export default React.memo(PageInsights);

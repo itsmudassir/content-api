@@ -1,10 +1,10 @@
 import mongoose from "mongoose"
 import userModel from "../../models/userModel/user.Model.js";
 import refreshTokenModel from "../../models/userModel/refreshToken.Model.js"
-import { jwt_secret_key } from "../../config/jwtConfig.js"
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import { sendEmail_ResetPassword } from "../../controllers/nodeMailer/nodeMailer.js"
 const userService = {
     register,
     verifyEmail,
@@ -77,7 +77,7 @@ async function sendVerificationEmail(user, origin) {
     });
 }
 
-async function verifyEmail( token ) {
+async function verifyEmail(token) {
     try {
         const user = await userModel.findOne({ verificationToken: token });
         console.log(token)
@@ -124,11 +124,12 @@ async function revokeToken({ token, ipAddress }) {
 }
 
 async function forgotPassword({ email }, origin) {
+
     try {
         const user = await userModel.findOne({ email: email });
 
         // always return ok response to prevent email enumeration
-        if (!user) return;
+        if (!user) throw "User or Email does not exist";
 
         // create reset token that expires after 24 hours
         user.resetToken = {
@@ -208,7 +209,7 @@ async function refreshToken({ token, ipAddress }) {
 
 async function update(id, params) {
     const user = await getUser(id);
-    
+
     // validate (if email was changed)
     // if (params.email && user.email !== params.email && await userModel.findOne({ email: params.email })) {
     //     throw 'Email "' + params.email + '" is already taken';
@@ -258,7 +259,7 @@ function hash(password) {
 
 function generateJwtToken(user) {
     // create a jwt token containing the account id that expires in 15 minutes
-    return jwt.sign({ sub: user.id, id: user.id }, jwt_secret_key, { expiresIn: '15m' });
+    return jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET_KEY, { expiresIn: '15m' });
 }
 
 function generateRefreshToken(user, ipAddress) {
@@ -280,28 +281,32 @@ function basicDetails(user) {
 async function getRefreshToken(token) {
     try {
         const refreshToken = await refreshTokenModel.findOne({ token }).populate('userId');
-        console.log( !refreshToken.isActive)
-        if (!refreshToken || !refreshToken.isActive){
+        console.log(!refreshToken.isActive)
+        if (!refreshToken || !refreshToken.isActive) {
             throw 'Invalid token';
-        } else{
+        } else {
             return refreshToken;
         }
     } catch (err) {
-        console.log("ERROR OCCOURED WHILE GETTING REFRESH TOKEN",err)
+        console.log("ERROR OCCOURED WHILE GETTING REFRESH TOKEN", err)
     }
 }
 
 
 async function sendPasswordResetEmail(user, origin) {
+
     let message;
+    let resetUrl;
     if (origin) {
-        const resetUrl = `${origin}/user/reset-password?token=${user.resetToken.token}`;
+        resetUrl = `${origin}/user/reset-password?token=${user.resetToken.token}`;
         message = `<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
                    <p><a href="${resetUrl}">${resetUrl}</a></p>`;
     } else {
         message = `<p>Please use the below token to reset your password with the <code>/account/reset-password</code> api route:</p>
                    <p><code>${user.resetToken.token}</code></p>`;
     }
+
+    await sendEmail_ResetPassword(user.email, resetUrl, "Click here to Reset yourpassword.");
 
     // await sendEmail({
     //     to: user.email,

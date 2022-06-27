@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express";
 import connectDatabase from "./src/config/databaseConnection.js";
 import { checkConnection } from "./src/config/elasticSearchConnection.js";
@@ -12,7 +13,6 @@ import errorHandler from "./src/middlewares/errorHandler.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 // import { server } from "./src/GQL_SearchKit/gqlSearchkit.js";
-
 
 // cache
 import { clearHash } from "./src/controllers/cachingControllers/redis.Controller.js";

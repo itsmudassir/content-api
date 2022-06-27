@@ -106,7 +106,7 @@ const gqlQuery = gql`
 const FollowedTopicsSearch = ({ className = "", category }) => {
   // local states
   let newData;
-
+  console.log("FollowedTopicsSearch")
   // RTK-Query
   const RtkData = useGetAllFavouritePostsbyUserQuery();
 

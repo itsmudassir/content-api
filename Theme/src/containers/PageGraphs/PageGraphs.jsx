@@ -134,4 +134,4 @@ const PageGraphs = ({ data }) => {
   );
 };
 
-export default PageGraphs;
+export default React.memo(PageGraphs);

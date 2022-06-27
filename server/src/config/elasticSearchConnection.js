@@ -6,12 +6,9 @@ const type = "_doc";
 
 
 
-const host = "http://43.251.253.107:2500";
-
-//  const host = "https://x8dkko05bk:nw4qm909rg@content-system-v4-4554244877.us-west-2.bonsaisearch.net:443";
-
-
-//  const host = "https://s0oskhnou6:l7y6497d4v@contentgizmo-9661164665.us-east-1.bonsaisearch.net:443";
+const host = process.env.ELASTICSEARCH_HOST_1;
+// const host = process.env.ELASTICSEARCH_HOST_2;
+// const host = process.env.ELASTICSEARCH_HOST_3;
 
 // export const client = new elasticsearch.Client({
 //   host: host,
@@ -19,7 +16,7 @@ const host = "http://43.251.253.107:2500";
 // });
 
 
-// incase of   // const host = "http://43.251.253.107:1200"; use the code below
+// incase of  const host = "http://43.251.253.107:1200"; use the code below
 
 export const client = new elasticsearch.Client({
   host: host

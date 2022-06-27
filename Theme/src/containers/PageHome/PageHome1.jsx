@@ -8,7 +8,6 @@ import PageSearchMain from "../../containers/PageSearch/PageSearchMain";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 import dates from "../../data/globalVariables/globalDates";
-// import {usePrefetch} from "../../app/Api/contentApi";
 
 const query = gql`
   query resultSet(
@@ -107,7 +106,7 @@ const PageHome1 = () => {
   // const prefetchFollowedTopics = usePrefetch("getAllFollowedTopics");
   // const prefetchCustomTopics = usePrefetch("getAllCustomTopics");
   // const prefetchFavFolders = usePrefetch("getAllFolders");
-
+  console.log("SSSSSSSSSSSSSSSSSS");
   var {
     customCategory,
     customQuery,
@@ -119,14 +118,10 @@ const PageHome1 = () => {
   } = queryString.parse(search);
   const searchkitOutput = useQuery(query, { variables });
 
-  // prefetchCustomTopics(null, {force:true});
-  // prefetchFavFolders(null, {force:true});
-  // prefetchFollowedTopics(null, {force:true});
-
   useEffect(() => {
     if (api.canResetSearch()) {
       api.setQuery("");
-      api.search();
+      // api.search();
     }
   }, []);
 

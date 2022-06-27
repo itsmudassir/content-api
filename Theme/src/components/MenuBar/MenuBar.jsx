@@ -20,7 +20,7 @@ const MenuBar= () => {
           className="fixed inset-0 z-50 overflow-y-auto"
           onClose={handleCloseMenu}
         >
-          <div className="fixed left-0 top-0 bottom-0 w-full md:w-auto z-max outline-none focus:outline-none">
+          <div className="fixed left-0 top-0 bottom-0 w-full md:w-full z-max outline-none focus:outline-none">
             <React.Fragment>
               <Transition.Child
                 as={Fragment}

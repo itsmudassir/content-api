@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ButtonClose from "../ButtonClose/ButtonClose";
 import Logo from "../Logo/Logo";
 import { Disclosure } from "@headlessui/react";
@@ -6,19 +6,24 @@ import { NavLink } from "react-router-dom";
 import { NavItemType } from "./NavigationItem";
 import DarkModeContainer from "../../containers/DarkModeContainer/DarkModeContainer";
 import { NAVIGATION_DEMO } from "../../data/navigation";
-import ButtonPrimary from "../Button/ButtonPrimary";
 import SocialsList from "../SocialsList/SocialsList";
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { accountService } from "../../authentication/_services/account.Service";
+import UnauthorizeMobileNavItems from "./UnauthorizeMobileNavItems";
 
 // export interface NavMobileProps {
 //   data?: NavItemType[];
 //   onClickClose?: () => void;
 // }
 
-const NavMobile = ({
-  data = NAVIGATION_DEMO,
-  onClickClose,
-}) => {
+const NavMobile = ({ data = NAVIGATION_DEMO, onClickClose }) => {
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const subscription = accountService.user.subscribe((x) => setUser(x));
+    return subscription.unsubscribe;
+  }, []);
+
   const _renderMenuChild = (item) => {
     return (
       <ul className="nav-mobile-sub-menu pl-6 pb-1 text-base">
@@ -157,9 +162,13 @@ const NavMobile = ({
           <ButtonClose onClick={onClickClose} />
         </span>
       </div>
-      <ul className="flex flex-col py-6 px-2 space-y-1">
-        {data.map(_renderItem)}
-      </ul>
+      {user ? (
+        <ul className="flex flex-col py-6 px-2 space-y-1">
+          {data.map(_renderItem)}
+        </ul>
+      ) : (
+        <UnauthorizeMobileNavItems onClickClose={onClickClose} />
+      )}
     </div>
   );
 };

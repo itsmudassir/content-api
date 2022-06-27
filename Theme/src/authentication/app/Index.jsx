@@ -33,29 +33,25 @@ function App() {
 
   return (
     <div className={"app-container" + (user && " bg-light")}>
-
-      
       <BrowserRouter>
         <ScrollToTop />
-        <MainNav1  isTop={true}/>
+        <MainNav1 isTop={true} />
         <Switch>
-          <Route path="/sidebar" component={SidebarMobile} />
 
           <Route exact path={`/`}>
             <Redirect to={`/discover/discover_search`} />
           </Route>
 
+
           <PrivateRoute
             exact
             path={`/discover/discover_search`}
-            // component={PageHome}
             component={PageHome1}
           />
 
           <PrivateRoute
             exact
             path={`/discover/discover_content`}
-            // component={PageSearch}
             component={PageSearchMain}
           />
 

@@ -10,7 +10,7 @@ import { useSearchkitVariables, useSearchkit } from "@searchkit/client";
 import { gql, useQuery } from "@apollo/client";
 import CustomPagination from "../../components/Pagination/CustomPagination.jsx";
 import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
-
+import { useMemo } from "react";
 
 const gqlQuery = gql`
   query resultSet(
@@ -178,23 +178,24 @@ const CustomTopicsSearch = ({
   const api = useSearchkit();
   const variables = useSearchkitVariables();
   const { data, loading, error } = useQuery(gqlQuery, { variables });
-  console.log(data);
+  console.log(data, "CustomTopicsSearch");
 
   useEffect(() => {
     api.setSearchState(customTopic);
     api.search();
   }, [customTopic]);
 
-  if (data) {
-    var sortOptions = data?.results.summary.sortOptions;
-    var langaugeList = data?.results.facets.filter(
-      (item) => item.identifier == "language"
-    )[0].entries;
-  }
+  // if (data) {
+    var sortOptions = useMemo(() => data?.results.summary.sortOptions, [data]);
+    var langaugeList = useMemo(
+      () =>
+        data?.results.facets.filter((item) => item.identifier == "language")[0]
+          .entries,
+      [data]
+    );
+  // }
 
   if (data) {
-    console.log(data);
-
     var allFavoriteFolder = {};
     RtkData?.data?.filter((item) => {
       if (item.post_id !== undefined) {
@@ -221,7 +222,7 @@ const CustomTopicsSearch = ({
         </Helmet>
       </div>
 
-      <ScrollToTopButton/>
+      <ScrollToTopButton />
 
       <hr className="mx-4 sm:mx-8 my-10 py-4" />
 
@@ -289,4 +290,4 @@ const CustomTopicsSearch = ({
   );
 };
 
-export default CustomTopicsSearch;
+export default React.memo(CustomTopicsSearch);

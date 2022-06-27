@@ -30,7 +30,7 @@ const MainNav1 = ({ isTop }) => {
             {user ? (
               <div className="flex items-center">
                 <UserBtnDropDown />
-                <p className="font-normal">{user.firstName}</p>
+                {/* <p className="font-normal">{user.firstName}</p> */}
               </div>
             ) : null}
           </div>
@@ -38,7 +38,7 @@ const MainNav1 = ({ isTop }) => {
             {user ? (
               <>
                 <UserBtnDropDown />
-                <p className="font-normal">{user.firstName}</p>
+                {/* <p className="font-normal">{user.firstName}</p> */}
               </>
             ) : null}
             <div className="px-1" />

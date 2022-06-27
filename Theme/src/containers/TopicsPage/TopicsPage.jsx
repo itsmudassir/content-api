@@ -17,7 +17,13 @@ import {
 } from "../../app/Api/contentApi";
 import ButtonCircle from "../../components/Button/ButtonCircle";
 import Input from "../../components/Input/Input";
-import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrashCan,
+  faPen,
+  faArrowTrendUp,
+  faStar,
+  faFileLines,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cogoToast from "cogo-toast";
 import ReactLoading from "react-loading";
@@ -28,6 +34,7 @@ import FollowedTopicsMain from "../../containers/FollowedTopics/FollowedTopicsMa
 import SidebarMobile from "../../components/SidebarMobile/SidebarMobile";
 import "react-alert-confirm/dist/index.css";
 import confirmAlert from "../../app/confirmAlert.js";
+import TrendingNewsMain from "../../containers/TrendingNews/TrendingNewsMain"
 
 const TopicsPage = ({ className = "" }) => {
   const history = useHistory();
@@ -157,7 +164,7 @@ const TopicsPage = ({ className = "" }) => {
       );
     }
   };
-
+  console.log("TOPIC PAGE");
   return (
     <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
       <Helmet>
@@ -180,11 +187,37 @@ const TopicsPage = ({ className = "" }) => {
             style={{ height: screenHeight + "px" }}
             className="flex-shrink-0 w-48 overflow-y-scroll sticky top-0 hidden lg:block scrollbar-w-1 scrollbar-thumb-slate-300 scrollbar-track-slate-0"
           >
+            {/* =========== TRENDING NEWS ==================== */}
+            <div
+              className="flex justify-start items-center w-full hover:cursor-pointer "
+              onClick={() => history.push(`/topics`)}
+            >
+              <FontAwesomeIcon
+                icon={faArrowTrendUp}
+                className="text-xs text-slate-400 mr-2"
+              />
+              <p
+                onClick={() => history.push(`/topics`)}
+                className="flex py-2.5 mr-2 font-medium text-[#666666] hover:text-slate-400"
+              >
+                Trending News
+              </p>
+            </div>
+
+            {/* =========== DIVIDER ==================== */}
+            <div className="w-full my-3">
+              <hr className="border w-32" />
+            </div>
+
             {/* ============ FOLLOWED TOPICS ================== */}
             <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
-              <li className="flex justify-between items-center w-44">
+              <li className="flex justify-start items-center w-44">
+              <FontAwesomeIcon
+                icon={faFileLines}
+                className="text-xs text-slate-400 mr-2"
+              />
                 <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
-                  FOLLOWED TOPICS
+                  Followed Topics
                 </p>
               </li>
               {!getAllFollowedTopics.data ? (
@@ -246,9 +279,15 @@ const TopicsPage = ({ className = "" }) => {
 
             <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
               <li className="flex justify-between items-center w-44">
-                <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
-                  CUSTOM TOPICS
-                </p>
+                <div className="flex items-center">
+                  <FontAwesomeIcon
+                    icon={faFileLines}
+                    className="text-xs text-slate-400 mr-2"
+                  />
+                  <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
+                    Custom Topics
+                  </p>
+                </div>
                 <button
                   onClick={() => history.push(`${url}/submit-post`)}
                   // className="flex flex-row justify-center items-end rounded p-1 h-6 font-bold text-[25px] bg-gray-300 text-[#8c8c8c] hover:text-indigo-600"
@@ -332,9 +371,15 @@ const TopicsPage = ({ className = "" }) => {
             {/* ============ FAVOURITES FOLDER ================== */}
             <ul className=" flex justify-center items-start ml-0 flex-col text-base space-y-1 text-neutral-6000 dark:text-neutral-400">
               <li className="flex justify-between items-center w-44">
-                <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
-                  FAVOURITES
-                </p>
+                <div className="flex items-center">
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    className="text-xs text-slate-400 mr-2"
+                  />
+                  <p className="flex py-2.5 mr-2 font-medium rounded-lg text-[#666666]">
+                    Favourites
+                  </p>
+                </div>
                 <button
                   onClick={showModalOnClick}
                   // className="flex flex-row justify-center items-end rounded p-1 h-6 font-bold text-[25px] bg-gray-300 text-[#8c8c8c] hover:text-indigo-600 "
@@ -445,6 +490,7 @@ const TopicsPage = ({ className = "" }) => {
               )}
             </ul>
           </div>
+
           {/* ============ PAGES CONTAINERS =================  */}
           <div className="border border-neutral-100 dark:border-neutral-800 md:hidden"></div>
           <div className="flex-grow">
@@ -504,6 +550,18 @@ const TopicsPage = ({ className = "" }) => {
                   return (
                     <>
                       {folderID ? <FavouritePosts folderID={folderID} /> : null}
+                    </>
+                  );
+                }}
+              />
+
+              {/* Trending News Main Route  */}
+              <Route
+                path={`/topics`}
+                render={() => {
+                  return (
+                    <>
+                      <TrendingNewsMain />
                     </>
                   );
                 }}
